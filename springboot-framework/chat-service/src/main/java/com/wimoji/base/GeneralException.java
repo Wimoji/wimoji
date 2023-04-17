@@ -1,8 +1,11 @@
 package com.wimoji.base;
 
 import com.wimoji.base.constant.Code;
+import lombok.Getter;
 
+@Getter
 public class GeneralException extends RuntimeException {
+
     private final Code errorCode;
 
     public GeneralException() {
@@ -43,9 +46,5 @@ public class GeneralException extends RuntimeException {
     public GeneralException(Code errorCode, Throwable cause) {
         super(errorCode.getMessage(cause), cause);
         this.errorCode = errorCode;
-    }
-
-    public Code getErrorCode() {
-        return this.errorCode;
     }
 }

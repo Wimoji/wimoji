@@ -5,12 +5,16 @@ import com.wimoji.base.constant.Code;
 import com.wimoji.repository.dto.Test;
 
 import java.util.List;
+
+import com.wimoji.service.TestService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
+@RequiredArgsConstructor
 public class TestController {
     private final TestService service;
 
@@ -21,15 +25,12 @@ public class TestController {
         try {
             if (list.size() == 0) {
                 throw new GeneralException(Code.BAD_REQUEST, "zero!");
+                //{"success":false,"code":10000,"message":"Bad request - zero!"}
             } else {
                 return new ResponseEntity(list, HttpStatus.OK);
             }
-        } catch (Exception var3) {
-            throw var3;
+        } catch (Exception e) {
+            throw e;
         }
-    }
-
-    public TestController(final TestService service) {
-        this.service = service;
     }
 }

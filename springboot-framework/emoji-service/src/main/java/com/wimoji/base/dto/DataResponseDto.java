@@ -1,8 +1,11 @@
 package com.wimoji.base.dto;
 
 import com.wimoji.base.constant.Code;
+import lombok.Getter;
 
+@Getter
 public class DataResponseDto<T> extends ResponseDto {
+
     private final T data;
 
     private DataResponseDto(T data) {
@@ -16,18 +19,14 @@ public class DataResponseDto<T> extends ResponseDto {
     }
 
     public static <T> DataResponseDto<T> of(T data) {
-        return new DataResponseDto(data);
+        return new DataResponseDto<>(data);
     }
 
     public static <T> DataResponseDto<T> of(T data, String message) {
-        return new DataResponseDto(data, message);
+        return new DataResponseDto<>(data, message);
     }
 
     public static <T> DataResponseDto<T> empty() {
-        return new DataResponseDto((Object)null);
-    }
-
-    public T getData() {
-        return this.data;
+        return new DataResponseDto<>(null);
     }
 }

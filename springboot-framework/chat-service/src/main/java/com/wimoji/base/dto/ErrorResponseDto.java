@@ -3,6 +3,7 @@ package com.wimoji.base.dto;
 import com.wimoji.base.constant.Code;
 
 public class ErrorResponseDto extends ResponseDto {
+
     private ErrorResponseDto(Code errorCode) {
         super(false, errorCode.getCode(), errorCode.getMessage());
     }
@@ -14,6 +15,7 @@ public class ErrorResponseDto extends ResponseDto {
     private ErrorResponseDto(Code errorCode, String message) {
         super(false, errorCode.getCode(), errorCode.getMessage(message));
     }
+
 
     public static ErrorResponseDto of(Code errorCode) {
         return new ErrorResponseDto(errorCode);
