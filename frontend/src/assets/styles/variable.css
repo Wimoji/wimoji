@@ -1,0 +1,16 @@
+:root {
+  /* 색상 */
+  --main-col-1: #f2f2f2;
+  --main-col-2: #a6d6ff;
+  --main-col-3: #55b1ff;
+  --main-col-4: #ffe899;
+  --main-col-5: #ffd955;
+
+  --text-col-1: #737373;
+  --text-col-2: #c3c3c3;
+  --text-col-3: #d6d6d6;
+
+  /* 글씨체 */
+  --main-font-1: "SEBANG_Gothic_Rg";
+  --main-font-2: "SEBANG_Gothic_Bd";
+}
