@@ -25,6 +25,8 @@ export default {
 @import "@/assets/styles/font.css";
 @import "@/assets/styles/text.css";
 @import "@/assets/styles/variable.css";
+@import "@/assets/styles/override.css";
+@import "@/assets/styles/input.css";
 
 html body {
   background: #fafafa;
