@@ -1,4 +1,5 @@
 import ChatPage from "@/components/ChatPage/ChatPage.vue";
+import ChattingPage from "@/components/ChatPage/ChattingPage.vue";
 
 const chat = [
   {
@@ -7,6 +8,11 @@ const chat = [
     components: {
       default: ChatPage,
     },
+  },
+  {
+    path: "/chatting",
+    name: "chatting",
+    component: ChattingPage,
   },
 ];
 
