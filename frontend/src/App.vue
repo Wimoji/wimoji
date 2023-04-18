@@ -23,6 +23,7 @@ export default {
 
 <style>
 @import "@/assets/styles/font.css";
+@import "@/assets/styles/text.css";
 @import "@/assets/styles/variable.css";
 
 html body {
