@@ -75,7 +75,10 @@
 </template>
 
 <script>
-import { login } from "@/api/modules/user";
+// import { login } from "@/api/modules/user";
+import { mapActions, mapState } from "vuex";
+
+const userStore = "userStore";
 
 export default {
   data() {
@@ -86,33 +89,43 @@ export default {
       passwordRules: [(v) => !!v || "비밀번호를 입력해주세요."],
     };
   },
+  computed: {
+    ...mapState(userStore, ["isLogin"]),
+  },
   methods: {
+    ...mapActions(userStore, ["setIsLogin"]),
     goSignupPage() {
       this.$router.push("/signup");
     },
     async goLogin() {
       //로그인 유효성 검증
       const validate = this.$refs.form.validate();
-      const data = {
-        uid: this.id,
-        password: this.password,
-      };
+      // const data = {
+      //   uid: this.id,
+      //   password: this.password,
+      // };
 
       if (validate) {
         // alert("유효성 확인 완료");
-        await login(
-          data,
-          ({ data }) => {
-            console.log(data);
-            if (data.success) {
-              alert("로그인 성공");
-              this.$router.push("/home");
-            }
-          },
-          (error) => {
-            console.log(error);
-          }
-        );
+
+        //임시로 로그인 토큰을 저장합니다.
+        sessionStorage.setItem("access-token", "testtokentoken");
+        this.setIsLogin(true); //로그인 상태로 변경
+
+        // await login(
+        //   data,
+        //   ({ data }) => {
+        //     console.log(data);
+        //     if (data.success) {
+        //       alert("로그인 성공");
+        //       this.setIsLogin(true); //로그인 상태로 변경
+        //       this.$router.push("/home");
+        //     }
+        //   },
+        //   (error) => {
+        //     console.log(error);
+        //   }
+        // );
       }
     },
   },

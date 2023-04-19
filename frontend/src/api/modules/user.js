@@ -10,7 +10,7 @@ async function signup(data, success, fail) {
 
 async function login(data, success, fail) {
   console.log("로그인 보낼 유저 정보 >> ", data);
-  await api.post(`/user-service/login`, data).then(success).catch(fail);
+  await api.put(`/user-service/login`, data).then(success).catch(fail);
 }
 
 export { signup, login };

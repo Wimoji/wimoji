@@ -1,4 +1,5 @@
 const userStore = {
+  namespaced: true,
   state: {
     isLogin: false,
   },
@@ -8,7 +9,11 @@ const userStore = {
       state.isLogin = flag;
     },
   },
-  actions: {},
+  actions: {
+    setIsLogin({ commit }, flag) {
+      commit("SET_IS_LOGIN", flag);
+    },
+  },
   modules: {},
 };
 
