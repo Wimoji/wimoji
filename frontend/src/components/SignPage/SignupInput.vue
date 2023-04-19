@@ -65,7 +65,7 @@
             rounded
             color="var(--main-col-5)"
             class="white-col-1"
-            @click="goLogin"
+            @click="goSignup"
             >회원가입</v-btn
           >
         </v-form>
@@ -75,7 +75,7 @@
 </template>
 
 <script>
-import { makeUser } from "@/api/modules/user";
+import { signup } from "@/api/modules/user";
 
 export default {
   data() {
@@ -107,18 +107,25 @@ export default {
         nickname: this.nickname,
       };
       if (validate) {
-        alert("유효성 확인 완료");
-        await makeUser(
+        await signup(
           data,
           ({ data }) => {
-            console.log(data);
+            // console.log(data);
+            if (data.success) {
+              alert(
+                `회원가입이 완료되었습니다. 반갑습니다 ${this.nickname}님!`
+              );
+              this.$router.push("/login");
+            } else {
+              alert("회원가입 중 오류가 발생했습니다. 다시 시도해주세요.");
+            }
           },
           (error) => {
             console.log(error);
+            alert("회원가입 중 오류가 발생했습니다. 다시 시도해주세요.");
           }
         );
       }
-      // this.$router.push("/login");
     },
   },
 };

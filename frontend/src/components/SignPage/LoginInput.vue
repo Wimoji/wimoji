@@ -32,6 +32,7 @@
             :rules="passwordRules"
             rounded
             solo
+            type="password"
             background-color="white"
           >
             <template v-slot:label>
@@ -62,7 +63,10 @@
       <div class="social-login">구글 깃허브 페이스북 트위터</div>
       <div>
         계정이 없으신가요?
-        <span class="main-font-bd main-col-3" @click="goSignup"
+        <span
+          class="main-font-bd main-col-3"
+          style="cursor: pointer"
+          @click="goSignupPage"
           >회원가입 하기</span
         >
       </div>
@@ -71,36 +75,45 @@
 </template>
 
 <script>
+import { login } from "@/api/modules/user";
+
 export default {
   data() {
     return {
       id: "",
       password: "",
-      idRules: [
-        (v) => !!v || "아이디를 입력해주세요.",
-        (v) =>
-          /^[a-zA-Z0-9]+$/.test(v) || "아이디는 알파벳과 숫자만 가능합니다.",
-      ],
-      passwordRules: [
-        (v) => !!v || "비밀번호를 입력해주세요.",
-        (v) =>
-          /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,16}$/.test(v) ||
-          "비밀번호는 8~16자, 영문과 숫자를 조합해주세요.",
-      ],
+      idRules: [(v) => !!v || "아이디를 입력해주세요."],
+      passwordRules: [(v) => !!v || "비밀번호를 입력해주세요."],
     };
   },
   methods: {
-    goSignup() {
+    goSignupPage() {
       this.$router.push("/signup");
     },
-    goLogin() {
+    async goLogin() {
       //로그인 유효성 검증
       const validate = this.$refs.form.validate();
+      const data = {
+        uid: this.id,
+        password: this.password,
+      };
 
       if (validate) {
-        alert("유효성 확인 완료");
+        // alert("유효성 확인 완료");
+        await login(
+          data,
+          ({ data }) => {
+            console.log(data);
+            if (data.success) {
+              alert("로그인 성공");
+              this.$router.push("/home");
+            }
+          },
+          (error) => {
+            console.log(error);
+          }
+        );
       }
-      // this.$router.push("/home");
     },
   },
 };
