@@ -1,7 +1,13 @@
 const userStore = {
-  state: {},
+  state: {
+    isLogin: false,
+  },
   getters: {},
-  mutations: {},
+  mutations: {
+    SET_IS_LOGIN(state, flag) {
+      state.isLogin = flag;
+    },
+  },
   actions: {},
   modules: {},
 };
