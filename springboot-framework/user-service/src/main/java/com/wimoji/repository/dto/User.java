@@ -1,6 +1,7 @@
 package com.wimoji.repository.dto;
 
 import lombok.Builder;
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.data.annotation.Id;
@@ -10,7 +11,7 @@ import java.util.*;
 
 @Document(collection = "user")
 @Builder
-@Setter
+@Data
 public class User {
     @Id
     String uid;

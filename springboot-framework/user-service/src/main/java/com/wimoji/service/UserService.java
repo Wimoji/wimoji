@@ -1,7 +1,8 @@
 package com.wimoji.service;
 
+import com.wimoji.common.JwtTokenUtil;
 import com.wimoji.repository.UserRepository;
-import com.wimoji.repository.dto.Emoji;
+//import com.wimoji.repository.dto.Emoji;
 import com.wimoji.repository.dto.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +22,7 @@ public class UserService {
     @Autowired
     private MongoTemplate mongoTemplate;
 
-    public void makeUser(String uid, String nickname, String password) {
+    public void makeUser(String uid, String password, String nickname) {
         User user = User.builder()
                 .uid(uid)
                 .nickname(nickname)
@@ -31,17 +32,33 @@ public class UserService {
         repository.save(user);
     }
 
-    public void loginUser(String id, String password) {
+    public HashMap<String, String> loginUser(String id, String password) {
         Query query = new Query();
         Criteria criteria = new Criteria();
 
-        query.addCriteria(criteria.andOperator(Criteria.where("uid").is(id)));
-        query.addCriteria(criteria.andOperator(Criteria.where("password").is(password)));
+        query.addCriteria(criteria.andOperator(
+                Criteria.where("uid").is(id),
+                Criteria.where("password").is(password)
+        ));
 
+        //로그인 상태 변경
         User user = mongoTemplate.findAndModify(
                 query,
                 Update.update("login", true),
                 User.class
         );
+
+        if (user != null) {
+            //로그인 성공, 토큰 발급
+            String accessToken = JwtTokenUtil.makeAccessToken(user.getUid(), user.getNickname());
+            String refreshToken = JwtTokenUtil.makeRefreshToken(user.getUid(), user.getNickname());
+
+            HashMap<String, String> result = new HashMap<>();
+            result.put("accessToken", accessToken);
+            result.put("refreshToken", refreshToken);
+
+            return result;
+        }
+        return null; //유저가 없을 시 null return
     }
 }
