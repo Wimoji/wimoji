@@ -57,7 +57,7 @@
       </v-container>
     </v-container>
     <v-container
-      class="another-area d-flex flex-column align-center justify-space-around"
+      class="another-area d-flex flex-column align-center justify-space-around text-col-1"
     >
       <div>다른 방법으로 로그인 하기</div>
       <div class="social-login">구글 깃허브 페이스북 트위터</div>
@@ -75,7 +75,7 @@
 </template>
 
 <script>
-// import { login } from "@/api/modules/user";
+import { login } from "@/api/modules/user";
 import { mapActions, mapState } from "vuex";
 
 const userStore = "userStore";
@@ -100,32 +100,35 @@ export default {
     async goLogin() {
       //로그인 유효성 검증
       const validate = this.$refs.form.validate();
-      // const data = {
-      //   uid: this.id,
-      //   password: this.password,
-      // };
+      const data = {
+        uid: this.id,
+        password: this.password,
+      };
 
       if (validate) {
-        // alert("유효성 확인 완료");
-
-        //임시로 로그인 토큰을 저장합니다.
-        sessionStorage.setItem("access-token", "testtokentoken");
-        this.setIsLogin(true); //로그인 상태로 변경
-
-        // await login(
-        //   data,
-        //   ({ data }) => {
-        //     console.log(data);
-        //     if (data.success) {
-        //       alert("로그인 성공");
-        //       this.setIsLogin(true); //로그인 상태로 변경
-        //       this.$router.push("/home");
-        //     }
-        //   },
-        //   (error) => {
-        //     console.log(error);
-        //   }
-        // );
+        await login(
+          data,
+          ({ data }) => {
+            // console.log(data);
+            if (data.success) {
+              alert("로그인 성공");
+              //세션 스토리지에 토큰 저장
+              sessionStorage.setItem("access-token", data.data.accessToken);
+              sessionStorage.setItem("refresh-token", data.data.refreshToken);
+              this.setIsLogin(true); //로그인 상태로 변경
+              this.$router.push("/home");
+            }
+          },
+          (error) => {
+            console.log(error.response.data);
+            if (error.response.data.code == 10000) {
+              alert(error.response.data.message);
+              //input 지워주기
+              this.id = "";
+              this.password = "";
+            }
+          }
+        );
       }
     },
   },
