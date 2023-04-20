@@ -122,7 +122,7 @@ export default {
           (error) => {
             console.log(error.response.data);
             if (error.response.data.code == 10000) {
-              alert(error.response.data.message);
+              alert(error.response.data.message.split(" - ")[1]);
               //input 지워주기
               this.id = "";
               this.password = "";
