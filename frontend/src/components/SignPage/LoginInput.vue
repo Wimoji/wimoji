@@ -121,11 +121,13 @@ export default {
           },
           (error) => {
             console.log(error.response.data);
-            if (error.response.data.code == 10000) {
-              alert(error.response.data.message.split(" - ")[1]);
+            if (error.response.data.code == 30000) {
+              alert(error.response.data.message);
               //input 지워주기
               this.id = "";
               this.password = "";
+            } else {
+              alert("로그인 중 에러가 발생했습니다.");
             }
           }
         );

@@ -31,9 +31,6 @@ public class UserController {
     public DataResponseDto<?> setLoginUser(@RequestBody UserReqDto user) {
         try {
             HashMap<String, String> result = service.loginUser(user.getUid(), user.getPassword());
-
-            if (result == null)
-                throw new GeneralException(Code.BAD_REQUEST, "등록된 사용자 정보가 없습니다.");
             return DataResponseDto.of(result);
         } catch (Exception e) {
             throw e;

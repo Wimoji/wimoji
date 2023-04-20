@@ -1,5 +1,7 @@
 package com.wimoji.service;
 
+import com.wimoji.base.GeneralException;
+import com.wimoji.base.constant.Code;
 import com.wimoji.common.JwtTokenUtil;
 import com.wimoji.repository.UserRepository;
 //import com.wimoji.repository.dto.Emoji;
@@ -54,17 +56,18 @@ public class UserService {
                 User.class
         );
 
-        if (user != null) {
-            //로그인 성공, 토큰 발급
-            String accessToken = JwtTokenUtil.makeAccessToken(user.getUid(), user.getNickname());
-            String refreshToken = JwtTokenUtil.makeRefreshToken(user.getUid(), user.getNickname());
-
-            HashMap<String, String> result = new HashMap<>();
-            result.put("accessToken", accessToken);
-            result.put("refreshToken", refreshToken);
-
-            return result;
+        if (user == null) {
+            throw new GeneralException(Code.NO_USER);
         }
-        return null; //유저가 없을 시 null return
+
+        //로그인 성공, 토큰 발급
+        String accessToken = JwtTokenUtil.makeAccessToken(user.getUid(), user.getNickname());
+        String refreshToken = JwtTokenUtil.makeRefreshToken(user.getUid(), user.getNickname());
+
+        HashMap<String, String> result = new HashMap<>();
+        result.put("accessToken", accessToken);
+        result.put("refreshToken", refreshToken);
+
+        return result;
     }
 }
