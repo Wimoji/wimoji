@@ -13,14 +13,15 @@ import lombok.RequiredArgsConstructor;
 public class ChatController {
 	private final SimpMessagingTemplate template;
 
-	@MessageMapping(value = "/chat/enter")
+	@MessageMapping("/chat/enter")
 	public void enter(ChatDto chat) {
 		chat.setContent(chat.getSender() + "님이 채팅방에 참여하였습니다.");
 		template.convertAndSend("/sub/chat/room/" + chat.getRid(), chat);
 	}
 
-	@MessageMapping(value = "/chat/message")
+	@MessageMapping("/chat/message")
 	public void chat(ChatDto chat) {
-		template.convertAndSend("/seb/chat/room" + chat.getRid(), chat);
+		// template.convertAndSend("/seb/chat/room" + chat.getRid(), chat);
+		template.convertAndSend("/sub/chat/" + 1, chat);
 	}
 }

@@ -7,63 +7,71 @@
     </div>
     <div class="msg">
       <div v-for="(message, index) in messages" :key="index">
-        {{ message }}
+        <div>닉네임: {{ message.sender }}</div>
+        <div>네용: {{ message.content }}</div>
       </div>
     </div>
     <div class="form">
-      <input v-model="messageText" placeholder="입력해주세요" @keyup.enter="sendMessage">
+      <input v-model="sender" placeholder="닉네임란">
+      <input v-model="content" placeholder="입력해주세요" @keyup.enter="sendMessage">
       <button @click="sendMessage">Send</button>
     </div>
   </div>
 </template>
 
 <script>
+import StompJS from "stompjs";
+import SockJS from "sockjs-client";
+
 export default {
   data() {
     return {
-      webSocket: null,
       messages: [],
-      messageText: '',
+      sender: '',
+      content: '',
+      serverURL: 'http://70.12.246.229:8080',
+      socket: null,
     };
   },
   created() {
-    this.connectWebSocket();
+    this.connect();
   },
   methods: {
     goChat() {
       this.$router.push("/chat");
     },
-    connectWebSocket() {
-      // const username = [];
-      const protocol = location.protocol === 'https:' ? 'wss:' : 'ws:';
-      // const webSocketUrl = `${protocol}//${location.host}/ws/chat`;
-      const webSocketUrl = `${protocol}//70.12.246.229:8080/ws/chat`;
-      console.log(location.host);
-
-      this.webSocket = new WebSocket(webSocketUrl);
-      this.webSocket.onopen = () => {
-        console.log('WebSocket connection opened!');
-      };
-
-      this.webSocket.onmessage = (event) => {
-        const message = event.data;
-        this.messages.push(message);
-      };
-
-      this.webSocket.onclose = () => {
-        console.log('WebSocket connection closed!');
-        setTimeout(() => this.connectWebSocket(), 5000);
-      };
-    },
-
     sendMessage() {
-      if (this.webSocket.readyState === WebSocket.OPEN) {
-        this.webSocket.send(this.messageText);
-        this.messageText = '';
-      } else {
-        console.log('WebSocket is not open');
-        this.connectWebSocket();
+      console.log("Send message:" + this.content);
+      if (this.socket && this.socket.connected) {
+        const msg = { 
+          sendTime: "23041800",
+          sender: this.sender,
+          content: this.content,
+        };
+        this.socket.send("/pub/chat/message", { token: "" }, JSON.stringify(msg));
       }
+      this.content = "";
+    },
+    connect() {
+      var sock = new SockJS(`${this.serverURL}/ws/chat`);
+      this.socket = StompJS.over(sock);
+      console.log('소켓 연결을 시도합니다. 서버 주소: ', this.serverURL);
+
+      this.socket.connect(
+      {},
+      frame => {
+        console.log('소켓 연결 성공: ', frame);
+        this.socket.subscribe("/sub/chat/1",
+          msg => {
+            console.log("전달 메세지: ", msg);
+            this.messages.push(JSON.parse(msg.body));
+          }
+        );
+      },
+      error => {
+        console.log("소켓 연결 실패", error);
+      }
+    );
     },
   },
 };
