@@ -10,7 +10,7 @@ const chat = [
     },
   },
   {
-    path: "/chatting",
+    path: "/chat/:roomId",
     name: "chatting",
     component: ChattingPage,
   },

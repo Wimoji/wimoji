@@ -8,7 +8,7 @@
 export default {
   methods: {
     goChatting() {
-      this.$router.push("/chatting");
+      this.$router.push("/chat/1");
     },
   }
 }
