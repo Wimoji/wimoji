@@ -38,22 +38,27 @@ export default {
       this.$router.push("/chat");
     },
     connectWebSocket() {
+      // const username = [];
       // const protocol = location.protocol === 'https:' ? 'wss:' : 'ws:';
       // const webSocketUrl = `${protocol}//${location.host}/chat`;
-      const webSocketUrl = "ws://localhost:8080/ws/chat"
+      const webSocketUrl = "ws://70.12.246.229:8080/ws/chat"
+
       this.webSocket = new WebSocket(webSocketUrl);
       this.webSocket.onopen = () => {
         console.log('WebSocket connection opened!');
       };
+
       this.webSocket.onmessage = (event) => {
         const message = event.data;
         this.messages.push(message);
       };
+
       this.webSocket.onclose = () => {
         console.log('WebSocket connection closed!');
         setTimeout(() => this.connectWebSocket(), 5000);
       };
     },
+
     sendMessage() {
       if (this.webSocket.readyState === WebSocket.OPEN) {
         this.webSocket.send(this.messageText);
@@ -71,23 +76,5 @@ export default {
   img {
     width: 100px;
     height: 100px;  
-  }
-  .container {
-    display: flex;
-    flex-direction: column;
-    /* height: 100vh; */
-  }
-  .content {
-    flex: 1;
-  }
-  .form {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    height: 50px;
-    background-color: #fff;
-    padding: 10px;
-    box-sizing: border-box;
   }
 </style>
