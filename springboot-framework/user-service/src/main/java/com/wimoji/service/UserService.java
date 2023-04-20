@@ -32,6 +32,12 @@ public class UserService {
         repository.save(user);
     }
 
+    /**
+     * 로그인 상태 변경 및 토큰 발급
+     * @param id
+     * @param password
+     * @return
+     */
     public HashMap<String, String> loginUser(String id, String password) {
         Query query = new Query();
         Criteria criteria = new Criteria();
