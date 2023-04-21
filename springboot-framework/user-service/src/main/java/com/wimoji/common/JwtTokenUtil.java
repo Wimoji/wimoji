@@ -1,5 +1,7 @@
 package com.wimoji.common;
 
+import com.wimoji.base.GeneralException;
+import com.wimoji.base.constant.Code;
 import io.jsonwebtoken.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -142,6 +144,7 @@ public class JwtTokenUtil {
             //잘못된 JWT 서명, 잘못된 형식의 JWT
 //            e.printStackTrace();
             System.out.println("access >> 잘못된 JWT 서명, 잘못된 형식의 JWT");
+            throw new GeneralException(Code.TOKEN_ERROR);
         }catch (ExpiredJwtException e){
             //만료된 JWT 토큰
 //            e.printStackTrace();
@@ -156,6 +159,25 @@ public class JwtTokenUtil {
             System.out.println("access >> JWT가 비어있음");
         }
         return false;
+    }
+
+    /**
+     * Access Token에서 사용자의 아이디를 가져옴
+     * @param token
+     * @return
+     */
+    public String getUserIdFromToken(String token){
+        validateToken(token);
+        return getClaims(token, secretKey1).getSubject();
+    }
+
+    /**
+     * Access Token에서 사용자의 닉네임을 가져옴
+     * @param token
+     * @return
+     */
+    public String getUserNicknameFromToken(String token){
+        return getClaims(token, secretKey1).get("userNickname", String.class);
     }
 
 }

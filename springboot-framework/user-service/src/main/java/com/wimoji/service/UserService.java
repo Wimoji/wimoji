@@ -70,4 +70,47 @@ public class UserService {
 
         return result;
     }
+
+    /**
+     * 로그아웃 상태 변경
+     * @param id
+     */
+    public void logoutUser(String id){
+        Query query = new Query();
+        Criteria criteria = new Criteria();
+
+        query.addCriteria(criteria.andOperator(
+                Criteria.where("uid").is(id)
+        ));
+
+        //로그아웃 상태로 변경
+        User user = mongoTemplate.findAndModify(
+                query,
+                Update.update("login", false),
+                User.class
+        );
+
+        if(user == null){
+            throw new GeneralException(Code.NO_USER);
+        }
+    }
+
+    /**
+     * 회원 탈퇴
+     * @param id
+     */
+    public void deleteUser(String id){
+        Query query = new Query();
+        Criteria criteria = new Criteria();
+
+        query.addCriteria(criteria.andOperator(
+                Criteria.where("uid").is(id)
+        ));
+
+        User user = mongoTemplate.findAndRemove(
+                query,
+                User.class
+        );
+    }
+
 }

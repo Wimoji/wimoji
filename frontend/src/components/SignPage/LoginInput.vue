@@ -116,7 +116,7 @@ export default {
               sessionStorage.setItem("access-token", data.data.accessToken);
               sessionStorage.setItem("refresh-token", data.data.refreshToken);
               this.setIsLogin(true); //로그인 상태로 변경
-              this.$router.push("/home");
+              this.$router.push("/");
             }
           },
           (error) => {
