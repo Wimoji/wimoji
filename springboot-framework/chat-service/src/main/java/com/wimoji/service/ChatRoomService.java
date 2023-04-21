@@ -3,8 +3,6 @@ package com.wimoji.service;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.stereotype.Service;
 
 import com.wimoji.repository.ChatRoomRepository;
@@ -17,18 +15,8 @@ import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
-public class ChatService {
-	@Autowired
-	private MongoTemplate mongoTemplate;
+public class ChatRoomService {
 	private final ChatRoomRepository chatRoomRepository;
-
-	public void makeChatRoom(ChatRoomReq chatRoomReq) {
-		ChatRoom chatRoom = ChatRoom.builder()
-			.userList(chatRoomReq.getUserList())
-			.content(new ArrayList<ChatDto>())
-			.build();
-		chatRoomRepository.save(chatRoom);
-	}
 
 	public List<ChatRoomRes> findAllRooms() {
 		return chatRoomRepository.findAllRooms();

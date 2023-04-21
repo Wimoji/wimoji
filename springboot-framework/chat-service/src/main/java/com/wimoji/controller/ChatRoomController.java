@@ -2,32 +2,36 @@ package com.wimoji.controller;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.wimoji.service.ChatService;
+import com.wimoji.base.dto.DataResponseDto;
+import com.wimoji.service.ChatRoomService;
 
 import lombok.RequiredArgsConstructor;
 
 @RestController
-@RequestMapping("/chat")
+@RequestMapping("/chatroom")
 @RequiredArgsConstructor
 public class ChatRoomController {
-	private final ChatService chatService;
+	private final ChatRoomService chatRoomService;
 
-	@GetMapping("/rooms")
-	public ResponseEntity<?> getRooms() {
-		return new ResponseEntity(HttpStatus.OK);
+	@GetMapping("")
+	public DataResponseDto getRooms() {
+		DataResponseDto dataResponseDto = DataResponseDto.of(chatRoomService.findAllRooms());
+
+		return dataResponseDto;
 	}
 
-	@PostMapping("/room")
+	@PostMapping("")
 	public ResponseEntity<?> makeRoom() {
 		return new ResponseEntity(HttpStatus.OK);
 	}
 
-	@GetMapping("/room")
+	@DeleteMapping("")
 	public ResponseEntity<?> getRoom() {
 		return new ResponseEntity(HttpStatus.OK);
 	}

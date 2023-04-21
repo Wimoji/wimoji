@@ -3,12 +3,12 @@
     <div class="info">
       <button @click="goChat">뒤로 가기</button>
       <img src="https://item.kakaocdn.net/do/1318d6316a603a75dc7021a51ddc6bc2617ea012db208c18f6e83b1a90a7baa7">
-      <p>이모지 제목</p>
+      <p>{{ room.name }}</p>
     </div>
     <div class="msg">
       <div v-for="(message, index) in messages" :key="index">
         <div>닉네임: {{ message.sender }}</div>
-        <div>네용: {{ message.content }}</div>
+        <div>내용: {{ message.content }}</div>
       </div>
     </div>
     <div class="form">
@@ -26,6 +26,7 @@ import SockJS from "sockjs-client";
 export default {
   data() {
     return {
+      room: {},
       messages: [],
       sender: '',
       content: '',
@@ -36,9 +37,22 @@ export default {
   created() {
     this.connect();
   },
+  mounted() {
+    this.getRoom();
+  },
   methods: {
     goChat() {
       this.$router.push("/chat");
+    },
+    getRoom() {
+      const id = this.$route.params.roomId;
+      fetch(`/chat/${id}`)
+      .then(response => response.json())
+      .then(data => {
+        this.room = data;
+      }).catch(error => {
+        console.error(error);
+      })
     },
     sendMessage() {
       console.log("Send message:" + this.content);

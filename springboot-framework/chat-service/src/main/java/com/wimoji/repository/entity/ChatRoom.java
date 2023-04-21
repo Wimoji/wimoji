@@ -16,16 +16,5 @@ public class ChatRoom {
 	@Id
 	private ObjectId _id;
 
-	// TODO: String에서 User로 변환
-	private List<String> userList;
-
-	// TODO: 나간 유저 표시
-	// private boolean[] isExit;
-
-	private List<ChatDto> content;
-
-	// TODO: Emoji 추가
-	// private Emoji emoji;
-
-	// private Set<WebSocketSession> sessions = new HashSet<>();
+	private String name;
 }
