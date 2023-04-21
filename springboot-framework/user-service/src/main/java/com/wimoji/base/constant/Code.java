@@ -23,6 +23,7 @@ public enum Code {
 
     NO_USER(30000, HttpStatus.NOT_FOUND, "등록된 사용자 정보를 찾을 수 없습니다."),
     TOKEN_ERROR(30001, HttpStatus.UNAUTHORIZED, "Token 정보가 잘못됐습니다."),
+    ALREADY_USER(30002, HttpStatus.CONFLICT, "중복된 아이디입니다. 다른 아이디를 입력해주세요."),
 
     UNAUTHORIZED(40000, HttpStatus.UNAUTHORIZED, "User unauthorized");
 

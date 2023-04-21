@@ -25,6 +25,12 @@ public class UserService {
     private MongoTemplate mongoTemplate;
 
     public void makeUser(String uid, String password, String nickname) {
+        User findUser = mongoTemplate.findById(uid, User.class);
+
+        if(findUser != null){
+            throw new GeneralException(Code.ALREADY_USER);
+        }
+
         User user = User.builder()
                 .uid(uid)
                 .nickname(nickname)
