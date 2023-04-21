@@ -2,9 +2,9 @@
   <div>
     <h3>채팅 목록</h3>
     <ul>
-      <li v-for="room in rooms" :key="room._id">
-        {{ room.name }}
-        <button @click="goRoom(room._id)">채팅방 들어가기</button>
+      <li v-for="room in rooms" :key="room.id">
+        이름 {{ room.name }}
+        <button @click="goRoom(room.id)">채팅방 들어가기</button>
       </li>
     </ul>
   </div>
@@ -27,7 +27,8 @@ export default {
     async getRooms() {
       try {
         const response = await axios.get(`${this.serverURL}/chatroom`);
-        this.rooms = response.data;
+        this.rooms = response.data.data;
+        console.log(response);
       } catch (error) {
         console.error(error);
       }
