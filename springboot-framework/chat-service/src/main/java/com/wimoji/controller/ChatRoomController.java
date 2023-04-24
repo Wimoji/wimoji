@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.wimoji.base.dto.DataResponseDto;
 import com.wimoji.repository.dto.ChatRoomReq;
-import com.wimoji.repository.entity.ChatRoom;
+import com.wimoji.repository.dto.ChatRoomRes;
 import com.wimoji.service.ChatRoomService;
 
 import lombok.RequiredArgsConstructor;
@@ -29,12 +29,17 @@ public class ChatRoomController {
 
 	@GetMapping()
 	public DataResponseDto<?> getRooms() {
-		List<ChatRoom> result = chatRoomService.findAllRooms();
+		List<ChatRoomRes> result = chatRoomService.findAllRooms();
 		return DataResponseDto.of(result);
 	}
 
 	@PostMapping()
 	public ResponseEntity<?> makeRoom(@RequestBody ChatRoomReq chatRoomReq) {
+		log.info("만들기 요청");
+		log.info(chatRoomReq.getEmoji());
+		log.info(chatRoomReq.getName());
+		chatRoomService.makeRoom(chatRoomReq);
+
 		return new ResponseEntity(HttpStatus.OK);
 	}
 
