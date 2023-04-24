@@ -3,7 +3,8 @@
     <div class="info">
       <button @click="goChat">뒤로 가기</button>
       <img src="https://item.kakaocdn.net/do/1318d6316a603a75dc7021a51ddc6bc2617ea012db208c18f6e83b1a90a7baa7">
-      <p>{{ room.name }}</p>
+      <p>이모지: {{ room.emoji }}</p>
+      <p>방 이름: {{ room.name }}</p>
     </div>
     <div class="msg">
       <div v-for="(message, index) in messages" :key="index">
@@ -27,9 +28,9 @@ export default {
   data() {
     return {
       serverURL: 'http://70.12.246.229:8080',
-      room: {},
       messages: [],
       rid: '',
+      room: [],
       sender: '',
       content: '',
       socket: null,
@@ -37,6 +38,7 @@ export default {
   },
   created() {
     this.connect();
+    this.room = this.$route.params.data;
   },
   mounted() {
     this.getRoom();
@@ -48,14 +50,7 @@ export default {
     getRoom() {
       const id = this.$route.params.roomId;
       this.rid = id;
-      console.log("이 방의 id >>>", this.rid);
-      // fetch(`/chat/${id}`)
-      // .then(response => response.json())
-      // .then(data => {
-      //   this.room = data;
-      // }).catch(error => {
-      //   console.error(error);
-      // })
+      console.log("이 방의 id >>> ", this.rid);
     },
     sendMessage() {
       console.log("Send message:" + this.content);

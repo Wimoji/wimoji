@@ -24,6 +24,7 @@ const list = [
         path: "/chat/:roomId",
         name: "chatting",
         component: ChattingPage,
+        // props: true,
       },
       {
         path: "/myEmoji",
