@@ -1,5 +1,6 @@
 package com.wimoji.repository.entity;
 
+import org.bson.types.ObjectId;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import lombok.AllArgsConstructor;
@@ -13,6 +14,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Document(collection = "chat_room")
 public class ChatRoom {
+	private ObjectId id;
 	private String emoji;
 	private String name;
 	private int participant;

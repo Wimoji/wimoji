@@ -22,6 +22,6 @@ public class ChatController {
 	@MessageMapping("/chat/message")
 	public void chat(ChatDto chat) {
 		// template.convertAndSend("/seb/chat/room" + chat.getRid(), chat);
-		template.convertAndSend("/sub/chat/" + 1, chat);
+		template.convertAndSend("/sub/chat/" + chat.getRid(), chat);
 	}
 }

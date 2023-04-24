@@ -12,8 +12,8 @@
     </form>
     <ul>
       <li v-for="room in rooms" :key="room.id">
-        <p>채팅방 이름 {{ room.name }}</p>
-        <button @click="goRoom(room.id)">채팅방 들어가기</button>
+        <p>채팅방 이름 {{ room.name }} 채팅방 아이디 {{ room.rid }}</p>
+        <button @click="goRoom(room.rid)">채팅방 들어가기</button>
       </li>
     </ul>
   </div>
@@ -43,9 +43,8 @@ export default {
         console.error(error);
       }
     },
-    goRoom(roomId) {
-      this.$router.push(`/chat/${roomId}`);
-      console.log(roomId);
+    goRoom(id) {
+      this.$router.push(`/chat/${id}`);
     },
     makeRoom(event) {
       event.preventDefault();

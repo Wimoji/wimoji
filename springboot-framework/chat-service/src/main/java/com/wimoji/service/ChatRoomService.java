@@ -23,7 +23,7 @@ public class ChatRoomService {
 
 		for(ChatRoom chatRoom : chatRooms) {
 			ChatRoomRes res = new ChatRoomRes(
-				chatRoom.getEmoji(), chatRoom.getName(), false
+				chatRoom.getId(), chatRoom.getEmoji(), chatRoom.getName(), false
 			);
 			roomRes.add(res);
 		}
