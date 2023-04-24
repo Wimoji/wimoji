@@ -8,5 +8,7 @@ import lombok.Data;
 @Data
 @AllArgsConstructor
 public class ChatRoomReq {
-	List<String> userList;
+	// TODO: emoji 연동
+	String emoji;
+	String name;
 }
