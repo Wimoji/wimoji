@@ -1,0 +1,21 @@
+/* 로그인, 회원가입의 input 영역 커스텀 */
+.sign-page {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+}
+.input-container {
+  position: relative;
+  z-index: 2;
+}
+.another-area {
+  height: 30%;
+}
+.blue-circle-area {
+  top: -10%;
+  position: absolute;
+}
+.yellow-circle-area {
+  position: absolute;
+}
