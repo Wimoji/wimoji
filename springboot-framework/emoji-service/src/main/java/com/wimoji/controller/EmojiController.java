@@ -4,6 +4,7 @@ import com.wimoji.base.dto.DataResponseDto;
 import com.wimoji.repository.dto.request.EmojiModifyReq;
 import com.wimoji.repository.dto.request.EmojiSaveReq;
 import com.wimoji.service.EmojiService;
+import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -36,11 +37,22 @@ public class EmojiController {
     @PutMapping("/")
     public DataResponseDto<?> modifyEmoji(@RequestBody EmojiModifyReq emoji){
         try{
-            emojiService.modifyEmoji(emoji.getUid(), emoji.getOrder(), emoji.getContent());
+            emojiService.modifyEmoji(emoji.getUid(), emoji.getOrder(), emoji.getEid(), emoji.getContent());
             return DataResponseDto.empty();
         }catch (Exception e){
             throw e;
         }
     }
+
+//    @PutMapping("/del")
+//    public DataResponseDto<?> deleteEmoji(@RequestBody){
+//        try{
+//
+//        }catch (Exception e){
+//            throw e;
+//        }
+//    }
+
+
 
 }
