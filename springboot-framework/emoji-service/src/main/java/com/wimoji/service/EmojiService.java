@@ -60,7 +60,7 @@ public class EmojiService {
      * @param content
      */
     public void modifyEmoji(String uid, String order, String eid, String content){
-        Criteria criteria  = Criteria.where("uid").is(uid);
+        Criteria criteria = Criteria.where("uid").is(uid);
         Query query = new Query(criteria);
         User document = mongoTemplate.findOne(query, User.class);
 
@@ -86,11 +86,11 @@ public class EmojiService {
      * @param eid
      */
     public void deleteEmoji(String uid, String order, String eid){
-        Criteria criteria  = Criteria.where("uid").is(uid);
+        Criteria criteria = Criteria.where("uid").is(uid);
         Query query = new Query(criteria);
         User document = mongoTemplate.findOne(query, User.class);
 
-        //index가 emoji list size내에 있어야 update
+        //index가 emoji list size내에 있어야 delete
         int intOrder = Integer.parseInt(order);
         if(intOrder >= 0 && intOrder<document.getEmoji().size()) {
             if(document.getEmoji().get(intOrder).getEid().equals(eid)){
@@ -103,5 +103,17 @@ public class EmojiService {
         else
             throw new GeneralException(Code.NO_EMOJI);
     }
+
+    public List<Emoji> getEmojiList(String uid){
+        Criteria criteria = Criteria.where("uid").is(uid);
+        Query query = new Query(criteria);
+//        query.fields().include("emoji");
+//        List<Emoji> emojiList = mongoTemplate.find(query, Emoji.class);
+        User user = mongoTemplate.findOne(query, User.class);
+        List<Emoji> emojiList = user.getEmoji();
+
+        return emojiList;
+    }
+
 
 }
