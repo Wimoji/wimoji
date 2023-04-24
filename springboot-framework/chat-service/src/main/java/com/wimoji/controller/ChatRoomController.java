@@ -30,7 +30,6 @@ public class ChatRoomController {
 	@GetMapping()
 	public DataResponseDto<?> getRooms() {
 		List<ChatRoomRes> result = chatRoomService.findAllRooms();
-		log.info("list 값에서 id>>>" + result.get(0).getRid().toString());
 		return DataResponseDto.of(result);
 	}
 

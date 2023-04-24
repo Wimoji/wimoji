@@ -23,8 +23,10 @@ public class ChatRoomService {
 
 		for(ChatRoom chatRoom : chatRooms) {
 			ChatRoomRes res = new ChatRoomRes(
-				chatRoom.getId(), chatRoom.getEmoji(), chatRoom.getName(), false
+				chatRoom.getEmoji(), chatRoom.getName(), false
 			);
+			// TODO: 12byte를 12bit로 줄여서 저장
+			res.setRid(chatRoom.getId().toString());
 			roomRes.add(res);
 		}
 

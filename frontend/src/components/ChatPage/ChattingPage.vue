@@ -26,11 +26,12 @@ import SockJS from "sockjs-client";
 export default {
   data() {
     return {
+      serverURL: 'http://70.12.246.229:8080',
       room: {},
       messages: [],
+      rid: '',
       sender: '',
       content: '',
-      serverURL: 'http://70.12.246.229:8080',
       socket: null,
     };
   },
@@ -46,19 +47,22 @@ export default {
     },
     getRoom() {
       const id = this.$route.params.roomId;
-      fetch(`/chat/${id}`)
-      .then(response => response.json())
-      .then(data => {
-        this.room = data;
-      }).catch(error => {
-        console.error(error);
-      })
+      this.rid = id;
+      console.log("이 방의 id >>>", this.rid);
+      // fetch(`/chat/${id}`)
+      // .then(response => response.json())
+      // .then(data => {
+      //   this.room = data;
+      // }).catch(error => {
+      //   console.error(error);
+      // })
     },
     sendMessage() {
       console.log("Send message:" + this.content);
       if (this.socket && this.socket.connected) {
         const msg = { 
-          sendTime: "23041800",
+          rid: this.rid,
+          sendTime: "23042400",
           sender: this.sender,
           content: this.content,
         };
@@ -75,7 +79,7 @@ export default {
       {},
       frame => {
         console.log('소켓 연결 성공: ', frame);
-        this.socket.subscribe("/sub/chat/1",
+        this.socket.subscribe(`/sub/chat/${this.rid}`,
           msg => {
             console.log("전달 메세지: ", msg);
             this.messages.push(JSON.parse(msg.body));

@@ -16,12 +16,12 @@ public class ChatController {
 	@MessageMapping("/chat/enter")
 	public void enter(ChatDto chat) {
 		chat.setContent(chat.getSender() + "님이 채팅방에 참여하였습니다.");
-		template.convertAndSend("/sub/chat/room/" + chat.getRid(), chat);
+		template.convertAndSend("/sub/chat/room" + chat.getRid(), chat);
 	}
 
 	@MessageMapping("/chat/message")
 	public void chat(ChatDto chat) {
-		// template.convertAndSend("/seb/chat/room" + chat.getRid(), chat);
+		// template.convertAndSend("/sub/chat/" + 1, chat);
 		template.convertAndSend("/sub/chat/" + chat.getRid(), chat);
 	}
 }

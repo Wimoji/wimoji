@@ -8,8 +8,14 @@ import lombok.Data;
 @Data
 @AllArgsConstructor
 public class ChatRoomRes {
-	ObjectId rid;
+	String rid;
 	String emoji;
 	String name;
 	boolean isNew;
+
+	public ChatRoomRes(String emoji, String name, boolean isNew) {
+		this.emoji = emoji;
+		this.name = name;
+		this.isNew = isNew;
+	}
 }
