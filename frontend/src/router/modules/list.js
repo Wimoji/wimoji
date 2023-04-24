@@ -1,6 +1,7 @@
 import ListHeader from "@/views/Header/ListHeader.vue";
 import ListView from "@/views/ListView.vue";
 import ChatPage from "@/components/ChatPage/ChatPage.vue";
+import ChattingPage from "@/components/ChatPage/ChattingPage.vue";
 import MyEmojiPage from "@/components/MyEmojiPage/MyEmojiPage.vue";
 
 const list = [
@@ -15,7 +16,14 @@ const list = [
       {
         path: "/chat",
         name: "chat",
-        component: ChatPage,
+        components: {
+          default: ChatPage,
+        },
+      },
+      {
+        path: "/chat/:roomId",
+        name: "chatting",
+        component: ChattingPage,
       },
       {
         path: "/myEmoji",

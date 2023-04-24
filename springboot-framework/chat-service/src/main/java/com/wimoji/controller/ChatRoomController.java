@@ -35,9 +35,6 @@ public class ChatRoomController {
 
 	@PostMapping()
 	public ResponseEntity<?> makeRoom(@RequestBody ChatRoomReq chatRoomReq) {
-		log.info("만들기 요청");
-		log.info(chatRoomReq.getEmoji());
-		log.info(chatRoomReq.getName());
 		chatRoomService.makeRoom(chatRoomReq);
 
 		return new ResponseEntity(HttpStatus.OK);
