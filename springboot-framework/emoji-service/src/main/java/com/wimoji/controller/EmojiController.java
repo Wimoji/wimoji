@@ -45,6 +45,11 @@ public class EmojiController {
         }
     }
 
+    /**
+     * 이모지 삭제
+     * @param emoji
+     * @return
+     */
     @PutMapping("/del")
     public DataResponseDto<?> deleteEmoji(@RequestBody EmojiDeleteReq emoji){
         try{

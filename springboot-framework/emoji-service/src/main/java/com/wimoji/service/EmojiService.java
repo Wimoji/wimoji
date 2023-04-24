@@ -79,6 +79,12 @@ public class EmojiService {
             throw new GeneralException(Code.NO_EMOJI);
     }
 
+    /**
+     * 이모지 삭제
+     * @param uid
+     * @param order
+     * @param eid
+     */
     public void deleteEmoji(String uid, String order, String eid){
         Criteria criteria  = Criteria.where("uid").is(uid);
         Query query = new Query(criteria);
