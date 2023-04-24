@@ -1,6 +1,7 @@
 package com.wimoji.controller;
 
 import com.wimoji.base.dto.DataResponseDto;
+import com.wimoji.repository.dto.request.EmojiDeleteReq;
 import com.wimoji.repository.dto.request.EmojiModifyReq;
 import com.wimoji.repository.dto.request.EmojiSaveReq;
 import com.wimoji.service.EmojiService;
@@ -44,14 +45,15 @@ public class EmojiController {
         }
     }
 
-//    @PutMapping("/del")
-//    public DataResponseDto<?> deleteEmoji(@RequestBody){
-//        try{
-//
-//        }catch (Exception e){
-//            throw e;
-//        }
-//    }
+    @PutMapping("/del")
+    public DataResponseDto<?> deleteEmoji(@RequestBody EmojiDeleteReq emoji){
+        try{
+            emojiService.deleteEmoji(emoji.getUid(), emoji.getOrder(), emoji.getEid());
+            return DataResponseDto.empty();
+        }catch (Exception e){
+            throw e;
+        }
+    }
 
 
 

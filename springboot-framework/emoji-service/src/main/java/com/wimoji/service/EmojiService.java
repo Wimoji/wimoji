@@ -79,5 +79,23 @@ public class EmojiService {
             throw new GeneralException(Code.NO_EMOJI);
     }
 
+    public void deleteEmoji(String uid, String order, String eid){
+        Criteria criteria  = Criteria.where("uid").is(uid);
+        Query query = new Query(criteria);
+        User document = mongoTemplate.findOne(query, User.class);
+
+        //index가 emoji list size내에 있어야 update
+        int intOrder = Integer.parseInt(order);
+        if(intOrder >= 0 && intOrder<document.getEmoji().size()) {
+            if(document.getEmoji().get(intOrder).getEid().equals(eid)){
+                document.getEmoji().remove(intOrder);
+                mongoTemplate.save(document);
+            }
+            else
+                throw new GeneralException(Code.NO_EMOJI);
+        }
+        else
+            throw new GeneralException(Code.NO_EMOJI);
+    }
 
 }
