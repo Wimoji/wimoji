@@ -1,17 +1,11 @@
 package com.wimoji.controller;
 
 import com.wimoji.base.dto.DataResponseDto;
-import com.wimoji.repository.dto.request.EmojiSaveReqDto;
+import com.wimoji.repository.dto.request.EmojiModifyReq;
+import com.wimoji.repository.dto.request.EmojiSaveReq;
 import com.wimoji.service.EmojiService;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
-import com.wimoji.base.constant.Code;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 //@RequestMapping("/emoji-service")
@@ -25,9 +19,24 @@ public class EmojiController {
      * @return
      */
     @PostMapping("/")
-    public DataResponseDto<?> saveEmoji(@RequestBody EmojiSaveReqDto emoji){
+    public DataResponseDto<?> saveEmoji(@RequestBody EmojiSaveReq emoji){
         try{
             emojiService.saveEmoji(emoji.getUid(), emoji.getEid(), emoji.getContent(), emoji.getLatitude(), emoji.getLongitude(), emoji.getDongCode());
+            return DataResponseDto.empty();
+        }catch (Exception e){
+            throw e;
+        }
+    }
+
+    /**
+     * 이모지 수정
+     * @param emoji
+     * @return
+     */
+    @PutMapping("/")
+    public DataResponseDto<?> modifyEmoji(@RequestBody EmojiModifyReq emoji){
+        try{
+            emojiService.modifyEmoji(emoji.getUid(), emoji.getOrder(), emoji.getContent());
             return DataResponseDto.empty();
         }catch (Exception e){
             throw e;

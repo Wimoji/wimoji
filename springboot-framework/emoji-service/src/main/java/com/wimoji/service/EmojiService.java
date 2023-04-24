@@ -1,5 +1,6 @@
 package com.wimoji.service;
 
+import com.mongodb.client.result.UpdateResult;
 import com.wimoji.base.GeneralException;
 import com.wimoji.base.constant.Code;
 import com.wimoji.repository.Entity.Emoji;
@@ -7,12 +8,16 @@ import com.wimoji.repository.Entity.User;
 import com.wimoji.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.mongodb.core.FindAndModifyOptions;
 import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.aggregation.ArrayOperators;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -46,6 +51,28 @@ public class EmojiService {
 
         update.push("emoji", emoji);
         mongoTemplate.updateFirst(Query.query(criteria), update, User.class);
+    }
+
+    /**
+     * 이모지 수정
+     * @param uid
+     * @param order
+     * @param content
+     */
+    public void modifyEmoji(String uid, String order, String content){
+        Criteria criteria  = Criteria.where("uid").is(uid);
+        Query query = new Query(criteria);
+        User document = mongoTemplate.findOne(query, User.class);
+
+        //index가 emoji list size내에 있어야 update
+        int intOrder = Integer.parseInt(order);
+        if(intOrder >= 0 && intOrder<document.getEmoji().size()) {
+            Update update = new Update().set("emoji" + "." + order + ".content", content);
+            FindAndModifyOptions options = new FindAndModifyOptions().returnNew(true).upsert(false);
+            mongoTemplate.findAndModify(query, update, options, User.class);
+        }
+        else
+            throw new GeneralException(Code.NO_EMOJI);
     }
 
 
