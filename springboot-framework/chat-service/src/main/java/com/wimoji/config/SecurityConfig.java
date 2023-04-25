@@ -11,15 +11,15 @@ import org.springframework.security.web.SecurityFilterChain;
 public class SecurityConfig {
 	@Bean
 	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-		// security 기본 설정
+		// security 관련 설정
 		http
-			// basic auth, csrf 보안, session 미사용
 			.httpBasic().disable()
 			.csrf().disable()
-			.cors()
-			.and()// 권한 체크
+			.cors()// cors 허용
+			.and()
 			.authorizeRequests()
 			.anyRequest().permitAll();
+
 		return http.build();
 	}
 }

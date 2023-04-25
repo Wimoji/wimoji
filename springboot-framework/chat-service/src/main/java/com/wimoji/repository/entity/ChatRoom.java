@@ -8,16 +8,16 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-@Builder
 @Getter
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Document(collection = "chat_room")
 public class ChatRoom {
+	// 채팅방 Document
 	private ObjectId id;
 	private String emoji;
 	private String name;
 	private int participant;
 	// private List<Chat> chatList;
-
 }

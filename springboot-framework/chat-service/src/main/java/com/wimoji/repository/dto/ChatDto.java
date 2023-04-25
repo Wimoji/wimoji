@@ -10,20 +10,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ChatDto {
+	// 채팅 정보
 	ObjectId rid;
 	String sender;
 	String content;
 	String sendTime;
-
-	public String getSender() {
-		return sender;
-	}
-
-	public String getContent() {
-		return content;
-	}
-
-	public String getSendTime() {
-		return sendTime;
-	}
 }

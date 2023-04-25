@@ -1,4 +1,4 @@
-package com.wimoji.repository.dto;
+package com.wimoji.repository.dto.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -6,6 +6,7 @@ import lombok.Data;
 @Data
 @AllArgsConstructor
 public class ChatRoomRes {
+	// 채팅방의 정보
 	String rid;
 	String emoji;
 	String name;
