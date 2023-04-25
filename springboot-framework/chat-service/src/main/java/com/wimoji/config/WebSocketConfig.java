@@ -11,7 +11,8 @@ import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerCo
 public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 	@Override
 	public void registerStompEndpoints(StompEndpointRegistry registry) {
-		registry.addEndpoint("/ws/chat") // client가 webSocket handshake connection을 생성할 경로
+		// client가 webSocket handshake connection을 생성할 경로 설정
+		registry.addEndpoint("/ws/chat")
 			.setAllowedOriginPatterns("*")
 			.withSockJS();
 	}

@@ -7,14 +7,17 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.wimoji.base.GeneralException;
+import com.wimoji.base.constant.Code;
 import com.wimoji.base.dto.DataResponseDto;
-import com.wimoji.repository.dto.ChatRoomReq;
-import com.wimoji.repository.dto.ChatRoomRes;
+import com.wimoji.base.dto.ErrorResponseDto;
+import com.wimoji.base.dto.ResponseDto;
+import com.wimoji.repository.dto.request.ChatRoomReq;
+import com.wimoji.repository.dto.response.ChatRoomRes;
 import com.wimoji.service.ChatRoomService;
 
 import lombok.RequiredArgsConstructor;
@@ -27,25 +30,48 @@ import lombok.extern.slf4j.Slf4j;
 public class ChatRoomController {
 	private final ChatRoomService chatRoomService;
 
+	/**
+	 * DB의 모든 채팅방을 반환 -> TODO: 헤더로 사용자의 정보를 받아서 해당 사용자가 참여한 모든 채팅방 반환
+	 * @param : user의 정보를 담은 AccessToken
+	 * @return : 채팅방의 정보 ChatRoomRes 반환
+	 * **/
 	@GetMapping()
-	public DataResponseDto<?> getRooms() {
-		List<ChatRoomRes> result = chatRoomService.findAllRooms();
-		return DataResponseDto.of(result);
+	public DataResponseDto<?> getAllRoom() {
+		try {
+			List<ChatRoomRes> result = chatRoomService.getAllRoom();
+
+			return DataResponseDto.of(result);
+		} catch (Exception e) {
+			throw e;
+		}
 	}
 
+	/**
+	 * 이모지의 정보를 담은 새로운 채팅방을 생성
+	 *
+	 * @param : 이모지의 정보를 담은 ChatRoomReq
+	 * @return : 성공 또는 실패 메세지
+	 **/
 	@PostMapping()
-	public ResponseEntity<?> makeRoom(@RequestBody ChatRoomReq chatRoomReq) {
-		chatRoomService.makeRoom(chatRoomReq);
-		return new ResponseEntity(HttpStatus.OK);
+	public DataResponseDto<?> makeRoom(@RequestBody ChatRoomReq chatRoomReq) {
+		try {
+			chatRoomService.makeRoom(chatRoomReq);
+
+			return DataResponseDto.empty();
+		} catch (Exception e) {
+			throw e;
+		}
 	}
 
+	/**
+	 * 채팅방을 나가면 user의 참여 채팅방 목록에서 제거
+	 * @param : user의 정보를 담은 AccessToken
+	 * @return : 성공 또는 실패 메세지
+	 * **/
 	@DeleteMapping()
-	public ResponseEntity<?> removeRoom() {
-		return new ResponseEntity(HttpStatus.OK);
-	}
+	public DataResponseDto<?> removeRoom() {
+		// 로직 구현 단계
 
-	@PutMapping()
-	public ResponseEntity<?> enterRoom() {
-		return new ResponseEntity(HttpStatus.OK);
+		return DataResponseDto.empty();
 	}
 }
