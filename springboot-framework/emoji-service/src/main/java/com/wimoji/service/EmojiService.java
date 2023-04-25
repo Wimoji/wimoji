@@ -109,22 +109,25 @@ public class EmojiService {
     public List<EmojiGetRes> getEmojiList(String uid){
         Criteria criteria = Criteria.where("uid").is(uid);
         Query query = new Query(criteria);
+        // 다른 방식으로 해보려 했지만 실패한 코드
 //        query.fields().include("emoji");
 //        List<Emoji> emojiList = mongoTemplate.find(query, Emoji.class);
         User user = mongoTemplate.findOne(query, User.class);
         List<Emoji> emojiList = user.getEmoji();
 
         List<EmojiGetRes> emojiGetList = new ArrayList<>();
-        for(int i=0; i<emojiList.size(); i++){
-            Emoji emoji = emojiList.get(i);
-            EmojiGetRes emojiGetRes = EmojiGetRes.builder()
-                    .content(emoji.getContent())
-                    .dongCode(emoji.getDongCode())
-                    .eid(emoji.getEid())
-                    .latitude(emoji.getLatitude())
-                    .longitude(emoji.getLongitude())
-                    .build();
-            emojiGetList.add(emojiGetRes);
+        if(emojiList != null) {
+            for (int i = 0; i < emojiList.size(); i++) {
+                Emoji emoji = emojiList.get(i);
+                EmojiGetRes emojiGetRes = EmojiGetRes.builder()
+                        .content(emoji.getContent())
+                        .dongCode(emoji.getDongCode())
+                        .eid(emoji.getEid())
+                        .latitude(emoji.getLatitude())
+                        .longitude(emoji.getLongitude())
+                        .build();
+                emojiGetList.add(emojiGetRes);
+            }
         }
 
         return emojiGetList;

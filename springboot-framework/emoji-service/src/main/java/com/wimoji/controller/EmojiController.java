@@ -65,7 +65,7 @@ public class EmojiController {
     @GetMapping("/")
     public DataResponseDto<?> getEmojiList(){
         try{
-            String uid = "id"; // 후에는 header로 할 예정
+            String uid = "ssafy"; // 후에는 header로 할 예정
             List<EmojiGetRes> emojiList = emojiService.getEmojiList(uid);
             return DataResponseDto.of(emojiList,200,"SUCCESS");
         } catch (Exception e){
