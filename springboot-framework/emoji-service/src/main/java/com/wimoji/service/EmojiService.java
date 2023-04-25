@@ -106,6 +106,11 @@ public class EmojiService {
             throw new GeneralException(Code.NO_EMOJI);
     }
 
+    /**
+     * 이모지 리스트 가져오기
+     * @param uid
+     * @return
+     */
     public List<EmojiGetRes> getEmojiList(String uid){
         Criteria criteria = Criteria.where("uid").is(uid);
         Query query = new Query(criteria);
