@@ -36,6 +36,8 @@ public class HomeService {
         2. 유저의 이모지 리스트 가져오기
         3. 동코드가 같은 친구 들고오기
         4. 위도 경도 계산
+        5. 해당되는 친구 저장
+        6. 거리순 정렬하여 30개 뽑기
          */
         //1. 본인을 제외한 현재 있는 모든 유저 중 로그인한 사람들
         Criteria criteria = Criteria.where("login").is(true)
@@ -57,7 +59,7 @@ public class HomeService {
                 if(!emoji.getDongCode().equals(dongCode))
                     continue;
 
-                //위도 경도로 거리 계산
+                //4. 위도 경도로 거리 계산
                 double dis = getDistance(Double.parseDouble(latitude), Double.parseDouble(longitude),
                         Double.parseDouble(emoji.getLatitude()), Double.parseDouble(emoji.getLongitude()));
 
@@ -65,7 +67,7 @@ public class HomeService {
                 if(dis > 100 || dis < 0)
                     continue;
 
-                //저장
+                //5. 저장
                 list.add(HomeRes.builder()
                                 .dis(dis)
                                 .uid(user.getUid())
@@ -78,6 +80,7 @@ public class HomeService {
             }//emojiList
         }//userList
 
+        //6. 거리순 정렬하여 30개 뽑기
         Collections.sort(list, new Comparator<HomeRes>() {
             @Override
             public int compare(HomeRes o1, HomeRes o2) {
