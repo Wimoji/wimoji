@@ -12,7 +12,8 @@
     </form>
     <ul>
       <li v-for="room in rooms" :key="room.id">
-        <p>채팅방 이모지 {{ room.emoji }} 채팅방 이름 {{ room.name }}</p>
+        <p>이모지: <img :src="room.emoji" alt="방 이모지"> 채팅방 이름 {{ room.name }}</p>
+        <p>채팅방 아이디: {{ room.id }}</p>
         <button @click="goRoom(room)">채팅방 들어가기</button>
       </li>
     </ul>
@@ -37,39 +38,29 @@ export default {
   methods: {
     async getRooms() {
       try {
-        const response = await axios.get(`${this.serverURL}/chatroom`);
+        const response = await axios.get(`${this.serverURL}`);
         this.rooms = response.data.data;
       } catch (error) {
         console.error(error);
       }
     },
     goRoom(room) {
-      // this.$router.push(`/chat/${id}`);
-      console.log("보내기 전 룸", room);
-      // this.$router.push({ name: 'chatting', params: { id: room.rid }, props: { room } });
-      this.$router.push( { name: 'chatting', params: { roomId: room.rid, data: room } });
-      // this.$router.push({ 
-      //   name: 'chatting', 
-      //   params: { roomId: room.rid }, 
-      //   props: { 
-      //     room: room
-      //   }
-      // });
+      this.$router.push( { name: 'chatting', params: { roomId: room.id, data: room } });
     },
     makeRoom(event) {
       event.preventDefault();
 
       const chatRoomReq = {
         name: this.name,
-        emoji: this.emoji
+        emoji: this.emoji,
+        participant: 1
       };
-      console.log("chatRoomReq >>> ", chatRoomReq);
       if (chatRoomReq.name.trim() === '' || chatRoomReq.emoji.trim() === '') {
         console.log('제목과 이모지는 필수 입력 사항입니다.');
         return;
       }
 
-      axios.post(`${this.serverURL}/chatroom`, chatRoomReq)
+      axios.post(`${this.serverURL}`, chatRoomReq)
         .then(response => {
           console.log(response);
         })

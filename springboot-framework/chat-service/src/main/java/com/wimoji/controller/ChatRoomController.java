@@ -6,7 +6,6 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.wimoji.base.GeneralException;
@@ -17,11 +16,8 @@ import com.wimoji.repository.dto.response.ChatRoomRes;
 import com.wimoji.service.ChatRoomService;
 
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 
-@Slf4j
 @RestController
-@RequestMapping("chat-service")
 @RequiredArgsConstructor
 public class ChatRoomController {
 	private final ChatRoomService chatRoomService;
