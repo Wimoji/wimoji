@@ -70,3 +70,6 @@
 .main-font-bd {
   font-family: var(--main-font-2);
 }
+.col-transparent {
+  background-color: transparent !important;
+}

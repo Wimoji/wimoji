@@ -1,8 +1,19 @@
 const userStore = {
-  state: {},
+  namespaced: true,
+  state: {
+    isLogin: false,
+  },
   getters: {},
-  mutations: {},
-  actions: {},
+  mutations: {
+    SET_IS_LOGIN(state, flag) {
+      state.isLogin = flag;
+    },
+  },
+  actions: {
+    setIsLogin({ commit }, flag) {
+      commit("SET_IS_LOGIN", flag);
+    },
+  },
   modules: {},
 };
 

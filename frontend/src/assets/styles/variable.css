@@ -10,6 +10,8 @@
   --text-col-2: #c3c3c3;
   --text-col-3: #d6d6d6;
 
+  --col-empty: rgba(0, 0, 0, 0);
+
   /* 글씨체 */
   --main-font-1: "SEBANG_Gothic_Rg";
   --main-font-2: "SEBANG_Gothic_Bd";
