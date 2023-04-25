@@ -5,6 +5,7 @@ import com.wimoji.repository.Entity.Emoji;
 import com.wimoji.repository.dto.request.EmojiDeleteReq;
 import com.wimoji.repository.dto.request.EmojiModifyReq;
 import com.wimoji.repository.dto.request.EmojiSaveReq;
+import com.wimoji.repository.dto.response.EmojiGetRes;
 import com.wimoji.service.EmojiService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -65,7 +66,7 @@ public class EmojiController {
     public DataResponseDto<?> getEmojiList(){
         try{
             String uid = "id"; // 후에는 header로 할 예정
-            List<Emoji> emojiList = emojiService.getEmojiList(uid);
+            List<EmojiGetRes> emojiList = emojiService.getEmojiList(uid);
             return DataResponseDto.of(emojiList,200,"SUCCESS");
         } catch (Exception e){
             throw e;

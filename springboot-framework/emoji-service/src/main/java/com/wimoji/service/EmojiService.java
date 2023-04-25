@@ -6,6 +6,7 @@ import com.wimoji.base.constant.Code;
 import com.wimoji.repository.Entity.Emoji;
 import com.wimoji.repository.Entity.User;
 import com.wimoji.repository.UserRepository;
+import com.wimoji.repository.dto.response.EmojiGetRes;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.FindAndModifyOptions;
@@ -17,6 +18,7 @@ import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -104,7 +106,7 @@ public class EmojiService {
             throw new GeneralException(Code.NO_EMOJI);
     }
 
-    public List<Emoji> getEmojiList(String uid){
+    public List<EmojiGetRes> getEmojiList(String uid){
         Criteria criteria = Criteria.where("uid").is(uid);
         Query query = new Query(criteria);
 //        query.fields().include("emoji");
@@ -112,7 +114,20 @@ public class EmojiService {
         User user = mongoTemplate.findOne(query, User.class);
         List<Emoji> emojiList = user.getEmoji();
 
-        return emojiList;
+        List<EmojiGetRes> emojiGetList = new ArrayList<>();
+        for(int i=0; i<emojiList.size(); i++){
+            Emoji emoji = emojiList.get(i);
+            EmojiGetRes emojiGetRes = EmojiGetRes.builder()
+                    .content(emoji.getContent())
+                    .dongCode(emoji.getDongCode())
+                    .eid(emoji.getEid())
+                    .latitude(emoji.getLatitude())
+                    .longitude(emoji.getLongitude())
+                    .build();
+            emojiGetList.add(emojiGetRes);
+        }
+
+        return emojiGetList;
     }
 
 
