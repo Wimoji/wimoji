@@ -2,8 +2,6 @@ package com.wimoji.controller;
 
 import java.util.List;
 
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -14,8 +12,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.wimoji.base.GeneralException;
 import com.wimoji.base.constant.Code;
 import com.wimoji.base.dto.DataResponseDto;
-import com.wimoji.base.dto.ErrorResponseDto;
-import com.wimoji.base.dto.ResponseDto;
 import com.wimoji.repository.dto.request.ChatRoomReq;
 import com.wimoji.repository.dto.response.ChatRoomRes;
 import com.wimoji.service.ChatRoomService;
@@ -25,7 +21,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @RestController
-@RequestMapping("/chatroom")
+@RequestMapping("chat-service")
 @RequiredArgsConstructor
 public class ChatRoomController {
 	private final ChatRoomService chatRoomService;
@@ -35,14 +31,14 @@ public class ChatRoomController {
 	 * @param : user의 정보를 담은 AccessToken
 	 * @return : 채팅방의 정보 ChatRoomRes 반환
 	 * **/
-	@GetMapping()
+	@GetMapping("/")
 	public DataResponseDto<?> getAllRoom() {
 		try {
 			List<ChatRoomRes> result = chatRoomService.getAllRoom();
 
 			return DataResponseDto.of(result);
 		} catch (Exception e) {
-			throw e;
+			throw new GeneralException(Code.DATA_ACCESS_ERROR);
 		}
 	}
 
@@ -52,14 +48,14 @@ public class ChatRoomController {
 	 * @param : 이모지의 정보를 담은 ChatRoomReq
 	 * @return : 성공 또는 실패 메세지
 	 **/
-	@PostMapping()
+	@PostMapping("/")
 	public DataResponseDto<?> makeRoom(@RequestBody ChatRoomReq chatRoomReq) {
 		try {
 			chatRoomService.makeRoom(chatRoomReq);
 
 			return DataResponseDto.empty();
 		} catch (Exception e) {
-			throw e;
+			throw new GeneralException(Code.DATA_ACCESS_ERROR);
 		}
 	}
 
@@ -68,7 +64,7 @@ public class ChatRoomController {
 	 * @param : user의 정보를 담은 AccessToken
 	 * @return : 성공 또는 실패 메세지
 	 * **/
-	@DeleteMapping()
+	@DeleteMapping("/")
 	public DataResponseDto<?> removeRoom() {
 		// 로직 구현 단계
 
