@@ -1,8 +1,11 @@
 package com.wimoji.repository;
 
-import com.wimoji.repository.dto.User;
+import com.wimoji.repository.dto.UserEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Repository;
 
 @Repository
@@ -10,7 +13,47 @@ public class UserRepository {
     @Autowired
     private MongoTemplate mongoTemplate;
 
-    public void save(User user) {
-        mongoTemplate.save(user);
+    public void save(UserEntity userEntity) {
+        mongoTemplate.save(userEntity);
+    }
+    public UserEntity findById(String uid) {
+        return mongoTemplate.findById(uid, UserEntity.class);
+    }
+    public UserEntity findAndModify(String id, String password, boolean isLogin) {
+        Query query = new Query();
+        Criteria criteria = new Criteria();
+
+        if (password == null)
+            query.addCriteria(criteria.andOperator(
+                    Criteria.where("uid").is(id),
+                    Criteria.where("password").is(password)
+            ));
+        else
+            query.addCriteria(criteria.andOperator(
+                    Criteria.where("uid").is(id)
+            ));
+
+        //로그인 상태 변경
+        UserEntity userEntity = mongoTemplate.findAndModify(
+                query,
+                Update.update("login", isLogin),
+                UserEntity.class
+        );
+        return userEntity;
+    }
+    public UserEntity findAndRemove(String id) {
+
+        Query query = new Query();
+        Criteria criteria = new Criteria();
+
+        query.addCriteria(criteria.andOperator(
+                Criteria.where("uid").is(id)
+        ));
+
+        UserEntity userEntity = mongoTemplate.findAndRemove(
+                query,
+                UserEntity.class
+        );
+        return userEntity;
     }
 }

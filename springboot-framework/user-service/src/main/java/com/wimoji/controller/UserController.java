@@ -4,7 +4,7 @@ import com.wimoji.base.GeneralException;
 import com.wimoji.base.constant.Code;
 import com.wimoji.base.dto.DataResponseDto;
 import com.wimoji.common.JwtTokenUtil;
-import com.wimoji.repository.dto.request.UserReqDto;
+import com.wimoji.repository.dto.request.UserReq;
 import com.wimoji.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
@@ -22,10 +22,9 @@ public class UserController {
     private JwtTokenUtil jwtTokenUtil;
 
     @PostMapping("/signup")
-    public DataResponseDto<?> makeUser(@RequestBody UserReqDto user) {
-
+    public DataResponseDto<?> makeUser(@RequestBody UserReq userReq) {
         try {
-            service.makeUser(user.getUid(), user.getPassword(), user.getNickname());
+            service.makeUser(userReq);
 
             return DataResponseDto.empty();
         } catch (Exception e) {
@@ -34,9 +33,10 @@ public class UserController {
     }
 
     @PutMapping("/login")
-    public DataResponseDto<?> setLoginUser(@RequestBody UserReqDto user) {
+    public DataResponseDto<?> setLoginUser(@RequestBody UserReq user) {
         try {
             HashMap<String, String> result = service.loginUser(user.getUid(), user.getPassword());
+
             return DataResponseDto.of(result);
         } catch (Exception e) {
             throw e;
@@ -45,7 +45,6 @@ public class UserController {
 
     @PutMapping("/logout")
     public DataResponseDto<?> setLogoutUser(HttpServletRequest request) {
-
         try {
             String bearerToken = request.getHeader("Authorization");
 

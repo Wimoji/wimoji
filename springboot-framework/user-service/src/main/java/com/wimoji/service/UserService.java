@@ -4,14 +4,15 @@ import com.wimoji.base.GeneralException;
 import com.wimoji.base.constant.Code;
 import com.wimoji.common.JwtTokenUtil;
 import com.wimoji.repository.UserRepository;
-//import com.wimoji.repository.dto.Emoji;
-import com.wimoji.repository.dto.User;
+import com.wimoji.repository.dto.UserEntity;
+import com.wimoji.repository.dto.request.UserReq;
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
+import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
-import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -21,23 +22,22 @@ import java.util.*;
 public class UserService {
 
     private final UserRepository repository;
-    @Autowired
-    private MongoTemplate mongoTemplate;
+    private static final boolean LOGIN = true;
+    private static final boolean LOGOUT = false;
 
-    public void makeUser(String uid, String password, String nickname) {
-        User findUser = mongoTemplate.findById(uid, User.class);
+    public void makeUser(UserReq userReq) {
+        UserEntity findUserEntity = repository.findById(userReq.getUid());
 
-        if(findUser != null){
+        // id 중복 확인
+        if(findUserEntity != null){
             throw new GeneralException(Code.ALREADY_USER);
         }
 
-        User user = User.builder()
-                .uid(uid)
-                .nickname(nickname)
-                .password(password)
-                .build();
+        ModelMapper mapper = new ModelMapper();
+        mapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
+        UserEntity userEntity = mapper.map(userReq, UserEntity.class);
 
-        repository.save(user);
+        repository.save(userEntity);
     }
 
     /**
@@ -47,28 +47,17 @@ public class UserService {
      * @return
      */
     public HashMap<String, String> loginUser(String id, String password) {
-        Query query = new Query();
-        Criteria criteria = new Criteria();
 
-        query.addCriteria(criteria.andOperator(
-                Criteria.where("uid").is(id),
-                Criteria.where("password").is(password)
-        ));
+        //로그인 상태 변경 로그인할 때 true
+        UserEntity userEntity = repository.findAndModify(id, password, LOGIN);
 
-        //로그인 상태 변경
-        User user = mongoTemplate.findAndModify(
-                query,
-                Update.update("login", true),
-                User.class
-        );
-
-        if (user == null) {
+        if (userEntity == null) {
             throw new GeneralException(Code.NO_USER);
         }
 
         //로그인 성공, 토큰 발급
-        String accessToken = JwtTokenUtil.makeAccessToken(user.getUid(), user.getNickname());
-        String refreshToken = JwtTokenUtil.makeRefreshToken(user.getUid(), user.getNickname());
+        String accessToken = JwtTokenUtil.makeAccessToken(userEntity.getUid(), userEntity.getNickname());
+        String refreshToken = JwtTokenUtil.makeRefreshToken(userEntity.getUid(), userEntity.getNickname());
 
         HashMap<String, String> result = new HashMap<>();
         result.put("accessToken", accessToken);
@@ -90,13 +79,9 @@ public class UserService {
         ));
 
         //로그아웃 상태로 변경
-        User user = mongoTemplate.findAndModify(
-                query,
-                Update.update("login", false),
-                User.class
-        );
+        UserEntity userEntity = repository.findAndModify(id, null, LOGOUT);
 
-        if(user == null){
+        if(userEntity == null){
             throw new GeneralException(Code.NO_USER);
         }
     }
@@ -106,17 +91,7 @@ public class UserService {
      * @param id
      */
     public void deleteUser(String id){
-        Query query = new Query();
-        Criteria criteria = new Criteria();
-
-        query.addCriteria(criteria.andOperator(
-                Criteria.where("uid").is(id)
-        ));
-
-        User user = mongoTemplate.findAndRemove(
-                query,
-                User.class
-        );
+        UserEntity userEntity = repository.findAndRemove(id);
     }
 
 }
