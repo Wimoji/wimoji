@@ -24,6 +24,12 @@ public class ChatRoomService {
 	public List<ChatRoomRes> getAllRoom() {
 		List<ChatRoomRes> chatRooms = chatRoomRepository.findAll();
 
+		// 24글자 대신 8글자를 rid로 사용하기 위해서 변환
+		for(int i=0; i<chatRooms.size(); i++) {
+			ChatRoomRes chatRoom = chatRooms.get(i);
+			chatRoom.setId(chatRoom.getId().substring(0, 8));
+		}
+
 		return chatRooms;
 	}
 
@@ -35,6 +41,5 @@ public class ChatRoomService {
 	public void makeRoom(ChatRoomReq chatRoomReq) {
 		// 이모지 정보를 chat_room 형식에 맞춰서 변환
 		chatRoomRepository.save(chatRoomReq);
-		// TODO: USER에 DATA 추가
 	}
 }

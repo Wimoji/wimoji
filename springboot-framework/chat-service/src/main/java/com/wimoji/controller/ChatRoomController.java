@@ -40,7 +40,7 @@ public class ChatRoomController {
 
 	/**
 	 * 이모지의 정보를 담은 새로운 채팅방을 생성
-	 *
+	 * emoji-service에서 이모지 생성 시 해당 api 호출하고 user db에 data 추가
 	 * @param : 이모지의 정보를 담은 ChatRoomReq
 	 * @return : 성공 또는 실패 메세지
 	 **/
@@ -63,7 +63,6 @@ public class ChatRoomController {
 	@DeleteMapping("/")
 	public DataResponseDto<?> removeRoom() {
 		// 로직 구현 단계
-
 		return DataResponseDto.empty();
 	}
 }
