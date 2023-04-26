@@ -1,10 +1,13 @@
 package com.example.gatewayservice.filter;
 
+import java.util.Iterator;
+
 import org.springframework.cloud.gateway.filter.GatewayFilter;
 import org.springframework.cloud.gateway.filter.factory.AbstractGatewayFilterFactory;
 import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.http.server.reactive.ServerHttpResponse;
 import org.springframework.stereotype.Component;
+import org.springframework.util.MultiValueMap;
 
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
@@ -25,7 +28,15 @@ public class GlobalFilter extends AbstractGatewayFilterFactory<GlobalFilter.Conf
 
 			if(config.isPreLogger()){
 				log.info("request path : {}", request.getPath());
-				log.info("request query params : {}", request.getQueryParams());
+				MultiValueMap<String,String> params = request.getQueryParams();
+				Iterator<String> iter = params.keySet().iterator();
+				while(iter.hasNext()){
+					String key = iter.next();
+					for(int i=0;i<params.get(key).size();i++){
+						String value = params.get(key).get(i);
+						log.info("request query params : {} {}", key,value);
+					}
+				}
 			}
 			return chain.filter(exchange).then(Mono.fromRunnable(()->{
 				if(config.isPostLogger()){
