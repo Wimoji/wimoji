@@ -107,24 +107,28 @@ public class JwtTokenUtil {
                     .build()
                     .parseClaimsJws(token);
             return true;
-        }catch (io.jsonwebtoken.security.SecurityException | MalformedJwtException e){
-            //잘못된 JWT 서명, 잘못된 형식의 JWT
-//            e.printStackTrace();
-            System.out.println("refresh >> 잘못된 JWT 서명, 잘못된 형식의 JWT");
-        }catch (ExpiredJwtException e){
-            //만료된 JWT 토큰
-//            e.printStackTrace();
-            System.out.println("refresh >> 만료된 JWT 토큰");
-        }catch (UnsupportedJwtException e){
-            //지원되지 않는 JWT 토큰
-//            e.printStackTrace();
-            System.out.println("refresh >> 지원되지 않는 JWT 토큰");
-        }catch (IllegalArgumentException e){
-            //JWT가 비어있음
-//            e.printStackTrace();
-            System.out.println("refresh >> JWT가 비어있음");
         }
-        return false;
+//        catch (io.jsonwebtoken.security.SecurityException | MalformedJwtException e){
+//            //잘못된 JWT 서명, 잘못된 형식의 JWT
+////            e.printStackTrace();
+//            System.out.println("refresh >> 잘못된 JWT 서명, 잘못된 형식의 JWT");
+//        }catch (ExpiredJwtException e){
+//            //만료된 JWT 토큰
+////            e.printStackTrace();
+//            System.out.println("refresh >> 만료된 JWT 토큰");
+//        }catch (UnsupportedJwtException e){
+//            //지원되지 않는 JWT 토큰
+////            e.printStackTrace();
+//            System.out.println("refresh >> 지원되지 않는 JWT 토큰");
+//        }catch (IllegalArgumentException e){
+//            //JWT가 비어있음
+////            e.printStackTrace();
+//            System.out.println("refresh >> JWT가 비어있음");
+//        }
+//        return false;
+        catch (Exception e){
+            throw new GeneralException(Code.TOKEN_ERROR);
+        }
     }
 
     /**
@@ -140,25 +144,29 @@ public class JwtTokenUtil {
                     .build()
                     .parseClaimsJws(token);
             return true;
-        }catch (io.jsonwebtoken.security.SecurityException | MalformedJwtException e){
-            //잘못된 JWT 서명, 잘못된 형식의 JWT
-//            e.printStackTrace();
-            System.out.println("access >> 잘못된 JWT 서명, 잘못된 형식의 JWT");
-            throw new GeneralException(Code.TOKEN_ERROR);
-        }catch (ExpiredJwtException e){
-            //만료된 JWT 토큰
-//            e.printStackTrace();
-            System.out.println("access >> 만료된 JWT 토큰");
-        }catch (UnsupportedJwtException e){
-            //지원되지 않는 JWT 토큰
-//            e.printStackTrace();
-            System.out.println("access >> 지원되지 않는 JWT 토큰");
-        }catch (IllegalArgumentException e){
-            //JWT가 비어있음
-//            e.printStackTrace();
-            System.out.println("access >> JWT가 비어있음");
         }
-        return false;
+//        catch (io.jsonwebtoken.security.SecurityException | MalformedJwtException e){
+//            //잘못된 JWT 서명, 잘못된 형식의 JWT
+////            e.printStackTrace();
+//            System.out.println("access >> 잘못된 JWT 서명, 잘못된 형식의 JWT");
+//            throw new GeneralException(Code.TOKEN_ERROR);
+//        }catch (ExpiredJwtException e){
+//            //만료된 JWT 토큰
+////            e.printStackTrace();
+//            System.out.println("access >> 만료된 JWT 토큰");
+//        }catch (UnsupportedJwtException e){
+//            //지원되지 않는 JWT 토큰
+////            e.printStackTrace();
+//            System.out.println("access >> 지원되지 않는 JWT 토큰");
+//        }catch (IllegalArgumentException e){
+//            //JWT가 비어있음
+////            e.printStackTrace();
+//            System.out.println("access >> JWT가 비어있음");
+//        }
+//        return false;
+        catch (Exception e){
+            throw new GeneralException(Code.TOKEN_ERROR);
+        }
     }
 
     /**
