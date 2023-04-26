@@ -13,14 +13,16 @@ import lombok.NoArgsConstructor;
 public class ChatRoomRes {
 	// 채팅방의 정보
 	String id;
+	String rid;
 	String emoji;
 	String name;
 	int participant;
-	boolean isNew;
+	int limit;
 
-	public ChatRoomRes(String emoji, String name, boolean isNew) {
-		this.emoji = emoji;
-		this.name = name;
-		this.isNew = isNew;
+	public static boolean isLimit(ChatRoomRes chatRoom) {
+		if(chatRoom.getLimit() == chatRoom.getParticipant()) {
+			return false;
+		}
+		return true;
 	}
 }

@@ -27,7 +27,7 @@ public class ChatRoomService {
 		// 24글자 대신 8글자를 rid로 사용하기 위해서 변환
 		for(int i=0; i<chatRooms.size(); i++) {
 			ChatRoomRes chatRoom = chatRooms.get(i);
-			chatRoom.setId(chatRoom.getId().substring(0, 8));
+			chatRoom.setRid(chatRoom.getId().substring(0, 8));
 		}
 
 		return chatRooms;

@@ -2,8 +2,10 @@ package com.wimoji.repository;
 
 import java.util.List;
 
+import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Repository;
 
@@ -33,5 +35,13 @@ public class ChatRoomRepository {
 	 * **/
 	public void save(ChatRoomReq chatRoom) {
 		mongoTemplate.save(chatRoom);
+	}
+
+	public ChatRoomRes findById(String id) {
+		Query query = new Query();
+		query.addCriteria(Criteria.where("_id").is(new ObjectId(id)));
+
+		ChatRoomRes chatRoom = mongoTemplate.findOne(query, ChatRoomRes.class);
+		return chatRoom;
 	}
 }

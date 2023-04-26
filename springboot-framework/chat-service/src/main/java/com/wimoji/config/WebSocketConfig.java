@@ -1,14 +1,21 @@
 package com.wimoji.config;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.messaging.simp.config.ChannelRegistration;
 import org.springframework.messaging.simp.config.MessageBrokerRegistry;
 import org.springframework.web.socket.config.annotation.EnableWebSocketMessageBroker;
 import org.springframework.web.socket.config.annotation.StompEndpointRegistry;
 import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerConfigurer;
 
+import com.wimoji.aop.SubscriptionInterceptor;
+
 @Configuration
 @EnableWebSocketMessageBroker
 public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
+	@Autowired
+	SubscriptionInterceptor subscriptionInterceptor;
+
 	@Override
 	public void registerStompEndpoints(StompEndpointRegistry registry) {
 		// client가 webSocket handshake connection을 생성할 경로 설정
@@ -24,5 +31,10 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 		registry.setApplicationDestinationPrefixes("/pub");
 		// 클라이언트가 메시지를 구독할 endpoint 정의
 		registry.enableSimpleBroker("/sub");
+	}
+
+	@Override
+	public void configureClientInboundChannel(ChannelRegistration registration) {
+		registration.interceptors(subscriptionInterceptor);
 	}
 }
