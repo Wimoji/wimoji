@@ -1,4 +1,10 @@
+"use client";
+
+import { useEffect, useState } from "react";
+import Header from "./components/Header/Header";
+import LoginWrapper from "./components/Wrapper/LoginWrapper";
 import "./globals.css";
+import { usePathname } from "next/navigation";
 
 export const metadata = {
   title: "wimoji",
@@ -10,9 +16,34 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
+  const [token, setToken] = useState<null | string>(null);
+
+  useEffect(() => {
+    const accessToken = sessionStorage.getItem("access-token");
+    setToken(accessToken);
+  });
+
+  const pathname = usePathname();
+
+  const getHeader = (): JSX.Element | null => {
+    switch (pathname) {
+      case "/":
+        return token ? <Header /> : null;
+      case "/my":
+      case "/my/chat":
+      case "/my/emoji":
+        return token ? <Header back /> : null;
+      default:
+        return null;
+    }
+  };
+
   return (
     <html lang="en">
-      <body>{children}</body>
+      <body>
+        {getHeader()}
+        <LoginWrapper>{children}</LoginWrapper>
+      </body>
     </html>
   );
 }

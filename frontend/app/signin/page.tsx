@@ -3,8 +3,12 @@
 import React, { useState } from "react";
 import SigninForm from "../components/Signin/SigninForm";
 import { signIn } from "../utils/axios/api";
+import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 const Signin: React.FC = () => {
+  const router = useRouter();
+
   const [uid, setUid] = useState("");
   const [password, setPassword] = useState("");
 
@@ -21,6 +25,8 @@ const Signin: React.FC = () => {
           "refresh-token",
           response.data.data.refreshToken
         );
+        //메인 화면으로 이동
+        router.push("/");
       }
     } catch (error: any) {
       alert(error.response.data.message);
@@ -45,6 +51,7 @@ const Signin: React.FC = () => {
         onUidChange={handleUidChange}
         onPasswordChange={handlePasswordChange}
       />
+      <Link href="/signup">회원가입 하기</Link>
     </div>
   );
 };

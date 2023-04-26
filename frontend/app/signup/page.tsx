@@ -3,8 +3,11 @@
 import React, { useState } from "react";
 import SignupForm from "../components/Signup/SignupForm";
 import { signUp } from "../utils/axios/api";
+import { useRouter } from "next/navigation";
 
 const Signup: React.FC = () => {
+  const router = useRouter();
+
   const [nickname, setNickname] = useState("");
   const [uid, setUid] = useState("");
   const [password, setPassword] = useState("");
@@ -30,6 +33,8 @@ const Signup: React.FC = () => {
       const result = await signUp({ nickname, uid, password });
       if (result.data.success) {
         alert("회원가입이 완료되었습니다.");
+        //로그인 화면으로 이동
+        router.push("/signin");
       }
     } catch (error: any) {
       alert(error.response.data.message);
