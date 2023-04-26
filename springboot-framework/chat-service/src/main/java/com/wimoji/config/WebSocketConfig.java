@@ -13,8 +13,11 @@ import com.wimoji.aop.SubscriptionInterceptor;
 @Configuration
 @EnableWebSocketMessageBroker
 public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
-	@Autowired
-	SubscriptionInterceptor subscriptionInterceptor;
+	private final SubscriptionInterceptor subscriptionInterceptor;
+
+	public WebSocketConfig(SubscriptionInterceptor subscriptionInterceptor) {
+		this.subscriptionInterceptor = subscriptionInterceptor;
+	}
 
 	@Override
 	public void registerStompEndpoints(StompEndpointRegistry registry) {

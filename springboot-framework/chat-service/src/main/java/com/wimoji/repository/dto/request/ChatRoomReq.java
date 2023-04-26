@@ -11,4 +11,5 @@ public class ChatRoomReq {
 	String emoji;
 	String name;
 	int participant;
+	int limit;
 }
