@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class ChatDto {
 	// 채팅 정보
-	ObjectId rid;
+	String rid;
 	String sender;
 	String content;
 	String sendTime;
