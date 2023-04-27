@@ -1,4 +1,4 @@
-import SignupForm from "@/components/Signup/SignupForm";
+import SignupForm from "@/components/molecules/SignupForm/SignupForm";
 import { signUp } from "@/utils/axiosApi";
 import { useRouter } from "next/router";
 import { useState } from "react";

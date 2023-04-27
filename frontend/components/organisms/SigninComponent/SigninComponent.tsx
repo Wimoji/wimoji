@@ -1,10 +1,16 @@
-import SigninForm from "@/components/Signin/SigninForm";
+import SigninForm from "@/components/molecules/SigninForm/SigninForm";
+import { RootState } from "@/store";
+import { changeUserState } from "@/store/UserSlice";
 import { signIn } from "@/utils/axiosApi";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 
 const SigninComponent = () => {
+  const dispatch = useDispatch();
+  const isLogin = useSelector((state: RootState) => state.user.isLogin);
+
   const router = useRouter();
 
   const [uid, setUid] = useState("");
@@ -23,6 +29,10 @@ const SigninComponent = () => {
           "refresh-token",
           response.data.data.refreshToken
         );
+
+        dispatch(changeUserState(true));
+        // console.log("로그인 상태 확인할게요 >> ", isLogin);
+
         //메인 화면으로 이동
         router.push("/");
       }
@@ -54,7 +64,12 @@ const SigninComponent = () => {
         onUidChange={handleUidChange}
         onPasswordChange={handlePasswordChange}
       />
-      <Link href="/signup">회원가입 하기</Link>
+      <Link
+        href="/signup"
+        className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full"
+      >
+        회원가입 하기
+      </Link>
     </div>
   );
 };
