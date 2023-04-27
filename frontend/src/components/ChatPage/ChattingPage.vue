@@ -82,6 +82,13 @@ export default {
           // console.log("전달 메세지: ", msg);
           this.messages.push(JSON.parse(msg.body));
         });
+
+        const msg = { 
+          rid: this.room.id,
+          sender: this.userId,
+          content: this.content,
+        };
+        this.socket.send("/pub/chat/enter", { token: "" }, JSON.stringify(msg));
       }, error => {
         console.log("소켓 연결 실패", error);
         // rid 오류
