@@ -41,7 +41,7 @@ public class HomeService {
          */
         //1. 본인을 제외한 현재 있는 모든 유저 중 로그인한 사람들
         Criteria criteria = Criteria.where("login").is(true)
-                .andOperator(Criteria.where("uid").not().is(uid));
+                .andOperator(Criteria.where("uid").ne(uid));
         Query query = new Query(criteria);
         List<User> userList = mongoTemplate.find(query, User.class);
 
@@ -50,6 +50,7 @@ public class HomeService {
         //2. 유저의 이모지 리스트 가져오기
         for(User user: userList){
             List<Emoji> emojiList = user.getEmoji();
+//            System.out.println("emojiList size: " + emojiList.size());
             //이모지 리스트가 있으면 다음 유저로
             if(emojiList == null)
                 continue;
@@ -62,6 +63,7 @@ public class HomeService {
                 //4. 위도 경도로 거리 계산
                 double dis = getDistance(Double.parseDouble(latitude), Double.parseDouble(longitude),
                         Double.parseDouble(emoji.getLatitude()), Double.parseDouble(emoji.getLongitude()));
+//                System.out.println(dis);
 
                 //반경 100m 넘으면 추가 안 함
                 if(dis > 100 || dis < 0)
@@ -77,9 +79,11 @@ public class HomeService {
                                 .latitude(emoji.getLatitude())
                                 .longitude(emoji.getLongitude())
                             .build());
+//                System.out.println("list size: " + list.size());
             }//emojiList
         }//userList
 
+        System.out.println("list size: " + list.size());
         //6. 거리순 정렬하여 30개 뽑기
         Collections.sort(list, new Comparator<HomeRes>() {
             @Override
