@@ -30,6 +30,7 @@ dependencies {
 	annotationProcessor 'org.projectlombok:lombok'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'io.projectreactor:reactor-test'
+	testImplementation group: 'ch.qos.logback', name: 'logback-classic', version: '0.9.26'
 }
 
 dependencyManagement {
