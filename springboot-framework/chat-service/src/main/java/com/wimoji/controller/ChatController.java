@@ -4,7 +4,9 @@ import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
 
-import com.wimoji.repository.ChatRoomRepository;
+import com.wimoji.base.GeneralException;
+import com.wimoji.base.constant.Code;
+import com.wimoji.repository.ChatRepository;
 import com.wimoji.repository.dto.request.ChatReq;
 
 import lombok.RequiredArgsConstructor;
@@ -14,7 +16,7 @@ import lombok.RequiredArgsConstructor;
 public class ChatController {
 	// message broker 사용 template
 	private final SimpMessagingTemplate template;
-	private final ChatRoomRepository chatRoomRepository;
+	private final ChatRepository chatRepository;
 
 	/**
 	 * 채팅방 참여 시 알림
@@ -24,7 +26,7 @@ public class ChatController {
 	@MessageMapping("/chat/enter")
 	public void enter(ChatReq chat) {
 		chat.setContent(chat.getSender() + "님이 채팅방에 참여하였습니다.");
-		template.convertAndSend("/sub/chat/room" + chat.getRid(), chat);
+		template.convertAndSend("/sub/chat/" + chat.getRid(), chat);
 	}
 
 	/**
@@ -35,5 +37,10 @@ public class ChatController {
 	@MessageMapping("/chat/message")
 	public void chat(ChatReq chat) {
 		template.convertAndSend("/sub/chat/" + chat.getRid(), chat);
+		try {
+			chatRepository.save(chat);
+		} catch (Exception e) {
+			throw new GeneralException(Code.BAD_REQUEST);
+		}
 	}
 }

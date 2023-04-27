@@ -51,18 +51,7 @@ public class ChatRoomController {
 
 			return DataResponseDto.empty();
 		} catch (Exception e) {
-			throw new GeneralException(Code.DATA_ACCESS_ERROR);
+			throw new GeneralException(Code.BAD_REQUEST);
 		}
-	}
-
-	/**
-	 * 채팅방을 나가면 user의 참여 채팅방 목록에서 제거
-	 * @param : user의 정보를 담은 AccessToken
-	 * @return : 성공 또는 실패 메세지
-	 * **/
-	@DeleteMapping("/")
-	public DataResponseDto<?> removeRoom() {
-		// 로직 구현 단계
-		return DataResponseDto.empty();
 	}
 }

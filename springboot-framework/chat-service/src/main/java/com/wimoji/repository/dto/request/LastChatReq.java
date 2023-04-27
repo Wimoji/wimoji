@@ -5,9 +5,8 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import lombok.Data;
 
 @Data
-@Document(collection = "chat")
-public class ChatReq {
+@Document(collection = "last_chat")
+public class LastChatReq {
+	String uid;
 	String rid;
-	String sender;
-	String content;
 }
