@@ -23,8 +23,8 @@ router.beforeEach((to, from, next) => {
   if (token) {
     store.dispatch("userStore/setIsLogin", true);
   }
-  var isLogin = store.state.userStore.isLogin;
-  console.log("이동해용", isLogin);
+  // var isLogin = store.state.userStore.isLogin;
+  // console.log("이동해용", isLogin);
   next();
 });
 
