@@ -1,23 +1,17 @@
 package com.wimoji.service;
 
-import com.mongodb.client.result.UpdateResult;
 import com.wimoji.base.GeneralException;
 import com.wimoji.base.constant.Code;
 import com.wimoji.repository.Entity.Emoji;
 import com.wimoji.repository.Entity.User;
 import com.wimoji.repository.UserRepository;
+import com.wimoji.repository.dto.request.EmojiDeleteReq;
+import com.wimoji.repository.dto.request.EmojiModifyReq;
+import com.wimoji.repository.dto.request.EmojiSaveReq;
 import com.wimoji.repository.dto.response.EmojiGetRes;
-import com.wimoji.repository.dto.response.HomeRes;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.mongodb.core.FindAndModifyOptions;
-import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.data.mongodb.core.aggregation.ArrayOperators;
-import org.springframework.data.mongodb.core.query.Criteria;
-import org.springframework.data.mongodb.core.query.Query;
-import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -29,45 +23,33 @@ import java.util.List;
 @Transactional
 public class EmojiService {
     private final UserRepository userRepository;
-    @Autowired
-    private MongoTemplate mongoTemplate;
 
     /**
      * 새로운 이모지 저장
      * @param uid
-     * @param eid
-     * @param content
-     * @param latitude
-     * @param longitude
-     * @param dongCode
+     * @param emojiReq
      */
-    public void saveEmoji(String uid, String eid, String content, String latitude, String longitude, String dongCode){
-        Emoji emoji = Emoji.builder()
-                .eid(eid)
-                .content(content)
-                .latitude(latitude)
-                .longitude(longitude)
-                .dongCode(dongCode)
-                .build();
-
+    public void saveEmoji(String uid, EmojiSaveReq emojiReq){
+        ModelMapper mapper = new ModelMapper();
+        mapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
+        Emoji emoji = mapper.map(emojiReq, Emoji.class);
         userRepository.saveEmoji(uid, emoji);
     }
 
     /**
      * 이모지 수정
      * @param uid
-     * @param order
-     * @param content
+     * @param emojiReq
      */
-    public void modifyEmoji(String uid, String order, String eid, String content){
+    public void modifyEmoji(String uid, EmojiModifyReq emojiReq){
         //user 찾기
         User document = userRepository.findUserByUid(uid);
 
         //index가 emoji list size내에 있어야 update
-        int intOrder = Integer.parseInt(order);
+        int intOrder = Integer.parseInt(emojiReq.getOrder());
         if(intOrder >= 0 && intOrder<document.getEmoji().size()) {
-            if(document.getEmoji().get(intOrder).getEid().equals(eid)){
-                userRepository.updateEmoji(uid, order, content);
+            if(document.getEmoji().get(intOrder).getEid().equals(emojiReq.getEid())){
+                userRepository.updateEmoji(uid, emojiReq.getOrder(), emojiReq.getContent());
             }
             else
                 throw new GeneralException(Code.NO_EMOJI);
@@ -79,16 +61,15 @@ public class EmojiService {
     /**
      * 이모지 삭제
      * @param uid
-     * @param order
-     * @param eid
+     * @param emojiReq
      */
-    public void deleteEmoji(String uid, String order, String eid){
+    public void deleteEmoji(String uid, EmojiDeleteReq emojiReq){
         User document = userRepository.findUserByUid(uid);
 
         //index가 emoji list size내에 있어야 delete
-        int intOrder = Integer.parseInt(order);
+        int intOrder = Integer.parseInt(emojiReq.getOrder());
         if(intOrder >= 0 && intOrder<document.getEmoji().size()) {
-            if(document.getEmoji().get(intOrder).getEid().equals(eid)){
+            if(document.getEmoji().get(intOrder).getEid().equals(emojiReq.getEid())){
                 userRepository.removeEmoji(uid, intOrder);
             }
             else

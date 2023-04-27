@@ -12,8 +12,8 @@ public class DataResponseDto<T> extends ResponseDto {
         super(true, Code.OK.getCode(), Code.OK.getMessage());
         this.data = data;
     }
-    private DataResponseDto(T data, int code, String message) {
-        super(true, code, message);
+    private DataResponseDto(T data, Code code, String message) {
+        super(true, code.getCode(), message);
         this.data = data;
     }
 
@@ -30,8 +30,8 @@ public class DataResponseDto<T> extends ResponseDto {
         return new DataResponseDto<>(data, message);
     }
 
-    public static <T> DataResponseDto<T> empty(int code, String message) {
+    public static <T> DataResponseDto<T> empty(Code code, String message) {
         return new DataResponseDto<>(null, code, message);
     }
-    public static <T> DataResponseDto<T> of(T data, int code, String message){return new DataResponseDto<>(data, code, message);}
+    public static <T> DataResponseDto<T> of(T data, Code code, String message){return new DataResponseDto<>(data, code, message);}
 }

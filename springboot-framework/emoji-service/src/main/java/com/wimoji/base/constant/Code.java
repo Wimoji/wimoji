@@ -13,6 +13,8 @@ import org.springframework.http.HttpStatus;
 @RequiredArgsConstructor
 public enum Code {
     OK(0, HttpStatus.OK, "Ok"),
+    SUCCESS(200, HttpStatus.OK, "SUCCESS"),
+    SUCCESS_NODATA(201, HttpStatus.CREATED, "SUCCESS"),
 
     BAD_REQUEST(10000, HttpStatus.BAD_REQUEST, "Bad request"),
     VALIDATION_ERROR(10001, HttpStatus.BAD_REQUEST, "Validation error"),
@@ -20,11 +22,7 @@ public enum Code {
 
     INTERNAL_ERROR(20000, HttpStatus.INTERNAL_SERVER_ERROR, "Internal error"),
     DATA_ACCESS_ERROR(20001, HttpStatus.INTERNAL_SERVER_ERROR, "Data access error"),
-    NO_EMOJI(20003, HttpStatus.NOT_FOUND, "이모지를 찾을 수 없습니다."),
-
-    NO_USER(30000, HttpStatus.NOT_FOUND, "등록된 사용자 정보를 찾을 수 없습니다."),
-    TOKEN_ERROR(30001, HttpStatus.UNAUTHORIZED, "Token 정보가 잘못됐습니다."),
-    ALREADY_USER(30002, HttpStatus.CONFLICT, "중복된 아이디입니다. 다른 아이디를 입력해주세요."),
+    NO_EMOJI(20002, HttpStatus.NOT_FOUND, "이모지를 찾을 수 없습니다."),
 
     UNAUTHORIZED(40000, HttpStatus.UNAUTHORIZED, "User unauthorized");
 

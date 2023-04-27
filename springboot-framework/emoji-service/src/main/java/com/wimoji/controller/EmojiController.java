@@ -1,7 +1,7 @@
 package com.wimoji.controller;
 
+import com.wimoji.base.constant.Code;
 import com.wimoji.base.dto.DataResponseDto;
-import com.wimoji.repository.Entity.Emoji;
 import com.wimoji.repository.dto.request.EmojiDeleteReq;
 import com.wimoji.repository.dto.request.EmojiModifyReq;
 import com.wimoji.repository.dto.request.EmojiSaveReq;
@@ -25,8 +25,8 @@ public class EmojiController {
     @PostMapping("/")
     public DataResponseDto<?> saveEmoji(@RequestBody EmojiSaveReq emoji){
         try{
-            emojiService.saveEmoji(emoji.getUid(), emoji.getEid(), emoji.getContent(), emoji.getLatitude(), emoji.getLongitude(), emoji.getDongCode());
-            return DataResponseDto.empty(201,"SUCCESS");
+            emojiService.saveEmoji(emoji.getUid(), emoji);
+            return DataResponseDto.empty(Code.SUCCESS_NODATA,Code.SUCCESS_NODATA.getMessage());
         }catch (Exception e){
             throw e;
         }
@@ -40,8 +40,8 @@ public class EmojiController {
     @PutMapping("/")
     public DataResponseDto<?> modifyEmoji(@RequestBody EmojiModifyReq emoji){
         try{
-            emojiService.modifyEmoji(emoji.getUid(), emoji.getOrder(), emoji.getEid(), emoji.getContent());
-            return DataResponseDto.empty(200, "SUCCESS");
+            emojiService.modifyEmoji(emoji.getUid(), emoji);
+            return DataResponseDto.empty(Code.SUCCESS, Code.SUCCESS.getMessage());
         }catch (Exception e){
             throw e;
         }
@@ -55,24 +55,25 @@ public class EmojiController {
     @PutMapping("/del")
     public DataResponseDto<?> deleteEmoji(@RequestBody EmojiDeleteReq emoji){
         try{
-            emojiService.deleteEmoji(emoji.getUid(), emoji.getOrder(), emoji.getEid());
-            return DataResponseDto.empty(201, "SUCCESS");
+            emojiService.deleteEmoji(emoji.getUid(), emoji);
+            return DataResponseDto.empty(Code.SUCCESS_NODATA, Code.SUCCESS.getMessage());
         }catch (Exception e){
             throw e;
         }
-    }
+        }
 
+    /**
+     * 유저의 이모지 가져오기
+     * @return
+     */
     @GetMapping("/")
-    public DataResponseDto<?> getEmojiList(){
-        try{
-            String uid = "ssafy"; // 후에는 header로 할 예정
-            List<EmojiGetRes> emojiList = emojiService.getEmojiList(uid);
-            return DataResponseDto.of(emojiList,200,"SUCCESS");
+        public DataResponseDto<?> getEmojiList(){
+            try{
+                String uid = "ssafy"; // 후에는 header로 할 예정
+                List<EmojiGetRes> emojiList = emojiService.getEmojiList(uid);
+            return DataResponseDto.of(emojiList, Code.SUCCESS, Code.SUCCESS.getMessage());
         } catch (Exception e){
             throw e;
         }
     }
-
-
-
 }

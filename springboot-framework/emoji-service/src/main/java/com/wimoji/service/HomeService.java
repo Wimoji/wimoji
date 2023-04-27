@@ -3,6 +3,7 @@ package com.wimoji.service;
 import com.wimoji.repository.Entity.Emoji;
 import com.wimoji.repository.Entity.User;
 import com.wimoji.repository.UserRepository;
+import com.wimoji.repository.dto.request.HomeReq;
 import com.wimoji.repository.dto.response.HomeRes;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -24,12 +25,10 @@ public class HomeService {
     /**
      * 현재 위치 기준으로 반경 100m이내 30개의 이모지 가져오기
      * @param uid
-     * @param latitude
-     * @param longitude
-     * @param dongCode
+     * @param homeReq
      * @return
      */
-    public List<HomeRes> getOtherEmojiList(String uid, String latitude, String longitude, String dongCode){
+    public List<HomeRes> getOtherEmojiList(String uid, HomeReq homeReq){
         /*
         1. 본인을 제외한 현재 있는 모든 유저 중 로그인한 사람들
         2. 유저의 이모지 리스트 가져오기
@@ -53,11 +52,11 @@ public class HomeService {
 
             //3. 동 코드가 같은 이모지 리스트 가져오기
             for(Emoji emoji: emojiList){
-                if(!emoji.getDongCode().equals(dongCode))
+                if(!emoji.getDongCode().equals(homeReq.getDongCode()))
                     continue;
 
                 //4. 위도 경도로 거리 계산
-                double dis = getDistance(Double.parseDouble(latitude), Double.parseDouble(longitude),
+                double dis = getDistance(Double.parseDouble(homeReq.getLatitude()), Double.parseDouble(homeReq.getLongitude()),
                         Double.parseDouble(emoji.getLatitude()), Double.parseDouble(emoji.getLongitude()));
 
                 //반경 100m 넘으면 추가 안 함

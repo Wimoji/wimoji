@@ -24,6 +24,7 @@ public class UserRepository {
      * @return
      */
     public List<User> findLoginedUser(String uid) {
+        //select * from user where login == true and uid = uid;
         Criteria criteria = Criteria.where("login").is(true)
                 .andOperator(Criteria.where("uid").ne(uid));
         Query query = new Query(criteria);
@@ -37,6 +38,7 @@ public class UserRepository {
      * @param emoji
      */
     public void saveEmoji(String uid, Emoji emoji){
+        //select * from user where uid=uid;
         Criteria criteria  = Criteria.where("uid").is(uid);
         Update update = new Update();
         update.push("emoji", emoji);
@@ -50,6 +52,7 @@ public class UserRepository {
      */
 
     public User findUserByUid(String uid){
+        //select * from user where uid=uid;
         Criteria criteria = Criteria.where("uid").is(uid);
         Query query = new Query(criteria);
         User document = mongoTemplate.findOne(query, User.class);
@@ -63,6 +66,7 @@ public class UserRepository {
      * @param content
      */
     public void updateEmoji(String uid, String order, String content){
+        //select * from user where uid=uid;
         Criteria criteria = Criteria.where("uid").is(uid);
         Query query = new Query(criteria);
 

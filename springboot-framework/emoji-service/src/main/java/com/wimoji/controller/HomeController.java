@@ -1,5 +1,6 @@
 package com.wimoji.controller;
 
+import com.wimoji.base.constant.Code;
 import com.wimoji.base.dto.DataResponseDto;
 import com.wimoji.repository.dto.request.HomeReq;
 import com.wimoji.repository.dto.response.HomeRes;
@@ -15,12 +16,18 @@ import java.util.List;
 @RequiredArgsConstructor
 public class HomeController {
     private final HomeService homeService;
+
+    /**
+     * 현재 위치 기반 주변 이모지 가져오기
+     * @param location
+     * @return
+     */
     @PostMapping("/location")
     public DataResponseDto<?> getOtherEmojiList(@RequestBody HomeReq location){
         try{
             List<HomeRes> homeResList =
-                    homeService.getOtherEmojiList(location.getUid(), location.getLatitude(), location.getLongitude(), location.getDongCode());
-            return DataResponseDto.of(homeResList, 200, "SUCCESS");
+                    homeService.getOtherEmojiList(location.getUid(), location);
+            return DataResponseDto.of(homeResList, Code.SUCCESS, Code.SUCCESS.getMessage());
         }catch (Exception e){
             throw e;
         }
