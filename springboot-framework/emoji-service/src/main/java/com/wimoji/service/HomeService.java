@@ -2,12 +2,13 @@ package com.wimoji.service;
 
 import com.wimoji.repository.Entity.Emoji;
 import com.wimoji.repository.Entity.User;
+import com.wimoji.repository.UserRepository;
 import com.wimoji.repository.dto.response.HomeRes;
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
+import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.data.mongodb.core.query.Criteria;
-import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -18,8 +19,7 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class HomeService {
-    @Autowired
-    private MongoTemplate mongoTemplate;
+    private final UserRepository userRepository;
 
     /**
      * 현재 위치 기준으로 반경 100m이내 30개의 이모지 가져오기
@@ -31,7 +31,6 @@ public class HomeService {
      */
     public List<HomeRes> getOtherEmojiList(String uid, String latitude, String longitude, String dongCode){
         /*
-        로직
         1. 본인을 제외한 현재 있는 모든 유저 중 로그인한 사람들
         2. 유저의 이모지 리스트 가져오기
         3. 동코드가 같은 친구 들고오기
@@ -40,20 +39,17 @@ public class HomeService {
         6. 거리순 정렬하여 30개 뽑기
          */
         //1. 본인을 제외한 현재 있는 모든 유저 중 로그인한 사람들
-        Criteria criteria = Criteria.where("login").is(true)
-                .andOperator(Criteria.where("uid").ne(uid));
-        Query query = new Query(criteria);
-        List<User> userList = mongoTemplate.find(query, User.class);
-
+        List<User> userList = userRepository.findLoginedUser(uid);
         //반환할 list
         List<HomeRes> list = new ArrayList<>();
+
         //2. 유저의 이모지 리스트 가져오기
         for(User user: userList){
             List<Emoji> emojiList = user.getEmoji();
-//            System.out.println("emojiList size: " + emojiList.size());
-            //이모지 리스트가 있으면 다음 유저로
+            //이모지 리스트가 없으면 다음 유저로
             if(emojiList == null)
                 continue;
+
 
             //3. 동 코드가 같은 이모지 리스트 가져오기
             for(Emoji emoji: emojiList){
@@ -63,27 +59,21 @@ public class HomeService {
                 //4. 위도 경도로 거리 계산
                 double dis = getDistance(Double.parseDouble(latitude), Double.parseDouble(longitude),
                         Double.parseDouble(emoji.getLatitude()), Double.parseDouble(emoji.getLongitude()));
-//                System.out.println(dis);
 
                 //반경 100m 넘으면 추가 안 함
                 if(dis > 100 || dis < 0)
                     continue;
 
                 //5. 저장
-                list.add(HomeRes.builder()
-                                .dis(dis)
-                                .uid(user.getUid())
-                                .eid(emoji.getEid())
-                                .content(emoji.getContent())
-                                .dongCode(emoji.getDongCode())
-                                .latitude(emoji.getLatitude())
-                                .longitude(emoji.getLongitude())
-                            .build());
-//                System.out.println("list size: " + list.size());
+                ModelMapper mapper = new ModelMapper();
+                mapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
+                HomeRes homeRes = mapper.map(emoji, HomeRes.class);
+                homeRes.setDis(dis);
+                homeRes.setUid(user.getUid());
+                list.add(homeRes);
             }//emojiList
         }//userList
 
-        System.out.println("list size: " + list.size());
         //6. 거리순 정렬하여 30개 뽑기
         Collections.sort(list, new Comparator<HomeRes>() {
             @Override
