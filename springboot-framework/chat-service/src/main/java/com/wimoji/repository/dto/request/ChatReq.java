@@ -1,6 +1,6 @@
-package com.wimoji.repository.dto;
+package com.wimoji.repository.dto.request;
 
-import org.bson.types.ObjectId;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -9,10 +9,9 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class ChatDto {
-	// 채팅 정보
+@Document(collection = "chat")
+public class ChatReq {
 	String rid;
 	String sender;
 	String content;
-	String sendTime;
 }
