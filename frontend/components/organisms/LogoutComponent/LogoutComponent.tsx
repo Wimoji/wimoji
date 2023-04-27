@@ -7,6 +7,7 @@ const LogoutComponent = () => {
 
   //로그아웃
   const hadleLogout = async () => {
+    //로그인 상태인지 확인 >> 수정 필요
     try {
       const result = await logout();
       if (result.data.success) {
