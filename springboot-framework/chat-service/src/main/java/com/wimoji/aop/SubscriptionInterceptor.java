@@ -25,14 +25,22 @@ public class SubscriptionInterceptor implements ChannelInterceptor {
 		if (StompCommand.SUBSCRIBE.equals(headerAccessor.getCommand())) {
 			String destination = headerAccessor.getDestination();
 			if (destination != null && destination.startsWith("/sub/")) {
+				if(isExist()) {
+					return message;
+				}
+
 				String id = destination.substring(10);
 				if (!validateSubscription(id)) {
-					// TODO: 원하는 MESSAGE로 전달
 					throw new GeneralException(Code.LIMIT_ERROR);
 				}
 			}
 		}
 		return message;
+	}
+
+	private boolean isExist() {
+		// 이미 참여한 인원인 경우 TRUE 반환
+		return false;
 	}
 
 	private boolean validateSubscription(String roomId) {

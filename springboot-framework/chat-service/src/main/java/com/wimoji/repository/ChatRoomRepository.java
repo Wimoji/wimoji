@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Repository;
 
 import com.wimoji.repository.dto.request.ChatRoomReq;
@@ -19,11 +20,16 @@ public class ChatRoomRepository {
 
 	/**
 	 * DB의 모든 채팅방 조회
-	 *
 	 * @param :
 	 * @return : chat_room에 있는 모든 data
 	 **/
 	public List<ChatRoomRes> findAll() {
+		Query query = new Query();
+		return mongoTemplate.find(query, ChatRoomRes.class);
+	}
+
+	public List<ChatRoomRes> findByUid() {
+		// 구현 단계
 		Query query = new Query();
 		return mongoTemplate.find(query, ChatRoomRes.class);
 	}
@@ -43,5 +49,12 @@ public class ChatRoomRepository {
 
 		ChatRoomRes chatRoom = mongoTemplate.findOne(query, ChatRoomRes.class);
 		return chatRoom;
+	}
+
+	public void incParticipant(String id) {
+		Query query = new Query();
+		query.addCriteria(Criteria.where("_id").is(new ObjectId(id)));
+		Update update = new Update().inc("participant", 1);
+		mongoTemplate.updateFirst(query, update, ChatRoomReq.class);
 	}
 }

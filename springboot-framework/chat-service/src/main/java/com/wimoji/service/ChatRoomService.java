@@ -33,6 +33,18 @@ public class ChatRoomService {
 		return chatRooms;
 	}
 
+	public List<ChatRoomRes> getMyRooms(String id) {
+		List<ChatRoomRes> chatRooms = chatRoomRepository.findByUid();
+
+		// 24글자 대신 8글자를 rid로 사용하기 위해서 변환
+		for(int i=0; i<chatRooms.size(); i++) {
+			ChatRoomRes chatRoom = chatRooms.get(i);
+			chatRoom.setRid(chatRoom.getId().substring(0, 8));
+		}
+
+		return chatRooms;
+	}
+
 	/**
 	 * DB에 새로운 정보 저장
 	 * @param : 이모지 정보를 담은 ChatRoomReq

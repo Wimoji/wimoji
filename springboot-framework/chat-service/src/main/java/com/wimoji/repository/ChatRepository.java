@@ -27,4 +27,7 @@ public class ChatRepository {
 
 		return Chat.getCid();
 	}
+
+	// 클라이언트가 접속했을 때 받은 가장 마지막 메시지 id 저장
+	// 가장 마지막 메시지를 반환하는 api
 }

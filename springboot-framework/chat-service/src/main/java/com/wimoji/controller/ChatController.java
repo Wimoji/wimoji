@@ -2,11 +2,13 @@ package com.wimoji.controller;
 
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Controller;
 
 import com.wimoji.base.GeneralException;
 import com.wimoji.base.constant.Code;
 import com.wimoji.repository.ChatRepository;
+import com.wimoji.repository.ChatRoomRepository;
 import com.wimoji.repository.dto.request.ChatReq;
 
 import lombok.RequiredArgsConstructor;
@@ -17,6 +19,7 @@ public class ChatController {
 	// message broker 사용 template
 	private final SimpMessagingTemplate template;
 	private final ChatRepository chatRepository;
+	private final ChatRoomRepository chatRoomRepository;
 
 	/**
 	 * 채팅방 참여 시 알림
@@ -27,6 +30,8 @@ public class ChatController {
 	public void enter(ChatReq chat) {
 		chat.setContent(chat.getSender() + "님이 채팅방에 참여하였습니다.");
 		template.convertAndSend("/sub/chat/" + chat.getRid(), chat);
+		chatRoomRepository.incParticipant(chat.getRid());
+		// 참여 인원에 추가
 	}
 
 	/**
@@ -43,4 +48,6 @@ public class ChatController {
 			throw new GeneralException(Code.BAD_REQUEST);
 		}
 	}
+
+	// DISCONNECT 기능 // 전체 알림 + 채팅방의 인원 감소 + 채팅방 참여 유저에서 삭제
 }
