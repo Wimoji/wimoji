@@ -1,22 +1,23 @@
-import ListHeader from "@/views/Header/ListHeader.vue";
-import ListView from "@/views/ListView.vue";
+import MyHeader from "@/views/Header/MyHeader.vue";
+import MyPageView from "@/views/MyPageView.vue";
 import ChatPage from "@/components/ChatPage/ChatPage.vue";
 import ChattingPage from "@/components/ChatPage/ChattingPage.vue";
 import MyEmojiPage from "@/components/MyEmojiPage/MyEmojiPage.vue";
 
-const list = [
+const my = [
   {
-    path: "/list",
-    name: "list",
+    path: "/my",
+    name: "my",
     components: {
-      header: ListHeader,
-      default: ListView,
+      header: MyHeader,
+      default: MyPageView,
     },
     children: [
       {
         path: "/chat",
         name: "chat",
         components: {
+          header: MyHeader,
           default: ChatPage,
         },
       },
@@ -24,15 +25,17 @@ const list = [
         path: "/chat/:roomId",
         name: "chatting",
         component: ChattingPage,
-        // props: true,
       },
       {
-        path: "/myEmoji",
-        name: "myEmoji",
-        component: MyEmojiPage,
+        path: "/emoji",
+        name: "emoji",
+        components: {
+          header: MyHeader,
+          default: MyEmojiPage,
+        },
       },
     ],
   },
 ];
 
-export default list;
+export default my;

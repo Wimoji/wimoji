@@ -76,7 +76,7 @@
 
 <script>
 import { login } from "@/api/modules/user";
-import { mapActions, mapState } from "vuex";
+import { mapActions } from "vuex";
 
 const userStore = "userStore";
 
@@ -89,11 +89,9 @@ export default {
       passwordRules: [(v) => !!v || "비밀번호를 입력해주세요."],
     };
   },
-  computed: {
-    ...mapState(userStore, ["isLogin"]),
-  },
+  computed: {},
   methods: {
-    ...mapActions(userStore, ["setIsLogin"]),
+    ...mapActions(userStore, ["setLogin"]),
     goSignupPage() {
       this.$router.push("/signup");
     },
@@ -115,7 +113,7 @@ export default {
               //세션 스토리지에 토큰 저장
               sessionStorage.setItem("access-token", data.data.accessToken);
               sessionStorage.setItem("refresh-token", data.data.refreshToken);
-              this.setIsLogin(true); //로그인 상태로 변경
+              this.setLogin(data.data.nickname); //로그인 정보 설정
               this.$router.push("/");
             }
           },
