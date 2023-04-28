@@ -11,6 +11,9 @@
       <label>최대 인원: 
         <input type="text" v-model="limit">
       </label>
+      <br/>
+      <input v-model="userName" placeholder="닉네임란(리나 1 동주 2 정빈 3 혜진 4 현정 5 유진 6 고정)" style="width: 400px"><br/>
+      <input v-model="userId" placeholder="아이디란(리나 동주 정빈 혜진 현정 유진 고정)" style="width: 400px"><br/>
       <button @click="makeRoom">채팅방 만들기</button>
     </form>
     <ul>
@@ -30,6 +33,8 @@ export default {
     return {
       serverURL: 'http://70.12.246.229:8080',
       rooms: [],
+      userId: '',
+      userName: '',
       name: '',
       emoji: '',
       limit: '',
@@ -37,6 +42,8 @@ export default {
   },
   mounted() {
     this.getRooms();
+    this.userId = sessionStorage.getItem("userId");
+    this.userName = sessionStorage.getItem("nickname");
   },
   methods: {
     async getRooms() {
@@ -58,7 +65,7 @@ export default {
         emoji: this.emoji,
         participant: 1,
         limit: parseInt(this.limit),
-        userList: [],
+        userList: [this.userId],
       };
       if (chatRoomReq.name.trim() === '' || chatRoomReq.emoji.trim() === '') {
         console.log('제목과 이모지는 필수 입력 사항입니다.');
