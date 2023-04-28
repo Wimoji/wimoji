@@ -72,7 +72,7 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 .v-speed-dial {
   position: absolute;
 }
