@@ -30,9 +30,10 @@ public class ChatRoomRepository {
 
 	public List<String> isExistUser(String id) {
 		Query query = new Query();
-		query.addCriteria(Criteria.where("_id").is(new ObjectId()));
+		query.addCriteria(Criteria.where("_id").is(new ObjectId(id)));
 		query.fields().include("userList");
 		ChatRoomRes chatRoom = mongoTemplate.findOne(query, ChatRoomRes.class);
+
 		return chatRoom.getUserList();
 	}
 
@@ -57,6 +58,27 @@ public class ChatRoomRepository {
 		Query query = new Query();
 		query.addCriteria(Criteria.where("_id").is(new ObjectId(id)));
 		Update update = new Update().inc("participant", 1);
+		mongoTemplate.updateFirst(query, update, ChatRoomReq.class);
+	}
+
+	public void decParticipant(String id) {
+		Query query = new Query();
+		query.addCriteria(Criteria.where("_id").is(new ObjectId(id)));
+		Update update = new Update().inc("participant", -1);
+		mongoTemplate.updateFirst(query, update, ChatRoomReq.class);
+	}
+
+	public void addUserToList(String rid, String uid) {
+		Query query = new Query();
+		query.addCriteria(Criteria.where("_id").is(new ObjectId(rid)));
+		Update update = new Update().addToSet("userList", uid);
+		mongoTemplate.updateFirst(query, update, ChatRoomReq.class);
+	}
+
+	public void deleteUserToList(String rid, String uid) {
+		Query query = new Query();
+		query.addCriteria(Criteria.where("_id").is(new ObjectId(rid)));
+		Update update = new Update().pull("userList", uid);
 		mongoTemplate.updateFirst(query, update, ChatRoomReq.class);
 	}
 }

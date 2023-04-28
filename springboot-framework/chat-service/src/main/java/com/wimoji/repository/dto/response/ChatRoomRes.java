@@ -22,7 +22,7 @@ public class ChatRoomRes {
 	List<String> userList;
 
 	public static boolean isLimit(ChatRoomRes chatRoom) {
-		if(chatRoom.getLimit() == chatRoom.getParticipant()) {
+		if(chatRoom.getLimit() <= (chatRoom.getParticipant() + 1)) {
 			return false;
 		}
 		return true;

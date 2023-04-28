@@ -9,9 +9,12 @@ import com.wimoji.base.constant.Code;
 import com.wimoji.repository.ChatRepository;
 import com.wimoji.repository.ChatRoomRepository;
 import com.wimoji.repository.dto.request.ChatReq;
+import com.wimoji.repository.dto.request.InOutChatReq;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Controller
 @RequiredArgsConstructor
 public class ChatController {
@@ -26,11 +29,14 @@ public class ChatController {
 	 * @return 참여한 사람의 정보를 알림
 	 * **/
 	@MessageMapping("/chat/enter")
-	public void enter(ChatReq chat) {
-		chat.setContent(chat.getSender() + "님이 채팅방에 참여하였습니다.");
+	public void enter(InOutChatReq enterChat) {
+		ChatReq chat = new ChatReq(enterChat.getRid(),
+			enterChat.getUserId(),
+			enterChat.getUserName() + "님이 채팅방에 참여하였습니다.");
 		template.convertAndSend("/sub/chat/" + chat.getRid(), chat);
-		chatRoomRepository.incParticipant(chat.getRid());
-		// 참여 인원에 추가
+
+		chatRoomRepository.incParticipant(enterChat.getRid());
+		chatRoomRepository.addUserToList(enterChat.getRid(), enterChat.getUserId());
 	}
 
 	/**
@@ -48,5 +54,14 @@ public class ChatController {
 		}
 	}
 
-	// DISCONNECT 기능 // 전체 알림 + 채팅방의 인원 감소 + 채팅방 참여 유저에서 삭제
+	@MessageMapping("/chat/exit")
+	public void chat(InOutChatReq outChat) {
+		ChatReq chat = new ChatReq(outChat.getRid(),
+			outChat.getUserId(),
+			outChat.getUserName() + "님이 채팅방에서 퇴장하였습니다.");
+		template.convertAndSend("/sub/chat/" + chat.getRid(), chat);
+
+		chatRoomRepository.decParticipant(outChat.getRid());
+		chatRoomRepository.deleteUserToList(outChat.getRid(), outChat.getUserId());
+	}
 }

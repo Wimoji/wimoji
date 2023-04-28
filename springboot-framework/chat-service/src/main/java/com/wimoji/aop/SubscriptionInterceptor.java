@@ -15,7 +15,9 @@ import com.wimoji.repository.ChatRoomRepository;
 import com.wimoji.repository.dto.response.ChatRoomRes;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Component
 @RequiredArgsConstructor
 public class SubscriptionInterceptor implements ChannelInterceptor {
@@ -24,16 +26,14 @@ public class SubscriptionInterceptor implements ChannelInterceptor {
 	@Override
 	public Message<?> preSend(Message<?> message, MessageChannel channel) {
 		StompHeaderAccessor headerAccessor = StompHeaderAccessor.wrap(message);
-		if (StompCommand.SUBSCRIBE.equals(headerAccessor.getCommand())) {
-			String destination = headerAccessor.getDestination();
-			if (destination != null && destination.startsWith("/sub/")) {
-				String roomId = destination.substring(10);
-				String userId = (String) headerAccessor.getSessionAttributes().get("userId");
+		if (StompCommand.CONNECT.equals(headerAccessor.getCommand())) {
+			String userId = headerAccessor.getFirstNativeHeader("userId");
+			String roomId = headerAccessor.getFirstNativeHeader("roomId");
+			if(userId == null) {
+				// 예외처리
+			}
 
-				if(isExist(userId, roomId)) {
-					return message;
-				}
-
+			if(!isExist(userId, roomId)) {
 				if (!validateSubscription(roomId)) {
 					throw new GeneralException(Code.LIMIT_ERROR);
 				}
@@ -43,9 +43,10 @@ public class SubscriptionInterceptor implements ChannelInterceptor {
 	}
 
 	private boolean isExist(String uid, String rid) {
+		log.info("isExist");
 		List<String> userList = chatRoomRepository.isExistUser(rid);
 		for(String userId : userList) {
-			if(uid.equals(userId)) {
+			if(userId.equals(uid)) {
 				return true;
 			}
 		}
@@ -53,10 +54,12 @@ public class SubscriptionInterceptor implements ChannelInterceptor {
 	}
 
 	private boolean validateSubscription(String roomId) {
+		log.info("validate");
 		ChatRoomRes chatRoom = chatRoomRepository.findById(roomId);
 		if (chatRoom != null && ChatRoomRes.isLimit(chatRoom)) {
 			return true;
 		}
+		log.info("false");
 		return false;
 	}
 }
