@@ -1,11 +1,17 @@
-# user-service 컨테이너 생성
-docker build -t user-service:latest ./springboot-framework/user-service
+# openjdk17로 실행
+FROM openjdk:17
 
-# 이미 실행 중인 user-service 컨테이너가 있다면 중단하기
-if (docker ps | grep user-service) then docker stop user-service; fi
+# 컨테이너가 리스닝할 포트
+EXPOSE 8080
 
-# user-service 컨테이너 실행
-docker run -d --rm --name user-service -p 8081:8080 user-service
+# 해당 경로의 모든 jar파일을 변수로 담기
+ARG JAR_FILE=build/libs/*.jar
 
-# 중단한 뒤 남아있는 이미지들 삭제
-docker image prune -f
+# 빌드된 jar파일을 app.jar파일 이라는 이름으로 생성
+COPY ${JAR_FILE} app.jar
+
+# 환경 변수 설정
+ENV TZ=Asia/Seoul
+
+# 컨테이너를 실행할 때 실행할 커맨드
+ENTRYPOINT ["java", "-jar", "app.jar"]
