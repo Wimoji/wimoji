@@ -1,5 +1,7 @@
 package com.wimoji.repository.dto.response;
 
+import java.util.List;
+
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import lombok.AllArgsConstructor;
@@ -11,13 +13,13 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Document(collection = "chat_room")
 public class ChatRoomRes {
-	// 채팅방의 정보
 	String id;
 	String rid;
 	String emoji;
 	String name;
 	int participant;
 	int limit;
+	List<String> userList;
 
 	public static boolean isLimit(ChatRoomRes chatRoom) {
 		if(chatRoom.getLimit() == chatRoom.getParticipant()) {

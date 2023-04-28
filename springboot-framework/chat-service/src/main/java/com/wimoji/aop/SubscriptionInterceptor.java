@@ -1,5 +1,7 @@
 package com.wimoji.aop;
 
+import java.util.List;
+
 import org.springframework.messaging.Message;
 import org.springframework.messaging.MessageChannel;
 import org.springframework.messaging.simp.stomp.StompCommand;
@@ -25,12 +27,14 @@ public class SubscriptionInterceptor implements ChannelInterceptor {
 		if (StompCommand.SUBSCRIBE.equals(headerAccessor.getCommand())) {
 			String destination = headerAccessor.getDestination();
 			if (destination != null && destination.startsWith("/sub/")) {
-				if(isExist()) {
+				String roomId = destination.substring(10);
+				String userId = (String) headerAccessor.getSessionAttributes().get("userId");
+
+				if(isExist(userId, roomId)) {
 					return message;
 				}
 
-				String id = destination.substring(10);
-				if (!validateSubscription(id)) {
+				if (!validateSubscription(roomId)) {
 					throw new GeneralException(Code.LIMIT_ERROR);
 				}
 			}
@@ -38,8 +42,13 @@ public class SubscriptionInterceptor implements ChannelInterceptor {
 		return message;
 	}
 
-	private boolean isExist() {
-		// 이미 참여한 인원인 경우 TRUE 반환
+	private boolean isExist(String uid, String rid) {
+		List<String> userList = chatRoomRepository.isExistUser(rid);
+		for(String userId : userList) {
+			if(uid.equals(userId)) {
+				return true;
+			}
+		}
 		return false;
 	}
 

@@ -2,7 +2,6 @@ package com.wimoji.controller;
 
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
-import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Controller;
 
 import com.wimoji.base.GeneralException;

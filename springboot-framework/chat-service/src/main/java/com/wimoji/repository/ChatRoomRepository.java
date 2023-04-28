@@ -28,10 +28,12 @@ public class ChatRoomRepository {
 		return mongoTemplate.find(query, ChatRoomRes.class);
 	}
 
-	public List<ChatRoomRes> findByUid() {
-		// 구현 단계
+	public List<String> isExistUser(String id) {
 		Query query = new Query();
-		return mongoTemplate.find(query, ChatRoomRes.class);
+		query.addCriteria(Criteria.where("_id").is(new ObjectId()));
+		query.fields().include("userList");
+		ChatRoomRes chatRoom = mongoTemplate.findOne(query, ChatRoomRes.class);
+		return chatRoom.getUserList();
 	}
 
 	/**

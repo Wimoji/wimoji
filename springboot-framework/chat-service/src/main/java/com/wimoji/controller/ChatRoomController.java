@@ -2,8 +2,8 @@ package com.wimoji.controller;
 
 import java.util.List;
 
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -43,8 +43,9 @@ public class ChatRoomController {
 	 * @param : user의 id
 	 * @return : 채팅방의 정보 ChatRoomRes 반환
 	 * **/
-	// @GetMapping("/")
-	// public DataResponseDto<?> getMyRooms(String uid) {
+	// 고민 필요
+	// @GetMapping("/{uid}")
+	// public DataResponseDto<?> getMyRooms(@PathVariable String uid) {
 	// 	try {
 	// 		List<ChatRoomRes> result = chatRoomService.getMyRooms(uid);
 	//
