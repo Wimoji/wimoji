@@ -28,16 +28,16 @@ public class ChatController {
 	 * @param : 채팅 정보를 담은 ChatReq
 	 * @return 참여한 사람의 정보를 알림
 	 * **/
-	@MessageMapping("/chat/enter")
-	public void enter(InOutChatReq enterChat) {
-		ChatReq chat = new ChatReq(enterChat.getRid(),
-			enterChat.getUserId(),
-			enterChat.getUserName() + "님이 채팅방에 참여하였습니다.");
-		template.convertAndSend("/sub/chat/" + chat.getRid(), chat);
-
-		chatRoomRepository.incParticipant(enterChat.getRid());
-		chatRoomRepository.addUserToList(enterChat.getRid(), enterChat.getUserId());
-	}
+	// @MessageMapping("/chat/enter")
+	// public void enter(InOutChatReq enterChat) {
+	// 	ChatReq chat = new ChatReq(enterChat.getRid(),
+	// 		enterChat.getUserId(),
+	// 		enterChat.getUserName() + "님이 채팅방에 참여하였습니다.");
+	// 	template.convertAndSend("/sub/chat/" + chat.getRid(), chat);
+	//
+	// 	chatRoomRepository.incParticipant(enterChat.getRid());
+	// 	chatRoomRepository.addUserToList(enterChat.getRid(), enterChat.getUserId());
+	// }
 
 	/**
 	 * 사용자간 채팅
@@ -52,6 +52,7 @@ public class ChatController {
 		} catch (Exception e) {
 			throw new GeneralException(Code.BAD_REQUEST);
 		}
+		// 이거 돌려줄 때 Res로 바꿔서 id도 넣어서 돌려줘야 함 그러면 프론트에서 그거 저장하기
 	}
 
 	@MessageMapping("/chat/exit")

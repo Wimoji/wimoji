@@ -29,21 +29,23 @@ public class SubscriptionInterceptor implements ChannelInterceptor {
 		if (StompCommand.CONNECT.equals(headerAccessor.getCommand())) {
 			String userId = headerAccessor.getFirstNativeHeader("userId");
 			String roomId = headerAccessor.getFirstNativeHeader("roomId");
-			if(userId == null) {
-				// 예외처리
+			if(userId == null || roomId == null) {
+				throw new GeneralException(Code.BAD_REQUEST);
 			}
 
 			if(!isExist(userId, roomId)) {
 				if (!validateSubscription(roomId)) {
 					throw new GeneralException(Code.LIMIT_ERROR);
 				}
+
+				chatRoomRepository.incParticipant(roomId);
+				chatRoomRepository.addUserToList(roomId, userId);
 			}
 		}
 		return message;
 	}
 
 	private boolean isExist(String uid, String rid) {
-		log.info("isExist");
 		List<String> userList = chatRoomRepository.isExistUser(rid);
 		for(String userId : userList) {
 			if(userId.equals(uid)) {
@@ -54,12 +56,10 @@ public class SubscriptionInterceptor implements ChannelInterceptor {
 	}
 
 	private boolean validateSubscription(String roomId) {
-		log.info("validate");
 		ChatRoomRes chatRoom = chatRoomRepository.findById(roomId);
 		if (chatRoom != null && ChatRoomRes.isLimit(chatRoom)) {
 			return true;
 		}
-		log.info("false");
 		return false;
 	}
 }
