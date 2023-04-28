@@ -1,4 +1,3 @@
-import MyHeader from "@/views/Header/MyHeader.vue";
 import MyPageView from "@/views/MyPageView.vue";
 import ChatPage from "@/components/ChatPage/ChatPage.vue";
 import ChattingPage from "@/components/ChatPage/ChattingPage.vue";
@@ -9,28 +8,27 @@ const my = [
     path: "/my",
     name: "my",
     components: {
-      header: MyHeader,
       default: MyPageView,
     },
     children: [
       {
-        path: "/chat",
+        path: "/my/chat",
         name: "chat",
         components: {
-          header: MyHeader,
           default: ChatPage,
         },
       },
       {
-        path: "/chat/:roomId",
+        path: "/my/chat/:roomId",
         name: "chatting",
-        component: ChattingPage,
+        components: {
+          default: ChattingPage,
+        },
       },
       {
-        path: "/emoji",
+        path: "/my/emoji",
         name: "emoji",
         components: {
-          header: MyHeader,
           default: MyEmojiPage,
         },
       },

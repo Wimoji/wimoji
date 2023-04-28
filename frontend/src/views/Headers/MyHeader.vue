@@ -9,8 +9,8 @@
         <v-icon>mdi-account-remove-outline</v-icon>
       </v-btn>
     </div>
-    <router-link to="chat">채팅</router-link> |
-    <router-link to="myEmoji">나의 이모지</router-link>
+    <router-link to="/my/chat">채팅</router-link> |
+    <router-link to="/my/emoji">나의 이모지</router-link>
   </div>
 </template>
 
@@ -20,7 +20,7 @@ import { mapActions } from "vuex";
 
 export default {
   methods: {
-    ...mapActions("userStore", ["setIsLogin"]),
+    ...mapActions("userStore", ["setLogout"]),
     goBack() {
       if (this.$router.history.length > 1) {
         this.$router.go(-1);
@@ -35,10 +35,10 @@ export default {
             console.log(data);
             if (data.success) {
               alert("회원 탈퇴가 완료되었습니다.");
-              //세션에서 토큰 제거
+              //세션에서 유저 정보 제거
               sessionStorage.clear();
               //로그인 상태 변경
-              this.setIsLogin(false);
+              this.setLogout();
               this.$router.push("/");
             }
           },
