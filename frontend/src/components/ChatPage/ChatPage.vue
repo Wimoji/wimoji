@@ -58,6 +58,7 @@ export default {
         emoji: this.emoji,
         participant: 1,
         limit: parseInt(this.limit),
+        userList: [],
       };
       if (chatRoomReq.name.trim() === '' || chatRoomReq.emoji.trim() === '') {
         console.log('제목과 이모지는 필수 입력 사항입니다.');
