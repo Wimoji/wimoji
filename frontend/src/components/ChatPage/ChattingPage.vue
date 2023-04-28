@@ -75,7 +75,6 @@ export default {
           this.lastReadId = response.data.mid;
           resolve(this.lastReadId);
         }).catch(error => {
-          // db 오류
           console.log(error);
         });
       });
@@ -91,30 +90,21 @@ export default {
       this.socket.connect(headers, frame => {
         console.log('소켓 연결 성공: ', frame);
         this.socket.subscribe(`/sub/chat/${this.room.id}`, msg => {
-          // console.log("전달 메세지: ", msg);
           this.messages.push(JSON.parse(msg.body));
+          // 메시지 id 저장
         }), (error) => {
           console.log(error);
         };
-
-        const msg = { 
-          rid: this.room.id,
-          userId: this.userId,
-          userName: this.userName,
-        };
-        this.socket.send("/pub/chat/enter", { token: "" }, JSON.stringify(msg));
       }, error => {
         console.log("소켓 연결 실패", error);
-        // rid 오류
-        // 인원 최대
+        // rid 오류, uid 오류, 인원 최대
         if(error.command === "ERROR"){
-          alert("채팅방의 인원이 최대입니다.")
+          alert("채팅방에 접속할 수 없습니다.")
           this.goChat()
         }
       });
     },
     sendMessage() {
-      console.log("Send message:" + this.content);
       if (this.socket && this.socket.connected) {
         const msg = { 
           rid: this.room.id,
@@ -134,8 +124,7 @@ export default {
         const newMessages = response.data;
         this.messages.push(...newMessages);
       }).catch(error => {
-          // id 오류
-          // db 오류
+          // id 오류, db 오류
           console.log(error);
       });
     },
