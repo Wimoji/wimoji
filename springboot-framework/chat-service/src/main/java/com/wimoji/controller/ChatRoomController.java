@@ -8,8 +8,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.wimoji.base.GeneralException;
-import com.wimoji.base.constant.Code;
 import com.wimoji.base.dto.DataResponseDto;
 import com.wimoji.repository.dto.request.ChatRoomReq;
 import com.wimoji.repository.dto.request.ChatRoomUserReq;
