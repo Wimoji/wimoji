@@ -78,8 +78,10 @@ public class ChatRoomService {
 	 * @return :
 	 **/
 	public void decParticipant(String rid) {
-		chatRoomRepository.decParticipant(rid);
-		// 만약 나갔을 때 남은 인원이 0명이면 이모지 삭제
+		int participant = chatRoomRepository.decParticipant(rid);
+		if(participant == 0) {
+			// 이모지 삭제 요청 호출
+		}
 	}
 
 	/**

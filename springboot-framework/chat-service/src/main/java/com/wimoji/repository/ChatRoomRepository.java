@@ -82,11 +82,13 @@ public class ChatRoomRepository {
 	 * @param : 채팅방의 id
 	 * @return :
 	 **/
-	public void decParticipant(String rid) {
+	public int decParticipant(String rid) {
 		Query query = new Query();
 		query.addCriteria(Criteria.where("_id").is(new ObjectId(rid)));
 		Update update = new Update().inc("participant", -1);
 		mongoTemplate.updateFirst(query, update, ChatRoomReq.class);
+		ChatRoomRes chatRoom = mongoTemplate.findOne(query, ChatRoomRes.class);
+		return chatRoom.getParticipant();
 	}
 
 	/**
