@@ -3,6 +3,7 @@ const userStore = {
   state: {
     isLogin: false,
     user: {
+      id: null, //추후 제거
       nickname: null,
     },
   },
@@ -14,15 +15,19 @@ const userStore = {
     SET_USER_NICKNAME(state, nickname) {
       state.user.nickname = nickname;
     },
+    SET_USER_ID(state, id) {
+      state.user.id = id;
+    },
     CLEAR_USER(state) {
       state.isLogin = false;
       state.user.nickname = null;
     },
   },
   actions: {
-    setLogin({ commit }, nickname) {
+    setLogin({ commit }, user) {
       commit("SET_IS_LOGIN", true);
-      commit("SET_USER_NICKNAME", nickname);
+      commit("SET_USER_NICKNAME", user.nickname);
+      commit("SET_USER_ID", user.id);
     },
     setLogout({ commit }) {
       commit("CLEAR_USER");

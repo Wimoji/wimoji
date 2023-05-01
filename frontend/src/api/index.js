@@ -9,6 +9,12 @@ function apiInstance() {
   });
 
   instance.interceptors.request.use(function (config) {
+    if (config.url.includes("kakao")) {
+      config.headers["Authorization"] =
+        "KakaoAK " + process.env.VUE_APP_KAKAOMAP_API_KEY;
+      return config;
+    }
+
     const token = sessionStorage.getItem("access-token");
     const refreshToken = sessionStorage.getItem("refresh-token");
 
@@ -26,6 +32,10 @@ function apiInstance() {
   });
 
   instance.interceptors.response.use(function (config) {
+    if (config.config.url.includes("kakao")) {
+      return config;
+    }
+
     // 새로 발급된 access-token이 있다면 로컬 스토리지에 저장
     if (config.headers["access-token"]) {
       sessionStorage.setItem("access-token", config.headers["access-token"]);

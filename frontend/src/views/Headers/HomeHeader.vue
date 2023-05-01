@@ -56,10 +56,10 @@ export default {
           // console.log(data);
           if (data.success) {
             alert("로그아웃 되었습니다.");
-            //세션에서 유저 정보 제거
-            sessionStorage.clear();
             //로그인 상태 변경
             this.setLogout();
+            //세션에서 유저 정보 제거
+            sessionStorage.clear();
             this.$router.go(0);
           }
         },

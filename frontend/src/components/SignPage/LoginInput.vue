@@ -45,14 +45,25 @@
             </template>
           </v-text-field>
           <v-btn
+            v-if="isClick && isAllOk"
+            height="55px"
+            width="100%"
+            rounded
+            color="var(--main-col-3)"
+            class="white-col-1"
+            loading
+          ></v-btn>
+          <v-btn
+            v-else
             height="55px"
             width="100%"
             rounded
             color="var(--main-col-3)"
             class="white-col-1"
             @click="goLogin"
-            >로그인</v-btn
           >
+            로그인
+          </v-btn>
         </v-form>
       </v-container>
     </v-container>
@@ -87,6 +98,8 @@ export default {
       password: "",
       idRules: [(v) => !!v || "아이디를 입력해주세요."],
       passwordRules: [(v) => !!v || "비밀번호를 입력해주세요."],
+      isClick: false, //로그인 버튼을 눌렀는지 확인
+      isAllOk: false,
     };
   },
   computed: {},
@@ -96,6 +109,7 @@ export default {
       this.$router.push("/signup");
     },
     async goLogin() {
+      this.isClick = true;
       //로그인 유효성 검증
       const validate = this.$refs.form.validate();
       const data = {
@@ -104,6 +118,7 @@ export default {
       };
 
       if (validate) {
+        this.isAllOk = true;
         await login(
           data,
           ({ data }) => {
@@ -113,7 +128,13 @@ export default {
               //세션 스토리지에 토큰 저장
               sessionStorage.setItem("access-token", data.data.accessToken);
               sessionStorage.setItem("refresh-token", data.data.refreshToken);
-              this.setLogin(data.data.nickname); //로그인 정보 설정
+
+              //임시로 아이디도 전송 >> 이모지 서비스 수정되면 고칠 예정
+              const user = {
+                nickname: data.data.nickname,
+                id: this.id,
+              };
+              this.setLogin(user); //로그인 정보 설정
               this.$router.push("/");
             }
           },

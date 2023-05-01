@@ -14,10 +14,10 @@
 </template>
 
 <script>
+// 15개의 카테고리 이모지
 import { mapState } from "vuex";
 
 export default {
-  props: ["nowEmoji"],
   methods: {
     selectEmoji(id) {
       this.$emit("changeEmoji", id);
