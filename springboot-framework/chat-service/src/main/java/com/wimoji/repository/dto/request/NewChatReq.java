@@ -3,8 +3,7 @@ package com.wimoji.repository.dto.request;
 import lombok.Data;
 
 @Data
-public class InOutChatReq {
+public class NewChatReq {
 	String rid;
-	String userId;
-	String userName;
+	int idx;
 }

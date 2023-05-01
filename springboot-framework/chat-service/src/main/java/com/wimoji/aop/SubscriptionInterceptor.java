@@ -15,9 +15,7 @@ import com.wimoji.repository.ChatRoomRepository;
 import com.wimoji.repository.dto.response.ChatRoomRes;
 
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 
-@Slf4j
 @Component
 @RequiredArgsConstructor
 public class SubscriptionInterceptor implements ChannelInterceptor {
@@ -45,6 +43,11 @@ public class SubscriptionInterceptor implements ChannelInterceptor {
 		return message;
 	}
 
+	/**
+	 * 특정 유저가 특정 채팅방에 존재하는지 확인
+	 * @param : 유저의 id, 채팅방의 id
+	 * @return : true or false
+	 **/
 	private boolean isExist(String uid, String rid) {
 		List<String> userList = chatRoomRepository.isExistUser(rid);
 		for(String userId : userList) {
@@ -55,8 +58,13 @@ public class SubscriptionInterceptor implements ChannelInterceptor {
 		return false;
 	}
 
-	private boolean validateSubscription(String roomId) {
-		ChatRoomRes chatRoom = chatRoomRepository.findById(roomId);
+	/**
+	 * 유효한 채팅방인지 검사
+	 * @param : 채팅방의 id
+	 * @return : true or false
+	 **/
+	private boolean validateSubscription(String rid) {
+		ChatRoomRes chatRoom = chatRoomRepository.findById(rid);
 		if (chatRoom != null && ChatRoomRes.isLimit(chatRoom)) {
 			return true;
 		}

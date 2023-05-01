@@ -20,6 +20,8 @@ public class ChatRoomRes {
 	int participant;
 	int limit;
 	List<String> userList;
+	List<ChatRes> content;
+	boolean isNew;
 
 	public static boolean isLimit(ChatRoomRes chatRoom) {
 		if(chatRoom.getLimit() <= (chatRoom.getParticipant() + 1)) {
