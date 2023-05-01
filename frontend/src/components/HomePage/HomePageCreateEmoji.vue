@@ -22,9 +22,9 @@
               <div v-else>
                 <v-chip v-if="nowEmoji != 'mdi-heart-plus-outline'">
                   <v-avatar left>
-                    <v-img :src="emojiCategory[nowEmoji - 1].link"> </v-img>
+                    <v-img :src="emojiCategory[nowEmoji].link"> </v-img>
                   </v-avatar>
-                  {{ emojiCategory[nowEmoji - 1].title }}
+                  {{ emojiCategory[nowEmoji].title }}
                 </v-chip>
                 <v-btn fab v-else
                   ><v-icon>{{ nowEmoji }}</v-icon></v-btn
@@ -123,7 +123,7 @@ export default {
       await makeEmoji(
         data,
         ({ data }) => {
-          console.log(data);
+          // console.log(data);
           if (data.success) {
             alert("이모지 등록 완료!");
             //값 비워주기
