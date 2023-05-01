@@ -18,7 +18,7 @@
       <button @click="sendMessage">Send</button>
     </div>
     <div>
-      <button @click="disconnectWebSocket">채팅방 나가기</button>
+      <button @click="exitWebSocket">채팅방 완전 나가기</button>
     </div>
   </div>
 </template>
@@ -31,7 +31,7 @@ import axios from 'axios';
 export default {
   data() {
     return {
-      serverURL: 'http://70.12.246.229:8080',
+      serverURL: 'http://70.12.246.229:8083',
       messages: [],
       room: [],
       lastReadId: '',
@@ -55,14 +55,20 @@ export default {
     setInterval(this.checkUserActivity, 300000);
     
     this.connect();
-    // this.getLastReadId().then((lastReadId) => {
-    //   if(!lastReadId) {
-    //     this.connect();
-    //   } else {
-    //     this.getNewMessage(lastReadId);
-    //   }
-    // });
+    this.getLastReadId().then((lastReadId) => {
+      if(!lastReadId) {
+        this.connect();
+      } else {
+        this.getNewMessage(lastReadId);
+      }
+    });
     
+  },
+  mounted() {
+    window.addEventListener("beforeprint", this.disconnectWebSocket);
+  },
+  beforeUnmount() {
+    window.removeEventListener("beforeunload", this.disconnectWebSocket);
   },
   methods: {
     goChat() {
@@ -70,7 +76,7 @@ export default {
     },
     getLastReadId() {
       return new Promise((resolve) => {
-        axios.get("/read")
+        axios.get(`${this.serverURL}/read`)
         .then((response) => {
           this.lastReadId = response.data.mid;
           resolve(this.lastReadId);
@@ -92,6 +98,7 @@ export default {
         this.socket.subscribe(`/sub/chat/${this.room.id}`, msg => {
           this.messages.push(JSON.parse(msg.body));
           // 메시지 id 저장
+          console.log("전달 메시지>>>", msg);
         }), (error) => {
           console.log(error);
         };
@@ -108,18 +115,16 @@ export default {
       if (this.socket && this.socket.connected) {
         const msg = { 
           rid: this.room.id,
-          sender: this.userId,
           content: this.content,
         };
         this.socket.send("/pub/chat/message", { token: "" }, JSON.stringify(msg));
-        // 형식 오류
-        // db 저장 오류
+        // 형식 오류, db 저장 오류
       }
       this.content = "";
       this.lastActiveTime = Date.now();
     },
     getNewMessage(id) {
-      axios.get(`/unread` + id)
+      axios.get(`${this.serverURL}/unread` + id)
       .then((response) => {
         const newMessages = response.data;
         this.messages.push(...newMessages);
@@ -135,18 +140,28 @@ export default {
         this.disconnectWebSocket();
       }
     },
-    disconnectWebSocket() {
-      const msg = { 
+    disconnectWebSocket() {   
+      // 마지막 메시지 저장
+      const LastChatReq = { 
         rid: this.room.id,
-        userId: this.userId,
-        userName: this.userName,
+        uid: this.userId,
+        cid: null,
       };
-      this.socket.send("/pub/chat/exit", { token: "" }, JSON.stringify(msg));
+       axios.post(`${this.serverURL}/last`, LastChatReq)
+      .then(response => {
+        console.log(response);
+      })
+      .catch(error => {
+        console.log(error);
+      });
 
       this.socket.disconnect(() => {
         console.log('WebSocket 연결 종료.');
         this.goChat();
       });
+    },
+    exitWebSocket() {
+      this.socket.send("/pub/chat/exit", { token: "" }, { rid: this.room.id });
     },
   },
 };
