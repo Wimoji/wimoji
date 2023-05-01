@@ -15,3 +15,4 @@ ENV TZ=Asia/Seoul
 
 # 컨테이너를 실행할 때 실행할 커맨드
 ENTRYPOINT ["java", "-jar", "app.jar"]
+
