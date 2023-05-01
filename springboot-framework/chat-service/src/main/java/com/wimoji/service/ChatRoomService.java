@@ -2,8 +2,11 @@ package com.wimoji.service;
 
 import java.util.List;
 
+import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 
+import com.wimoji.base.GeneralException;
+import com.wimoji.base.constant.Code;
 import com.wimoji.repository.ChatRoomRepository;
 import com.wimoji.repository.LastChatRepository;
 import com.wimoji.repository.dto.request.ChatRoomReq;
@@ -19,6 +22,10 @@ import lombok.RequiredArgsConstructor;
 public class ChatRoomService {
 	private final ChatRoomRepository chatRoomRepository;
 	private final LastChatRepository lastChatRepository;
+
+	public List<ChatRoomRes> getAllRoom() {
+		return chatRoomRepository.findAll();
+	}
 
 	/**
 	 * id가 일치하는 채팅방을 반환
@@ -36,7 +43,11 @@ public class ChatRoomService {
 	 * @return :
 	 **/
 	public void makeRoom(ChatRoomReq chatRoomReq) {
-		chatRoomRepository.save(chatRoomReq);
+		try {
+			chatRoomRepository.save(chatRoomReq);
+		} catch (Exception e) {
+			throw new GeneralException(Code.BAD_REQUEST);
+		}
 	}
 
 	/**
@@ -45,7 +56,11 @@ public class ChatRoomService {
 	 * @return :
 	 **/
 	public void saveContent(ChatRes chat) {
-		chatRoomRepository.saveContent(chat);
+		try {
+			chatRoomRepository.saveContent(chat);
+		} catch (Exception e) {
+			throw new GeneralException(Code.BAD_REQUEST);
+		}
 	}
 
 	/**
@@ -64,6 +79,7 @@ public class ChatRoomService {
 	 **/
 	public void decParticipant(String rid) {
 		chatRoomRepository.decParticipant(rid);
+		// 만약 나갔을 때 남은 인원이 0명이면 이모지 삭제
 	}
 
 	/**
@@ -85,15 +101,30 @@ public class ChatRoomService {
 	}
 
 	/**
+	 * 채팅방에 참여한 유저 id 목록 반환
+	 * @param : 채팅방의 id
+	 * @return : 유저의 id를 담은 List
+	 **/
+	public List<String> isExistUser(String rid) {
+		return chatRoomRepository.isExistUser(rid);
+	}
+
+	/**
 	 * 유저가 채팅방에서 마지막으로 읽은 메시지 저장
 	 * @param : 채팅방의 id, 유저의 id
 	 * @return :
 	 **/
 	public void makeLastChat(String uid, String rid) {
-		int idx = chatRoomRepository.getLastChat(rid);
-		LastChatReq chatReq = new LastChatReq(uid, rid, idx);
+		try {
+			int idx = chatRoomRepository.getLastChat(rid);
+			LastChatReq chatReq = new LastChatReq(uid, rid, idx);
 
-		lastChatRepository.save(chatReq);
+			lastChatRepository.save(chatReq);
+		} catch (NullPointerException e) {
+			return;
+		} catch (Exception e) {
+			throw new GeneralException(Code.BAD_REQUEST);
+		}
 	}
 
 	/**
@@ -111,9 +142,13 @@ public class ChatRoomService {
 	 * @return : 메시지의 List
 	 **/
 	public List<ChatRes> getNewChat(NewChatReq newChatReq) {
-		int idx = (newChatReq.getIdx() < 10)? 0 : (newChatReq.getIdx() - 10);
-		newChatReq.setIdx(idx);
+		try {
+			int idx = (newChatReq.getIdx() < 10)? 0 : (newChatReq.getIdx() - 10);
+			newChatReq.setIdx(idx);
 
-		return chatRoomRepository.getNewChat(newChatReq);
+			return chatRoomRepository.getNewChat(newChatReq);
+		} catch (Exception e) {
+			throw new GeneralException(Code.BAD_REQUEST);
+		}
 	}
 }

@@ -1,11 +1,15 @@
 package com.wimoji.controller;
 
+import java.util.List;
+
 import org.springframework.messaging.handler.annotation.Header;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
 
+import com.wimoji.base.GeneralException;
+import com.wimoji.base.constant.Code;
 import com.wimoji.repository.dto.response.ChatRes;
 import com.wimoji.repository.dto.request.ChatReq;
 import com.wimoji.service.ChatRoomService;
@@ -28,9 +32,40 @@ public class ChatController {
 		String uid = "1"; // user-service 연동
 		String name = "이름"; // user-service 연동
 		ChatRes chatRes = new ChatRes(chatReq.getRid(), name, chatReq.getContent());
-		chatRoomService.saveContent(chatRes);
 
-		template.convertAndSend("/sub/chatRes/" + chatReq.getRid(), chatRes);
+		try {
+			chatRoomService.saveContent(chatRes);
+		} catch (Exception e) {
+			throw e;
+		}
+
+		template.convertAndSend("/sub/chat/" + chatReq.getRid(), chatRes);
+	}
+
+	/**
+	 * 사용자 입장
+	 * @param : accessToken, 채팅방의 id
+	 * @return :
+	 **/
+	@MessageMapping("/chat/enter")
+	public void enter(@Header("token") String token, @Header("rid") String rid) {
+		String uid = "1"; // user-service 연동
+		String name = "이름"; // user-service 연동
+
+		if(isExist(uid, rid)) {
+			return;
+		}
+
+		try {
+			chatRoomService.incParticipant(rid);
+			chatRoomService.addUserToList(rid, uid);
+		} catch (Exception e) {
+			throw new GeneralException(Code.INTERNAL_ERROR);
+		}
+
+		// 환영 메시지
+		ChatRes chatRes = new ChatRes(rid, uid, name + "님이 입장하였습니다.");
+		template.convertAndSend("/sub/chat/" + chatRes.getRid(), chatRes);
 	}
 
 	/**
@@ -39,13 +74,33 @@ public class ChatController {
 	 * @return :
 	**/
 	@MessageMapping("/chat/exit")
-	public void chat(@Header("token") String token, @Header("rid") String rid) {
+	public void exit(@Header("token") String token, @Header("rid") String rid) {
 		String uid = "1"; // user-service 연동
 		String name = "이름"; // user-service 연동
-		chatRoomService.decParticipant(rid);
-		chatRoomService.deleteUserToList(rid, uid);
+
+		try {
+			chatRoomService.decParticipant(rid);
+			chatRoomService.deleteUserToList(rid, uid);
+		} catch (Exception e) {
+			throw new GeneralException(Code.INTERNAL_ERROR);
+		}
 
 		ChatRes chatRes = new ChatRes(rid, uid, name + "님이 퇴장하였습니다.");
-		template.convertAndSend("/sub/chatRes/" + chatRes.getRid(), chatRes);
+		template.convertAndSend("/sub/chat/" + chatRes.getRid(), chatRes);
+	}
+
+	/**
+	 * 특정 유저가 특정 채팅방에 존재하는지 확인
+	 * @param : 유저의 id, 채팅방의 id
+	 * @return : true or false
+	 **/
+	private boolean isExist(String uid, String rid) {
+		List<String> userList = chatRoomService.isExistUser(rid);
+		for(String userId : userList) {
+			if(userId.equals(uid)) {
+				return true;
+			}
+		}
+		return false;
 	}
 }

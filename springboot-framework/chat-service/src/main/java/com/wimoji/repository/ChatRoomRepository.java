@@ -21,6 +21,17 @@ public class ChatRoomRepository {
 	private MongoTemplate mongoTemplate; // mongoDB 사용을 위한 template
 
 	/**
+	 * db의 모든 채팅방을 반환(테스트용)
+	 * @param : 채팅방의 id
+	 * @return : 채팅방의 정보를 담은 ChatRoomRes List 반환
+	 **/
+	public List<ChatRoomRes> findAll() {
+		Query query = new Query();
+		List<ChatRoomRes> chatRoom = mongoTemplate.find(query, ChatRoomRes.class);
+		return chatRoom;
+	}
+
+	/**
 	 * id가 일치하는 채팅방을 반환
 	 * @param : 채팅방의 id
 	 * @return : 채팅방의 정보 ChatRoomRes 반환

@@ -1,5 +1,7 @@
 package com.wimoji.controller;
 
+import java.util.List;
+
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -23,6 +25,21 @@ public class ChatRoomController {
 	private final ChatRoomService chatRoomService;
 
 	/**
+	 * db의 모든 채팅방을 반환(테스트용)
+	 * @param : 채팅방의 id
+	 * @return : 채팅방의 정보를 담은 ChatRoomRes List 반환
+	 **/
+	@GetMapping("/test")
+	public DataResponseDto<?> getAllRoom() {
+		try {
+			List<ChatRoomRes> result = chatRoomService.getAllRoom();
+			return DataResponseDto.of(result);
+		} catch (Exception e) {
+			throw e;
+		}
+	}
+
+	/**
 	 * id가 일치하는 채팅방을 반환
 	 * @param : 채팅방의 id
 	 * @return : 채팅방의 정보 ChatRoomRes 반환
@@ -40,7 +57,7 @@ public class ChatRoomController {
 
 			return DataResponseDto.of(chatRoom);
 		} catch (Exception e) {
-			throw new GeneralException(Code.DATA_ACCESS_ERROR);
+			throw e;
 		}
 	}
 
@@ -59,7 +76,7 @@ public class ChatRoomController {
 			chatRoomService.makeRoom(makeChatRoomReq);
 			return DataResponseDto.empty();
 		} catch (Exception e) {
-			throw new GeneralException(Code.BAD_REQUEST);
+			throw e;
 		}
 	}
 
@@ -71,10 +88,14 @@ public class ChatRoomController {
 	@PostMapping("/last")
 	public DataResponseDto<?> makeLastChat(@RequestHeader("Authorization") String accessToken,
 		@RequestBody String rid) {
-		String uid = "1"; // user-service 요청
-		chatRoomService.makeLastChat(uid, rid);
+		try {
+			String uid = "1"; // user-service 요청
+			chatRoomService.makeLastChat(uid, rid);
 
-		return DataResponseDto.empty();
+			return DataResponseDto.empty();
+		} catch (Exception e) {
+			throw e;
+		}
 	}
 
 	/**
@@ -85,10 +106,14 @@ public class ChatRoomController {
 	@GetMapping("/last")
 	public DataResponseDto<?> getLastChat(@RequestHeader("Authorization") String accessToken,
 		@RequestBody String rid) {
-		String uid = "1"; // user-service 요청
-		int lastId = chatRoomService.getLastChat(uid, rid);
+		try {
+			String uid = "1"; // user-service 요청
+			int lastId = chatRoomService.getLastChat(uid, rid);
 
-		return DataResponseDto.of(lastId);
+			return DataResponseDto.of(lastId);
+		} catch (Exception e) {
+			throw e;
+		}
 	}
 
 	/**
@@ -98,8 +123,12 @@ public class ChatRoomController {
 	 **/
 	@GetMapping("/unread")
 	public DataResponseDto<?> getNewChat(@RequestBody NewChatReq newChatReq) {
-		chatRoomService.getNewChat(newChatReq);
+		try {
+			chatRoomService.getNewChat(newChatReq);
 
-		return DataResponseDto.empty();
+			return DataResponseDto.empty();
+		} catch (Exception e) {
+			throw e;
+		}
 	}
 }
