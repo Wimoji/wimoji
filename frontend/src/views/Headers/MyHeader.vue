@@ -1,17 +1,21 @@
 <template>
-  <div>
-    <div>
-      <v-btn @click="goBack">
+  <v-sheet>
+    <v-toolbar flat height="80px">
+      <v-btn icon @click="goBack">
         <v-icon>mdi-chevron-left</v-icon>
       </v-btn>
-      목록
-      <v-btn @click="deleteUser">
+      <v-toolbar-title>목록</v-toolbar-title>
+      <v-spacer></v-spacer>
+      <v-btn icon @click="deleteUser">
         <v-icon>mdi-account-remove-outline</v-icon>
       </v-btn>
-    </div>
-    <router-link to="/my/chat">채팅</router-link> |
-    <router-link to="/my/emoji">나의 이모지</router-link>
-  </div>
+    </v-toolbar>
+
+    <v-tabs fixed-tabs>
+      <v-tab to="/my/chat">채팅</v-tab>
+      <v-tab to="/my/emoji">나의 이모지</v-tab>
+    </v-tabs>
+  </v-sheet>
 </template>
 
 <script>
