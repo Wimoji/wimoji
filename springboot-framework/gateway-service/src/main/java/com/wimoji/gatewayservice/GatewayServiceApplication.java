@@ -1,4 +1,4 @@
-package com.example.gatewayservice;
+package com.wimoji.gatewayservice;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

@@ -1,4 +1,4 @@
-package com.example.gatewayservice;
+package com.wimoji.gatewayservice;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

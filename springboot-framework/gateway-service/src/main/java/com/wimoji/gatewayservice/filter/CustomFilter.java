@@ -1,4 +1,4 @@
-package com.example.gatewayservice.filter;
+package com.wimoji.gatewayservice.filter;
 
 import org.springframework.cloud.gateway.filter.GatewayFilter;
 import org.springframework.cloud.gateway.filter.factory.AbstractGatewayFilterFactory;

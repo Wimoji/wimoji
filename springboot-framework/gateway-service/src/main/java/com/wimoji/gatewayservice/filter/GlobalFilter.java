@@ -1,4 +1,4 @@
-package com.example.gatewayservice.filter;
+package com.wimoji.gatewayservice.filter;
 
 import java.util.Iterator;
 
