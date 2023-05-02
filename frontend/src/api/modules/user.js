@@ -1,7 +1,7 @@
 import { apiInstance } from "@/api/index";
 
 const api = apiInstance();
-const baseURL = process.env.VUE_APP_API_USER_SERVICE_URL;
+const baseURL = `${process.env.VUE_APP_API_SERVICE_URL}/user-service`;
 
 //[ POST /user-service/signup ] 회원 가입
 async function signup(data, success, fail) {
