@@ -39,6 +39,9 @@ public class LastChatRepository {
 		Query query = new Query();
 		query.addCriteria(Criteria.where("uid").is(uid).and("rid").is(rid));
 		LastChatReq lastChat = mongoTemplate.findOne(query, LastChatReq.class);
+		if(lastChat == null) {
+			return 0;
+		}
 		return lastChat.getIdx();
 	}
 }

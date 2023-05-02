@@ -2,6 +2,7 @@ package com.wimoji.aop;
 
 import org.springframework.messaging.Message;
 import org.springframework.messaging.MessageChannel;
+import org.springframework.messaging.simp.stomp.StompCommand;
 import org.springframework.messaging.simp.stomp.StompHeaderAccessor;
 import org.springframework.messaging.support.ChannelInterceptor;
 import org.springframework.stereotype.Component;
@@ -12,7 +13,9 @@ import com.wimoji.repository.ChatRoomRepository;
 import com.wimoji.repository.dto.response.ChatRoomRes;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Component
 @RequiredArgsConstructor
 public class SubscriptionInterceptor implements ChannelInterceptor {
@@ -22,9 +25,11 @@ public class SubscriptionInterceptor implements ChannelInterceptor {
 	public Message<?> preSend(Message<?> message, MessageChannel channel) {
 		StompHeaderAccessor headerAccessor = StompHeaderAccessor.wrap(message);
 
-		String rid = headerAccessor.getFirstNativeHeader("roomId");
-		if (!validateSubscription(rid)) {
-			throw new GeneralException(Code.LIMIT_ERROR);
+		if (StompCommand.CONNECT.equals(headerAccessor.getCommand())) {
+			String rid = headerAccessor.getFirstNativeHeader("rid");
+			if (!validateSubscription(rid)) {
+				throw new GeneralException(Code.LIMIT_ERROR);
+			}
 		}
 
 		return message;

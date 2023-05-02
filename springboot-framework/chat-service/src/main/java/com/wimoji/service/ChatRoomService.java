@@ -2,7 +2,6 @@ package com.wimoji.service;
 
 import java.util.List;
 
-import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 
 import com.wimoji.base.GeneralException;
@@ -24,7 +23,14 @@ public class ChatRoomService {
 	private final LastChatRepository lastChatRepository;
 
 	public List<ChatRoomRes> getAllRoom() {
-		return chatRoomRepository.findAll();
+		List<ChatRoomRes> chatRooms = chatRoomRepository.findAll();
+
+		// 24글자 대신 8글자를 rid로 사용
+		for(ChatRoomRes chatRoom : chatRooms) {
+				chatRoom.setRid(chatRoom.getId().substring(0, 8));
+		}
+
+		return chatRooms;
 	}
 
 	/**
@@ -34,6 +40,7 @@ public class ChatRoomService {
 	 **/
 	public ChatRoomRes getRoom(String rid) {
 		ChatRoomRes chatRoom = chatRoomRepository.findById(rid);
+		chatRoom.setRid(chatRoom.getId().substring(0, 8));
 		return chatRoom;
 	}
 

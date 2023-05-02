@@ -13,8 +13,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Document(collection = "chat_room")
 public class ChatRoomRes {
-	String id;
-	String rid;
+	String id; // 8자리 짧은 아이디
+	String rid; // 12byte ObjectId
 	String emoji;
 	String name;
 	int participant;

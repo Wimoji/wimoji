@@ -3,6 +3,7 @@ package com.wimoji.controller;
 import java.util.List;
 
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -42,9 +43,9 @@ public class ChatRoomController {
 	 * @param : 채팅방의 id
 	 * @return : 채팅방의 정보 ChatRoomRes 반환
 	 **/
-	@GetMapping("/")
+	@GetMapping("/{rid}")
 	public DataResponseDto<?> getRoom(@RequestHeader("Authorization") String accessToken,
-		@RequestBody String rid) {
+		@PathVariable String rid) {
 		try {
 			String uid = "1"; // user-service 요청
 			ChatRoomRes chatRoom = chatRoomService.getRoom(rid);
@@ -101,9 +102,9 @@ public class ChatRoomController {
 	 * @param : 채팅방의 id, accessToken
 	 * @return : 마지막 메시지의 인덱스
 	 **/
-	@GetMapping("/last")
+	@GetMapping("/last/{rid}")
 	public DataResponseDto<?> getLastChat(@RequestHeader("Authorization") String accessToken,
-		@RequestBody String rid) {
+		@PathVariable String rid) {
 		try {
 			String uid = "1"; // user-service 요청
 			int lastId = chatRoomService.getLastChat(uid, rid);
@@ -119,9 +120,10 @@ public class ChatRoomController {
 	 * @param : 채팅방의 id, 마지막 메시지의 인덱스
 	 * @return : 메시지의 List
 	 **/
-	@GetMapping("/unread")
-	public DataResponseDto<?> getNewChat(@RequestBody NewChatReq newChatReq) {
+	@GetMapping("/unread/{rid}/{idx}")
+	public DataResponseDto<?> getNewChat(@PathVariable String rid, @PathVariable int idx) {
 		try {
+			NewChatReq newChatReq = new NewChatReq(rid, idx);
 			chatRoomService.getNewChat(newChatReq);
 
 			return DataResponseDto.empty();

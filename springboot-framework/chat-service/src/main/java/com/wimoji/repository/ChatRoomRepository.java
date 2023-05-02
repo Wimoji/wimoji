@@ -61,7 +61,7 @@ public class ChatRoomRepository {
 	public void saveContent(ChatRes chat) {
 		Query query = new Query();
 		query.addCriteria(Criteria.where("_id").is(new ObjectId(chat.getRid())));
-		Update update = new Update().pull("userList", chat.getSender());
+		Update update = new Update().addToSet("content", chat);
 		mongoTemplate.updateFirst(query, update, ChatRoomReq.class);
 	}
 

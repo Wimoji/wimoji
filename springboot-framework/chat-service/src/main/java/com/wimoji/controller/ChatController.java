@@ -28,7 +28,7 @@ public class ChatController {
 	 * @return 채팅을 보낸 채팅방에 대해서만 새로운 채팅 반환
 	**/
 	@MessageMapping("/chat/message")
-	public void chat(@Payload ChatReq chatReq, @Header("token") String token) {
+	public void chat(@Payload ChatReq chatReq, @Header("Authorization") String token) {
 		String uid = "1"; // user-service 연동
 		String name = "이름"; // user-service 연동
 		ChatRes chatRes = new ChatRes(chatReq.getRid(), name, chatReq.getContent());
@@ -48,7 +48,7 @@ public class ChatController {
 	 * @return :
 	 **/
 	@MessageMapping("/chat/enter")
-	public void enter(@Header("token") String token, @Header("rid") String rid) {
+	public void enter(@Header("Authorization") String token, @Header("rid") String rid) {
 		String uid = "1"; // user-service 연동
 		String name = "이름"; // user-service 연동
 
@@ -74,7 +74,7 @@ public class ChatController {
 	 * @return :
 	**/
 	@MessageMapping("/chat/exit")
-	public void exit(@Header("token") String token, @Header("rid") String rid) {
+	public void exit(@Header("Authorization") String token, @Header("rid") String rid) {
 		String uid = "1"; // user-service 연동
 		String name = "이름"; // user-service 연동
 
