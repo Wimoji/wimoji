@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class EmojiGetRes {
     String eid;
+    String rid;
     String content;
     String latitude;
     String longitude;

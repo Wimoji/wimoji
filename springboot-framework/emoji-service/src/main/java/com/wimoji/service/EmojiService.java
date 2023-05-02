@@ -29,10 +29,11 @@ public class EmojiService {
      * @param uid
      * @param emojiReq
      */
-    public void saveEmoji(String uid, EmojiSaveReq emojiReq){
+    public void saveEmoji(String uid, String rid, EmojiSaveReq emojiReq){
         ModelMapper mapper = new ModelMapper();
         mapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
         Emoji emoji = mapper.map(emojiReq, Emoji.class);
+        emoji.setRid(rid);
         userRepository.saveEmoji(uid, emoji);
     }
 

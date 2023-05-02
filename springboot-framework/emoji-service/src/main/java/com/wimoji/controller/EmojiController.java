@@ -13,6 +13,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.kafka.requestreply.ReplyingKafkaTemplate;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.List;
 
 import static com.wimoji.config.KafkaConfig.getUserByToken;
@@ -31,15 +35,38 @@ public class EmojiController {
      */
 
     @PostMapping("/")
-    public DataResponseDto<?> saveEmoji(HttpServletRequest request, @RequestBody EmojiSaveReq emoji){
+    public DataResponseDto<?> saveEmoji(HttpServletRequest request, @RequestBody EmojiSaveReq emoji) throws IOException {
+        BufferedReader bufferedReader = null;
+        StringBuilder stringBuilder = new StringBuilder();
         try{
             String bearerToken = request.getHeader("Authorization");
             User user = getUserByToken(template, bearerToken);
 
-            emojiService.saveEmoji(user.getUid(), emoji);
+            InputStream inputStream = request.getInputStream();
+            if (inputStream != null) {
+                bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
+                char[] charBuffer = new char[128];
+                int bytesRead = -1;
+                while ((bytesRead = bufferedReader.read(charBuffer)) > 0) {
+                    stringBuilder.append(charBuffer, 0, bytesRead);
+                }
+            }
+            String rid = stringBuilder.toString();
+
+            emojiService.saveEmoji(user.getUid(), rid, emoji);
             return DataResponseDto.empty(Code.SUCCESS_NODATA,Code.SUCCESS_NODATA.getMessage());
-        }catch (Exception e){
+        }
+        catch (Exception e){
             throw e;
+        }
+        finally {
+            if (bufferedReader != null) {
+                try {
+                    bufferedReader.close();
+                } catch (IOException ex) {
+                    throw ex;
+                }
+            }
         }
     }
 
