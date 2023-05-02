@@ -49,10 +49,10 @@ html body {
 }
 .moveInUp-enter-active {
   opacity: 0;
-  transition: opacity 1s ease-in;
+  transition: opacity 0.3s ease-in;
 }
 .moveInUp-enter-active {
-  animation: fadeIn 1s ease-in;
+  animation: fadeIn 0.3s ease-in;
 }
 @keyframes fadeIn {
   0% {
