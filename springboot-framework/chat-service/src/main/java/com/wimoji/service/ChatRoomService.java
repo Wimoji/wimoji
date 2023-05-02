@@ -161,4 +161,16 @@ public class ChatRoomService {
 			throw new GeneralException(Code.BAD_REQUEST);
 		}
 	}
+
+	/**
+	 * 이전 메시지를 30개씩 조회
+	 * @param : 채팅방의 id, 마지막 메시지의 인덱스
+	 * @return : 메시지의 List
+	 **/
+	public List<ChatRes> getPastChat(NewChatReq newChatReq) {
+		int idx = (newChatReq.getIdx() < 30)? 0 : (newChatReq.getIdx() - 30);
+		newChatReq.setIdx(idx);
+
+		return chatRoomRepository.getPastChat(newChatReq);
+	}
 }

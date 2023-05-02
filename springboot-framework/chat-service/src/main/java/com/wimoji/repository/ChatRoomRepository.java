@@ -144,6 +144,22 @@ public class ChatRoomRepository {
 	}
 
 	/**
+	 * 이전 메시지를 30개씩 조회
+	 * @param : 채팅방의 id, 메시지를 가져올 시작 인덱스
+	 * @return : 메시지의 List
+	 **/
+	public List<ChatRes> getPastChat(NewChatReq newChatReq) {
+		Query query = new Query();
+		query.addCriteria(Criteria.where("_id").is(new ObjectId(newChatReq.getRid())));
+		ChatRoomRes chatRoom = mongoTemplate.findOne(query, ChatRoomRes.class);
+
+		int endIdx = (newChatReq.getIdx() < 30)? newChatReq.getIdx() : (newChatReq.getIdx() + 30);
+
+		List<ChatRes> content = chatRoom.getContent().subList(newChatReq.getIdx(), endIdx);
+		return content;
+	}
+
+	/**
 	 * 채팅방에 참여한 유저 id 목록 반환
 	 * @param : 채팅방의 id
 	 * @return : 유저의 id를 담은 List
