@@ -1,21 +1,14 @@
 <template>
-  <v-sheet
-    class="d-flex justify-space-around flex-wrap"
-    color="var(--main-col-1)"
-  >
-    <v-sheet
-      class="my-5"
-      rounded="circle"
+  <v-sheet color="var(--main-col-1)">
+    <v-avatar
+      size="80"
+      color="white"
       v-for="(item, i) in myEmojis"
       :key="i"
       @click="detailEmoji(i)"
     >
-      <v-img
-        class="ma-4"
-        :src="emojiCategory[item.eid].link"
-        width="4rem"
-      ></v-img>
-    </v-sheet>
+      <v-img :src="emojiCategory[item.eid].link"></v-img>
+    </v-avatar>
     <transition name="moveInUp">
       <my-emoji-detail
         @closeEmoji="closeEmoji"
@@ -36,26 +29,48 @@ export default {
   components: { MyEmojiDetail },
   data() {
     return {
-      myEmojis: null,
+      myEmojis: [],
       selectedEmoji: null,
+      // lines: "",
     };
   },
   computed: {
     ...mapState("emojiStore", ["emojiCategory"]),
   },
-  async mounted() {
+  async created() {
     //나의 이모지 요청
     await getEmojis(
       ({ data }) => {
         // console.log(data);
         if (data.success) {
-          this.myEmojis = data.data;
+          // this.myEmojis = data.data;
+          data.data.forEach((element) => {
+            this.myEmojis.push({ eid: element.eid, content: element.content });
+          });
+          console.log(this.myEmojis);
+          // this.lines = this.myEmojis.length / 3;
         }
       },
       (error) => {
         console.log(error);
       }
     );
+  },
+  async mounted() {
+    // //나의 이모지 요청
+    // await getEmojis(
+    //   ({ data }) => {
+    //     // console.log(data);
+    //     if (data.success) {
+    //       this.myEmojis = data.data;
+    //       console.log(this.myEmojis);
+    //       this.lines = this.myEmojis.length / 3;
+    //     }
+    //   },
+    //   (error) => {
+    //     console.log(error);
+    //   }
+    // );
   },
   methods: {
     detailEmoji(index) {

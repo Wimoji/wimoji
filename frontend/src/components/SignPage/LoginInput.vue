@@ -52,6 +52,7 @@
             color="var(--main-col-3)"
             class="white-col-1"
             loading
+            @click="goLogin"
           ></v-btn>
           <v-btn
             v-else

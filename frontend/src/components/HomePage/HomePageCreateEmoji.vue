@@ -8,7 +8,7 @@
         </v-btn>
       </template>
 
-      <v-card class="pa-2">
+      <v-card max-width="500px" class="pa-2 emoji-card">
         <v-card-title class="text-h5 d-flex align-center justify-center">
           <v-speed-dial
             v-model="fab"
@@ -31,7 +31,12 @@
                 >
               </div>
             </template>
-            <v-sheet class="emoji-category pa-3" elevation="10" rounded="xl">
+            <v-sheet
+              max-width="500px"
+              class="emoji-category pa-3"
+              elevation="10"
+              rounded="xl"
+            >
               <emoji-list @changeEmoji="changeEmoji" />
             </v-sheet>
           </v-speed-dial>
@@ -58,7 +63,7 @@
 
 <script>
 import EmojiList from "../EmojiList/EmojiList.vue";
-import { mapState } from "vuex";
+import { mapState, mapActions } from "vuex";
 import { makeEmoji } from "@/api/modules/emoji";
 import { getNowPosition } from "@/api/modules/location";
 
@@ -101,6 +106,7 @@ export default {
     }
   },
   methods: {
+    ...mapActions("userStore", ["setLocation"]),
     changeEmoji(emojiId) {
       // console.log("선택된 이모지 아이디 >> ", emojiId);
       this.nowEmoji = emojiId;
@@ -157,6 +163,13 @@ export default {
           console.log("지금!! temp >>> ", temp);
           this.myPosition = temp.address_name;
           this.myDongcode = temp.code;
+
+          //store에 현재 위치 정보 저장
+          this.setLocation({
+            latitude: this.latitude,
+            longitude: this.longitude,
+            dongCode: this.myDongcode,
+          });
         },
         (error) => {
           console.log(error);
@@ -171,11 +184,13 @@ export default {
 .v-speed-dial {
   position: absolute;
 }
-.v-btn--floating {
-  position: relative;
-}
+/* .emoji-card {
+  position: fixed;
+  max-width: 500px !important;
+  top: 40%;
+} */
 .emoji-category {
   position: fixed;
-  width: 40%;
+  /* max-width: 500px; */
 }
 </style>

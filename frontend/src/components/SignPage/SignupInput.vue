@@ -106,11 +106,12 @@ export default {
         password: this.password,
         nickname: this.nickname,
       };
+      // console.log("data >> ", data);
       if (validate) {
         await signup(
           data,
           ({ data }) => {
-            // console.log(data);
+            // console.log("ㅎ회원가입>>", data);
             if (data.success) {
               alert(
                 `회원가입이 완료되었습니다. 반갑습니다 ${this.nickname}님!`
@@ -121,7 +122,7 @@ export default {
             }
           },
           (error) => {
-            console.log(error);
+            // console.log("ㅎ회원가입에러>>", error);
             alert(error.response.data.message);
             this.id = "";
           }

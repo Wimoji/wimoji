@@ -6,6 +6,11 @@ const userStore = {
       id: null, //추후 제거
       nickname: null,
     },
+    location: {
+      latitude: null,
+      longitude: null,
+      dongCode: null,
+    },
   },
   getters: {},
   mutations: {
@@ -17,6 +22,9 @@ const userStore = {
     },
     SET_USER_ID(state, id) {
       state.user.id = id;
+    },
+    SET_LOCATION(state, location) {
+      state.location = location;
     },
     CLEAR_USER(state) {
       state.isLogin = false;
@@ -31,6 +39,9 @@ const userStore = {
     },
     setLogout({ commit }) {
       commit("CLEAR_USER");
+    },
+    setLocation({ commit }, location) {
+      commit("SET_LOCATION", location);
     },
   },
   modules: {},
