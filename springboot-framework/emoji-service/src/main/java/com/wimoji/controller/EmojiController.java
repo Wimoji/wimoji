@@ -33,10 +33,9 @@ public class EmojiController {
     @PostMapping("/")
     public DataResponseDto<?> saveEmoji(HttpServletRequest request, @RequestBody EmojiSaveReq emoji){
         try{
-
             String bearerToken = request.getHeader("Authorization");
-
             User user = getUserByToken(template, bearerToken);
+
             emojiService.saveEmoji(user.getUid(), emoji);
             return DataResponseDto.empty(Code.SUCCESS_NODATA,Code.SUCCESS_NODATA.getMessage());
         }catch (Exception e){
@@ -50,9 +49,12 @@ public class EmojiController {
      * @return
      */
     @PutMapping("/")
-    public DataResponseDto<?> modifyEmoji(@RequestBody EmojiModifyReq emoji){
+    public DataResponseDto<?> modifyEmoji(HttpServletRequest request, @RequestBody EmojiModifyReq emoji){
         try{
-            emojiService.modifyEmoji(emoji.getUid(), emoji);
+            String bearerToken = request.getHeader("Authorization");
+            User user = getUserByToken(template, bearerToken);
+
+            emojiService.modifyEmoji(user.getUid(), emoji);
             return DataResponseDto.empty(Code.SUCCESS, Code.SUCCESS.getMessage());
         }catch (Exception e){
             throw e;
@@ -65,9 +67,12 @@ public class EmojiController {
      * @return
      */
     @PutMapping("/del")
-    public DataResponseDto<?> deleteEmoji(@RequestBody EmojiDeleteReq emoji){
+    public DataResponseDto<?> deleteEmoji(HttpServletRequest request, @RequestBody EmojiDeleteReq emoji){
         try{
-            emojiService.deleteEmoji(emoji.getUid(), emoji);
+            String bearerToken = request.getHeader("Authorization");
+            User user = getUserByToken(template, bearerToken);
+
+            emojiService.deleteEmoji(user.getUid(), emoji);
             return DataResponseDto.empty(Code.SUCCESS_NODATA, Code.SUCCESS.getMessage());
         }catch (Exception e){
             throw e;
@@ -79,10 +84,12 @@ public class EmojiController {
      * @return
      */
     @GetMapping("/")
-        public DataResponseDto<?> getEmojiList(){
+        public DataResponseDto<?> getEmojiList(HttpServletRequest request){
             try{
-                String uid = "ssafy"; // 후에는 header로 할 예정
-                List<EmojiGetRes> emojiList = emojiService.getEmojiList(uid);
+                String bearerToken = request.getHeader("Authorization");
+                User user = getUserByToken(template, bearerToken);
+
+                List<EmojiGetRes> emojiList = emojiService.getEmojiList(user.getUid());
             return DataResponseDto.of(emojiList, Code.SUCCESS, Code.SUCCESS.getMessage());
         } catch (Exception e){
             throw e;
