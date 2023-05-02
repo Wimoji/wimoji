@@ -37,6 +37,9 @@ export default {
       token: '',
     }
   },
+  mounted() {
+    this.getAllRooms();
+  },
   methods: {
     async getAllRooms() {
       try {
