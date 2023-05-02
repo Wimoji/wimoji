@@ -12,6 +12,7 @@ import lombok.Data;
 @Data
 @Document(collection = "chat_room")
 public class ChatRoomReq {
+	String id; // null
 	String emoji;
 	String name;
 	int participant;
@@ -20,6 +21,7 @@ public class ChatRoomReq {
 	List<ChatRes> content;
 
 	public ChatRoomReq(ChatRoomUserReq chatRoomReq, String uid) {
+		this.id = null;
 		this.emoji = chatRoomReq.getEmoji();
 		this.name = chatRoomReq.getName();
 		this.participant = 1;

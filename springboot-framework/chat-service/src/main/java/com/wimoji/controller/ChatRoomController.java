@@ -72,8 +72,8 @@ public class ChatRoomController {
 			String uid = "1"; // user-service 요청
 			ChatRoomReq makeChatRoomReq = new ChatRoomReq(chatRoomReq, uid);
 
-			chatRoomService.makeRoom(makeChatRoomReq);
-			return DataResponseDto.empty();
+			String rid = chatRoomService.makeRoom(makeChatRoomReq);
+			return DataResponseDto.of(rid);
 		} catch (Exception e) {
 			throw e;
 		}

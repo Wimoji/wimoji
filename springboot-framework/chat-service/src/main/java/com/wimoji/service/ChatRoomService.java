@@ -49,9 +49,10 @@ public class ChatRoomService {
 	 * @param : ChatRoomReq entity
 	 * @return :
 	 **/
-	public void makeRoom(ChatRoomReq chatRoomReq) {
+	public String makeRoom(ChatRoomReq chatRoomReq) {
 		try {
-			chatRoomRepository.save(chatRoomReq);
+			ChatRoomReq chatRoom = chatRoomRepository.save(chatRoomReq);
+			return chatRoom.getId();
 		} catch (Exception e) {
 			throw new GeneralException(Code.BAD_REQUEST);
 		}

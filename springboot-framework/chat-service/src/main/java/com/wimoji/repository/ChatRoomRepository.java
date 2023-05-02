@@ -49,8 +49,8 @@ public class ChatRoomRepository {
 	 * @param : ChatRoomReq entity
 	 * @return :
 	 **/
-	public void save(ChatRoomReq chatRoomReq) {
-		mongoTemplate.save(chatRoomReq);
+	public ChatRoomReq save(ChatRoomReq chatRoomReq) {
+		return mongoTemplate.insert(chatRoomReq);
 	}
 
 	/**
