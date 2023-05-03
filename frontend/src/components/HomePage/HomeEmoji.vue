@@ -44,18 +44,24 @@ export default {
   },
   async mounted() {
     //지금 dongcode로 주변 사용자의 이모지 불러오기
-    await getAroundEmojis(
-      this.location,
-      ({ data }) => {
-        console.log("around emojis", data);
-        if (data.success) {
-          this.aroundEmojis = data.data;
+    // console.log("주변이모지불러오기");
+    // console.log("this location", this.location);
+    if (this.location.dongCode != null) {
+      // console.log("요청을 보냄");
+      await getAroundEmojis(
+        this.location,
+        ({ data }) => {
+          // console.log("this location2", this.location);
+          // console.log("around emojis", data);
+          if (data.success) {
+            this.aroundEmojis = data.data;
+          }
+        },
+        (error) => {
+          console.log(error);
         }
-      },
-      (error) => {
-        console.log(error);
-      }
-    );
+      );
+    }
   },
   methods: {
     detailAroundEmoji(index) {

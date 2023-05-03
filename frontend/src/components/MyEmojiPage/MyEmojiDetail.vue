@@ -52,7 +52,7 @@ export default {
     },
     async deleteEmoji() {
       const data = {
-        uid: this.user.id,
+        // uid: this.user.id,
         eid: this.selectedEmoji.eid,
         order: this.selectedEmoji.index,
       };

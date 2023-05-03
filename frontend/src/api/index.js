@@ -16,7 +16,7 @@ function apiInstance() {
     }
 
     const token = sessionStorage.getItem("access-token");
-    const refreshToken = sessionStorage.getItem("refresh-token");
+    // const refreshToken = sessionStorage.getItem("refresh-token");
 
     // access 토큰이 sessionStorage 있으면 header에 포함시켜 전송
     if (token) {
@@ -24,10 +24,11 @@ function apiInstance() {
     }
 
     // refresh 토큰
-    if (refreshToken) {
-      config.headers["Refresh"] = "Refresh " + refreshToken;
-    }
+    // if (refreshToken) {
+    //   config.headers["Refresh"] = "Refresh " + refreshToken;
+    // }
 
+    console.log("config>>>>>>", config);
     return config;
   });
 

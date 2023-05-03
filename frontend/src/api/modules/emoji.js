@@ -21,7 +21,7 @@ async function deleteEmoji(data, success, fail) {
 
 // [GET /emoji-service/location ] 현재 위치의 이모지 목록 조회
 async function getAroundEmojis(data, success, fail) {
-  await api.get(`${baseURL}/location`, data).then(success).catch(fail);
+  await api.post(`${baseURL}/location`, data).then(success).catch(fail);
 }
 
 export { makeEmoji, getEmojis, deleteEmoji, getAroundEmojis };

@@ -64,7 +64,11 @@ export default {
           }
         },
         (error) => {
-          alert(error.response.data.message);
+          if (error.response.data != null) {
+            alert(error.response.data.message);
+          } else {
+            console.log("logout error >>> "), error;
+          }
         }
       );
     },

@@ -119,7 +119,7 @@ export default {
       }
       //emoji axios post 요청 처리
       const data = {
-        uid: this.user.id,
+        // uid: this.user.id,
         eid: this.nowEmoji,
         content: this.content,
         latitude: this.latitude,
@@ -151,7 +151,7 @@ export default {
         longitude: this.longitude,
         latitude: this.latitude,
       };
-      //현재 위치 정보 받아오기
+      // 현재 위치 정보 받아오기
       await getNowPosition(
         data,
         ({ data }) => {
@@ -175,6 +175,15 @@ export default {
           console.log(error);
         }
       );
+
+      // this.latitude = 37.5013488;
+      // this.longitude = 127.0397167;
+      // this.dongCode = 1168010800;
+      this.setLocation({
+        latitude: this.latitude,
+        longitude: this.longitude,
+        dongCode: this.myDongcode,
+      });
     },
   },
 };

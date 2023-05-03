@@ -6,6 +6,11 @@ const userStore = {
       id: null, //추후 제거
       nickname: null,
     },
+    // location: {
+    //   latitude: "37.5013488",
+    //   longitude: "127.0397167",
+    //   dongCode: "1168010800",
+    // },
     location: {
       latitude: null,
       longitude: null,
