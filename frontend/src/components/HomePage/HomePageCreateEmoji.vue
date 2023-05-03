@@ -51,6 +51,17 @@
           v-model="title"
         ></v-textarea>
 
+        <v-combobox
+          hide-details
+          v-model="limit"
+          clearable
+          outlined
+          rounded
+          :items="items"
+          class="px-16"
+          placeholder="인원수 선택"
+        ></v-combobox>
+
         <v-card-actions class="d-flex justify-center">
           <v-btn rounded dark color="var(--main-col-3)" @click="goMakeEmoji">
             등록
@@ -66,6 +77,7 @@ import EmojiList from "../EmojiList/EmojiList.vue";
 import { mapState, mapActions } from "vuex";
 import { makeEmoji } from "@/api/modules/emoji";
 import { getNowPosition } from "@/api/modules/location";
+import { makeChatRoom } from "@/api/modules/chat";
 
 export default {
   components: {
@@ -92,6 +104,12 @@ export default {
       longitude: null,
       myPosition: null,
       myDongcode: null,
+      //인원
+      items: [
+        2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21,
+        22, 23, 24, 25, 26, 27, 28, 29, 30,
+      ],
+      limit: null,
     };
   },
   computed: {
@@ -113,34 +131,69 @@ export default {
     },
     async goMakeEmoji() {
       //유효성 확인
+      if (this.nowEmoji == "mdi-heart-plus-outline") {
+        alert("이모지를 선택해주세요");
+        return;
+      }
       if (this.title.length <= 0) {
         alert("내용을 입력해주세요");
         return;
       }
-      //emoji axios post 요청 처리
-      const data = {
-        eid: this.nowEmoji,
-        title: this.title,
-        latitude: this.latitude,
-        longitude: this.longitude,
-        dongCode: this.myDongcode,
-      };
-      await makeEmoji(
-        data,
+      if (this.limit == null) {
+        alert("최대 인원수를 선택해주세요");
+        return;
+      }
+
+      let rid = null; //채팅방 아이디
+
+      //채팅방 생성 API 호출
+      await makeChatRoom(
+        {
+          eid: this.nowEmoji,
+          title: this.title,
+          limit: this.limit,
+        },
         ({ data }) => {
-          // console.log(data);
+          console.log(data);
           if (data.success) {
-            alert("이모지 등록 완료!");
-            //값 비워주기
-            this.dialog = false;
-            this.nowEmoji = "mdi-heart-plus-outline";
-            this.title = "";
+            rid = data.data.rid;
           }
         },
         (error) => {
           console.log(error);
         }
       );
+
+      if (rid != null) {
+        //emoji axios post 요청 처리
+        const data = {
+          eid: this.nowEmoji,
+          title: this.title,
+          latitude: this.latitude,
+          longitude: this.longitude,
+          dongCode: this.myDongcode,
+          rid: rid,
+        };
+        await makeEmoji(
+          data,
+          ({ data }) => {
+            // console.log(data);
+            if (data.success) {
+              alert("이모지 등록 완료!");
+              //값 비워주기
+              this.dialog = false;
+              this.nowEmoji = "mdi-heart-plus-outline";
+              this.title = "";
+            }
+          },
+          (error) => {
+            console.log(error);
+          }
+        );
+      } else {
+        alert("이모지 생성 중 오류가 발생했습니다. 다시 시도해주세요.");
+        // this.$router.go(0);
+      }
     },
     async setPosition(position) {
       this.latitude = position.coords.latitude;
@@ -154,12 +207,12 @@ export default {
       await getNowPosition(
         data,
         ({ data }) => {
-          console.log(data);
+          // console.log(data);
           const temp = data.documents.filter(
             (item) => item.region_type == "B"
           )[0];
 
-          console.log("지금!! temp >>> ", temp);
+          // console.log("지금!! temp >>> ", temp);
           this.myPosition = temp.address_name;
           this.myDongcode = temp.code;
 
@@ -192,13 +245,20 @@ export default {
 .v-speed-dial {
   position: absolute;
 }
-/* .emoji-card {
+.emoji-card {
   position: fixed;
-  max-width: 500px !important;
-  top: 40%;
-} */
+  width: 80%;
+  max-width: 500px;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
 .emoji-category {
   position: fixed;
   /* max-width: 500px; */
 }
+/* 인원수 선택 밑 글씨 */
+/* .v-text-field.v-text-field--enclosed .v-text-field__details {
+  display: none !important;
+} */
 </style>

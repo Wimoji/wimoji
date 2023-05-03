@@ -20,8 +20,20 @@ async function deleteEmoji(data, success, fail) {
 }
 
 // [GET /emoji-service/location ] 현재 위치의 이모지 목록 조회
-async function getAroundEmojis(data, success, fail) {
-  await api.post(`${baseURL}/location`, data).then(success).catch(fail);
+async function getAroundEmojis(data) {
+  var result = null;
+  await api
+    .post(`${baseURL}/location`, data)
+    .then(({ data }) => {
+      console.log("사용자 주변 정보 이모지 >> ", data);
+      if (data.success) {
+        result = data.data;
+      }
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+  return await Promise.resolve(result);
 }
 
 export { makeEmoji, getEmojis, deleteEmoji, getAroundEmojis };

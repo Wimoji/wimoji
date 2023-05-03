@@ -47,20 +47,14 @@ export default {
     // console.log("주변이모지불러오기");
     // console.log("this location", this.location);
     if (this.location.dongCode != null) {
-      // console.log("요청을 보냄");
-      await getAroundEmojis(
-        this.location,
-        ({ data }) => {
-          // console.log("this location2", this.location);
-          // console.log("around emojis", data);
-          if (data.success) {
-            this.aroundEmojis = data.data;
-          }
-        },
-        (error) => {
-          console.log(error);
-        }
-      );
+      let result = await getAroundEmojis(this.location);
+      if (result == null) {
+        console.log("주변 이모지 불러오기 오류 발생");
+      } else {
+        this.aroundEmojis = result.data;
+      }
+      // console.log("주변 이모지 화면 : 받아온 값", rㅛesult);
+      //result가 null이라면 오류, result.length가 0이라면 주변 이모지 없음
     }
   },
   methods: {
