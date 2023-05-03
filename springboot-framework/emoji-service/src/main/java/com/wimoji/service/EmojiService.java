@@ -49,7 +49,7 @@ public class EmojiService {
         int intOrder = Integer.parseInt(emojiReq.getOrder());
         if(intOrder >= 0 && intOrder<document.getEmoji().size()) {
             if(document.getEmoji().get(intOrder).getEid().equals(emojiReq.getEid())){
-                userRepository.updateEmoji(uid, emojiReq.getOrder(), emojiReq.getTitle());
+                userRepository.updateEmoji(uid, emojiReq.getOrder(), emojiReq.getTitles());
             }
             else
                 throw new GeneralException(Code.NO_EMOJI);
