@@ -35,38 +35,16 @@ public class EmojiController {
      */
 
     @PostMapping("/")
-    public DataResponseDto<?> saveEmoji(HttpServletRequest request, @RequestBody EmojiSaveReq emoji) throws IOException {
-        BufferedReader bufferedReader = null;
-        StringBuilder stringBuilder = new StringBuilder();
+    public DataResponseDto<?> saveEmoji(HttpServletRequest request, @RequestBody EmojiSaveReq emoji) {
         try{
             String bearerToken = request.getHeader("Authorization");
             User user = getUserByToken(template, bearerToken);
 
-            InputStream inputStream = request.getInputStream();
-            if (inputStream != null) {
-                bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
-                char[] charBuffer = new char[128];
-                int bytesRead = -1;
-                while ((bytesRead = bufferedReader.read(charBuffer)) > 0) {
-                    stringBuilder.append(charBuffer, 0, bytesRead);
-                }
-            }
-            String rid = stringBuilder.toString();
-
-            emojiService.saveEmoji(user.getUid(), rid, emoji);
+            emojiService.saveEmoji(user.getUid(), emoji);
             return DataResponseDto.empty(Code.SUCCESS_NODATA,Code.SUCCESS_NODATA.getMessage());
         }
         catch (Exception e){
             throw e;
-        }
-        finally {
-            if (bufferedReader != null) {
-                try {
-                    bufferedReader.close();
-                } catch (IOException ex) {
-                    throw ex;
-                }
-            }
         }
     }
 
