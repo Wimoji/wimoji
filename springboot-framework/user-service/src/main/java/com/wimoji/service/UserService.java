@@ -60,8 +60,9 @@ public class UserService {
         String refreshToken = JwtTokenUtil.makeRefreshToken(userEntity.getUid(), userEntity.getNickname());
 
         HashMap<String, String> result = new HashMap<>();
-        result.put("accessToken", accessToken);
-        result.put("refreshToken", refreshToken);
+        result.put("accessToken", accessToken); //토큰
+        result.put("refreshToken", refreshToken); //토큰
+        result.put("nickname", userEntity.getNickname()); //닉네임
 
         return result;
     }
