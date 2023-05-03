@@ -63,14 +63,14 @@ public class UserRepository {
      * EmojiService - Emoji 수정
      * @param uid
      * @param order
-     * @param content
+     * @param title
      */
-    public void updateEmoji(String uid, String order, String content){
+    public void updateEmoji(String uid, String order, String title){
         //select * from user where uid=uid;
         Criteria criteria = Criteria.where("uid").is(uid);
         Query query = new Query(criteria);
 
-        Update update = new Update().set("emoji" + "." + order + ".content", content);
+        Update update = new Update().set("emoji" + "." + order + ".title", title);
 //        FindAndModifyOptions options = new FindAndModifyOptions().returnNew(true).upsert(false);
 //        mongoTemplate.findAndModify(query, update, options, User.class);
         mongoTemplate.findAndModify(query, update, User.class);
