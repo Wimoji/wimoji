@@ -6,7 +6,7 @@
       type="avatar"
     ></v-skeleton-loader>
     <v-img v-else width="30%" :src="selectedEmoji.link"></v-img>
-    <v-card-title>{{ selectedEmoji.content }}</v-card-title>
+    <v-card-title>{{ selectedEmoji.title }}</v-card-title>
     <v-row class="d-flex">
       <v-col>
         <v-btn
@@ -52,7 +52,6 @@ export default {
     },
     async deleteEmoji() {
       const data = {
-        // uid: this.user.id,
         eid: this.selectedEmoji.eid,
         order: this.selectedEmoji.index,
       };

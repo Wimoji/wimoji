@@ -13,7 +13,7 @@
       <v-avatar>
         <v-img :src="emojiCategory[selectedEmoji.eid].link"></v-img>
       </v-avatar>
-      <v-card-title>{{ selectedEmoji.content }}</v-card-title>
+      <v-card-title>{{ selectedEmoji.title }}</v-card-title>
       <v-btn
         height="3em"
         width="6em"

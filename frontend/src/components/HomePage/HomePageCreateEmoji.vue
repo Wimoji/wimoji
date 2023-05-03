@@ -48,7 +48,7 @@
           outlined
           class="pa-5 mt-8"
           hide-details
-          v-model="content"
+          v-model="title"
         ></v-textarea>
 
         <v-card-actions class="d-flex justify-center">
@@ -87,7 +87,7 @@ export default {
       transition: "slide-y-transition",
       //이모지 관련 설정
       nowEmoji: "mdi-heart-plus-outline",
-      content: "",
+      title: "",
       latitude: null,
       longitude: null,
       myPosition: null,
@@ -113,15 +113,14 @@ export default {
     },
     async goMakeEmoji() {
       //유효성 확인
-      if (this.content.length <= 0) {
+      if (this.title.length <= 0) {
         alert("내용을 입력해주세요");
         return;
       }
       //emoji axios post 요청 처리
       const data = {
-        // uid: this.user.id,
         eid: this.nowEmoji,
-        content: this.content,
+        title: this.title,
         latitude: this.latitude,
         longitude: this.longitude,
         dongCode: this.myDongcode,
@@ -135,7 +134,7 @@ export default {
             //값 비워주기
             this.dialog = false;
             this.nowEmoji = "mdi-heart-plus-outline";
-            this.content = "";
+            this.title = "";
           }
         },
         (error) => {

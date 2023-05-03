@@ -45,7 +45,7 @@ export default {
         if (data.success) {
           // this.myEmojis = data.data;
           data.data.forEach((element) => {
-            this.myEmojis.push({ eid: element.eid, content: element.content });
+            this.myEmojis.push({ eid: element.eid, title: element.title });
           });
           console.log(this.myEmojis);
           // this.lines = this.myEmojis.length / 3;
@@ -76,13 +76,13 @@ export default {
     detailEmoji(index) {
       //선택한 이모지를 props로 보내기
       const eid = this.myEmojis[index].eid;
-      const content = this.myEmojis[index].content;
+      const title = this.myEmojis[index].title;
 
       this.selectedEmoji = {
         eid: eid,
         index: index,
         link: this.emojiCategory[eid].link,
-        content: content,
+        title: title,
       };
     },
     closeEmoji() {
