@@ -1,12 +1,36 @@
 <template>
-  <div>
-    <h1>채팅방 헤더입니다</h1>
-    <v-btn @click="goBack">뒤로가기</v-btn>
-  </div>
+  <v-toolbar flat height="80px">
+    <v-row>
+      <v-col align-self="center">
+        <v-btn icon @click="goBack">
+          <v-icon>mdi-chevron-left</v-icon>
+        </v-btn>
+      </v-col>
+      <v-col>
+        <v-toolbar-title class="d-flex flex-column align-center">
+          <v-avatar>
+            <v-img :src="emojiCategory[nowChatRoom.eid].link"></v-img>
+          </v-avatar>
+          <div class="xs-font main-font-bd">{{ nowChatRoom.title }}</div>
+        </v-toolbar-title>
+      </v-col>
+      <v-col></v-col>
+    </v-row>
+
+    <!-- <v-spacer></v-spacer> -->
+
+    <!-- <div>?</div> -->
+    <!-- <v-spacer></v-spacer> -->
+  </v-toolbar>
 </template>
 
 <script>
+import { mapState } from "vuex";
 export default {
+  computed: {
+    ...mapState("chatStore", ["nowChatRoom"]),
+    ...mapState("emojiStore", ["emojiCategory"]),
+  },
   methods: {
     goBack() {
       if (this.$router.history.length > 1) {
@@ -19,4 +43,4 @@ export default {
 };
 </script>
 
-<style></style>
+<style scoped></style>
