@@ -33,7 +33,8 @@ const userStore = {
     },
     CLEAR_USER(state) {
       state.isLogin = false;
-      state.user.nickname = null;
+      state.user = null;
+      state.location = null;
     },
   },
   actions: {
@@ -41,9 +42,6 @@ const userStore = {
       commit("SET_IS_LOGIN", true);
       commit("SET_USER_NICKNAME", user.nickname);
       commit("SET_USER_ID", user.id);
-    },
-    setLogout({ commit }) {
-      commit("CLEAR_USER");
     },
     setLocation({ commit }, location) {
       commit("SET_LOCATION", location);
