@@ -5,7 +5,8 @@ import lombok.Data;
 @Data
 public class EmojiSaveReq {
     String eid;
-    String content;
+    String rid;
+    String title;
     String latitude;
     String longitude;
     String dongCode;

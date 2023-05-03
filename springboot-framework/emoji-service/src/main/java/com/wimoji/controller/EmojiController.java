@@ -31,14 +31,15 @@ public class EmojiController {
      */
 
     @PostMapping("/")
-    public DataResponseDto<?> saveEmoji(HttpServletRequest request, @RequestBody EmojiSaveReq emoji){
+    public DataResponseDto<?> saveEmoji(HttpServletRequest request, @RequestBody EmojiSaveReq emoji) {
         try{
             String bearerToken = request.getHeader("Authorization");
             User user = getUserByToken(template, bearerToken);
 
             emojiService.saveEmoji(user.getUid(), emoji);
             return DataResponseDto.empty(Code.SUCCESS_NODATA,Code.SUCCESS_NODATA.getMessage());
-        }catch (Exception e){
+        }
+        catch (Exception e){
             throw e;
         }
     }
