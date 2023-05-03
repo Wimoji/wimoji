@@ -48,6 +48,9 @@ const userStore = {
     setLocation({ commit }, location) {
       commit("SET_LOCATION", location);
     },
+    setLogout({ commit }) {
+      commit("CLEAR_USER");
+    },
   },
   modules: {},
 };

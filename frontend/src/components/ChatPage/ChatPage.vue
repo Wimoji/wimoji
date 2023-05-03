@@ -11,6 +11,7 @@
       <label>최대 인원: 
         <input type="text" v-model="limit">
       </label>
+      <br/>
       <button @click="makeRoom">채팅방 만들기</button>
     </form>
     <ul>
@@ -28,20 +29,21 @@ import axios from 'axios';
 export default {
   data() {
     return {
-      serverURL: 'http://70.12.246.229:8080',
+      serverURL: 'http://70.12.246.229:8083',
       rooms: [],
       name: '',
       emoji: '',
       limit: '',
+      token: '',
     }
   },
   mounted() {
-    this.getRooms();
+    this.getAllRooms();
   },
   methods: {
-    async getRooms() {
+    async getAllRooms() {
       try {
-        const response = await axios.get(`${this.serverURL}`);
+        const response = await axios.get(`${this.serverURL}/test`);
         this.rooms = response.data.data;
       } catch (error) {
         console.error(error);
@@ -53,18 +55,22 @@ export default {
     makeRoom(event) {
       event.preventDefault();
 
-      const chatRoomReq = {
-        name: this.name,
+      const chatRoomUserReq = {
         emoji: this.emoji,
-        participant: 1,
+        name: this.name,
         limit: parseInt(this.limit),
       };
-      if (chatRoomReq.name.trim() === '' || chatRoomReq.emoji.trim() === '') {
+
+      if (chatRoomUserReq.name.trim() === '' || chatRoomUserReq.emoji.trim() === '') {
         console.log('제목과 이모지는 필수 입력 사항입니다.');
         return;
       }
 
-      axios.post(`${this.serverURL}`, chatRoomReq)
+      axios.post(`${this.serverURL}`, chatRoomUserReq, {
+          headers: {
+            'Authorization': `Bearer ${this.token}`
+          }
+        })
         .then(response => {
           console.log(response);
         })
