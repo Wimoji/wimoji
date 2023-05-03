@@ -13,7 +13,7 @@ public class HomeRes {
     String uid;
     String eid;
     String rid;
-    String content;
+    String title;
     String latitude;
     String longitude;
     String dongCode;

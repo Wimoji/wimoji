@@ -8,5 +8,5 @@ import lombok.Data;
 public class EmojiModifyReq {
     String order; // 이모지 순서, 생성일 기준으로 오름차순
     String eid;
-    String content;
+    String title;
 }

@@ -13,10 +13,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.kafka.requestreply.ReplyingKafkaTemplate;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.util.List;
 
 import static com.wimoji.config.KafkaConfig.getUserByToken;
