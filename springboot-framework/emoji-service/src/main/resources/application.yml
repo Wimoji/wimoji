@@ -1,6 +1,23 @@
+server:
+  port: 0
+  servlet:
+    context-path: /emoji-service
+
 spring:
   data:
     mongodb:
       host: localhost
       port: 27017
       database: testdb
+
+  application:
+    name: emoji-service
+
+eureka:
+  instance:
+    instanceId: ${spring.application.name}:${spring.application.instance_id:${random.value}}
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: http://localhost:8761/eureka

@@ -12,7 +12,8 @@ import lombok.NoArgsConstructor;
 public class HomeRes {
     String uid;
     String eid;
-    String content;
+    String rid;
+    String title;
     String latitude;
     String longitude;
     String dongCode;
