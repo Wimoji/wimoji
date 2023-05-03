@@ -1,8 +1,19 @@
 const chatStore = {
-  state: {},
+  namespaced: true,
+  state: {
+    nowChatRoom: null,
+  },
   getters: {},
-  mutations: {},
-  actions: {},
+  mutations: {
+    SET_NOW_CHAT_ROOM(state, room) {
+      state.nowChatRoom = room;
+    },
+  },
+  actions: {
+    setNowChatRoom({ commit }, room) {
+      commit("SET_NOW_CHAT_ROOM", room);
+    },
+  },
   modules: {},
 };
 

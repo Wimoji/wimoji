@@ -1,5 +1,5 @@
 <template>
-  <v-sheet color="var(--main-col-1)">
+  <v-sheet v-if="myEmojis.length != 0" color="var(--main-col-1)">
     <v-avatar
       size="80"
       color="white"
@@ -17,6 +17,9 @@
         :selectedEmoji="selectedEmoji"
       />
     </transition>
+  </v-sheet>
+  <v-sheet color="var(--main-col-1)" v-else>
+    <div class="xl-font text-center mt-10">나의 이모지가 없어요... 😂</div>
   </v-sheet>
 </template>
 
@@ -41,7 +44,7 @@ export default {
     //나의 이모지 요청
     await getEmojis(
       ({ data }) => {
-        // console.log(data);
+        console.log(data);
         if (data.success) {
           // this.myEmojis = data.data;
           data.data.forEach((element) => {
@@ -56,22 +59,7 @@ export default {
       }
     );
   },
-  async mounted() {
-    // //나의 이모지 요청
-    // await getEmojis(
-    //   ({ data }) => {
-    //     // console.log(data);
-    //     if (data.success) {
-    //       this.myEmojis = data.data;
-    //       console.log(this.myEmojis);
-    //       this.lines = this.myEmojis.length / 3;
-    //     }
-    //   },
-    //   (error) => {
-    //     console.log(error);
-    //   }
-    // );
-  },
+  mounted() {},
   methods: {
     detailEmoji(index) {
       //선택한 이모지를 props로 보내기
@@ -95,7 +83,10 @@ export default {
 <style scoped>
 .detail-emoji-modal {
   position: fixed;
-  top: 35%;
+  top: 50%;
+  left: 50%;
+  max-width: 500px;
+  transform: translate(-50%, -50%);
   width: 80%;
 }
 .moveInUp-enter-active {

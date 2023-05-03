@@ -59,8 +59,8 @@ export default {
             //로그인 상태 변경
             this.setLogout();
             //세션에서 유저 정보 제거
-            sessionStorage.clear();
-            this.$router.go(0);
+            // sessionStorage.clear();
+            // this.$router.go(0);
           }
         },
         (error) => {
@@ -71,6 +71,9 @@ export default {
           }
         }
       );
+      //세션에서 유저 정보 제거
+      sessionStorage.clear();
+      this.$router.go(0);
     },
   },
 };

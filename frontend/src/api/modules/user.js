@@ -10,9 +10,19 @@ async function signup(data, success, fail) {
 }
 
 //[ PUT /user-service/login ] 로그인
-async function login(data, success, fail) {
+async function login(data) {
   // console.log("로그인 보낼 유저 정보 >> ", data);
-  await api.put(`${baseURL}/login`, data).then(success).catch(fail);
+  var result = null;
+  await api
+    .put(`${baseURL}/login`, data)
+    .then((res) => {
+      // console.log("로그인 결과값 >> ", res);
+      result = res.data.data;
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+  return await Promise.resolve(result);
 }
 
 //[ PUT /user-service/logout ] 로그아웃

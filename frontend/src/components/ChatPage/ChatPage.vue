@@ -1,85 +1,68 @@
 <template>
-  <div>
-    <h3>채팅 목록</h3>
-    <form>
-      <label>이모지: 
-        <input type="text" v-model="emoji">
-      </label>
-      <label>제목: 
-        <input type="text" v-model="name">
-      </label>
-      <label>최대 인원: 
-        <input type="text" v-model="limit">
-      </label>
-      <br/>
-      <button @click="makeRoom">채팅방 만들기</button>
-    </form>
-    <ul>
-      <li v-for="room in rooms" :key="room.id">
-        <p>이모지: <img :src="room.emoji" alt="방 이모지"> 채팅방 이름 {{ room.name }}</p>
-        <button @click="goRoom(room)">채팅방 들어가기</button>
-      </li>
-    </ul>
-  </div>
+  <v-container v-if="rooms.length != 0">
+    <v-sheet
+      @click="goRoom(room)"
+      class="ma-3 d-flex justify-start px-5 py-4 rounded-xl align-center"
+      v-for="room in rooms"
+      :key="room.id"
+    >
+      <v-avatar class="mr-5">
+        <v-img :src="emojiCategory[room.eid].link"></v-img>
+      </v-avatar>
+      <div class="xs-font main-font-bd">{{ room.title }}</div>
+    </v-sheet>
+  </v-container>
+  <v-container v-else>
+    <div class="xl-font text-center mt-10">참여한 채팅이 없어요... 😂</div>
+  </v-container>
 </template>
 
 <script>
-import axios from 'axios';
+import { getUserChatRooms } from "@/api/modules/chat";
+import { mapState, mapActions } from "vuex";
 
 export default {
   data() {
     return {
-      serverURL: 'http://70.12.246.229:8083',
       rooms: [],
-      name: '',
-      emoji: '',
-      limit: '',
-      token: '',
-    }
+      name: "",
+      emoji: "",
+      limit: "",
+    };
+  },
+  computed: {
+    ...mapState("emojiStore", ["emojiCategory"]),
   },
   mounted() {
     this.getAllRooms();
   },
   methods: {
+    ...mapActions("chatStore", ["setNowChatRoom"]),
     async getAllRooms() {
-      try {
-        const response = await axios.get(`${this.serverURL}/test`);
-        this.rooms = response.data.data;
-      } catch (error) {
-        console.error(error);
-      }
+      //사용자가 참여한 채팅 목록 불러오기
+      await getUserChatRooms(
+        ({ data }) => {
+          if (data.success) {
+            this.rooms = data.data;
+            // console.log("this room >> ", this.rooms);
+          }
+        },
+        (error) => {
+          console.log(error);
+        }
+      );
     },
     goRoom(room) {
-      this.$router.push( { name: 'chatting', params: { roomId: room.rid, data: room } });
+      //지금 채팅방 정보 설정
+      // console.log("this room >> ", room);
+      this.setNowChatRoom(room);
+      this.$router.push({
+        name: "chatting",
+        params: { roomId: room.rid, data: room },
+      });
     },
-    makeRoom(event) {
-      event.preventDefault();
-
-      const chatRoomUserReq = {
-        emoji: this.emoji,
-        name: this.name,
-        limit: parseInt(this.limit),
-      };
-
-      if (chatRoomUserReq.name.trim() === '' || chatRoomUserReq.emoji.trim() === '') {
-        console.log('제목과 이모지는 필수 입력 사항입니다.');
-        return;
-      }
-
-      axios.post(`${this.serverURL}`, chatRoomUserReq, {
-          headers: {
-            'Authorization': `Bearer ${this.token}`
-          }
-        })
-        .then(response => {
-          console.log(response);
-        })
-        .catch(error => {
-          console.log(error);
-        });
-    },
-  }
-}
+  },
+};
 </script>
 
 <style></style>

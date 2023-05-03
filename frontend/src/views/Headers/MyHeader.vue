@@ -1,6 +1,26 @@
 <template>
   <v-sheet>
     <v-toolbar flat height="80px">
+      <v-row align="center" justify="space-between">
+        <v-col align="left">
+          <v-btn icon @click="goBack">
+            <v-icon>mdi-chevron-left</v-icon>
+          </v-btn>
+        </v-col>
+        <v-col align="center">
+          <v-toolbar-title>
+            <div class="xxl-font">목록</div>
+          </v-toolbar-title>
+        </v-col>
+        <v-col align="right">
+          <v-btn icon @click="deleteUser">
+            <v-icon>mdi-account-remove-outline</v-icon>
+          </v-btn>
+        </v-col>
+      </v-row>
+    </v-toolbar>
+    <!-- 
+    <v-toolbar flat height="80px">
       <v-btn icon @click="goBack">
         <v-icon>mdi-chevron-left</v-icon>
       </v-btn>
@@ -9,7 +29,7 @@
       <v-btn icon @click="deleteUser">
         <v-icon>mdi-account-remove-outline</v-icon>
       </v-btn>
-    </v-toolbar>
+    </v-toolbar> -->
 
     <v-tabs fixed-tabs>
       <v-tab to="/my/chat">채팅</v-tab>

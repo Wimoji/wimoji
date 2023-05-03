@@ -120,37 +120,26 @@ export default {
 
       if (validate) {
         this.isAllOk = true;
-        await login(
-          data,
-          ({ data }) => {
-            // console.log(data);
-            if (data.success) {
-              alert("로그인 성공");
-              //세션 스토리지에 토큰 저장
-              sessionStorage.setItem("access-token", data.data.accessToken);
-              sessionStorage.setItem("refresh-token", data.data.refreshToken);
 
-              //임시로 아이디도 전송 >> 이모지 서비스 수정되면 고칠 예정
-              const user = {
-                nickname: data.data.nickname,
-                id: this.id,
-              };
-              this.setLogin(user); //로그인 정보 설정
-              this.$router.push("/");
-            }
-          },
-          (error) => {
-            console.log(error.response.data);
-            if (error.response.data.code == 30000) {
-              alert(error.response.data.message);
-              //input 지워주기
-              this.id = "";
-              this.password = "";
-            } else {
-              alert("로그인 중 에러가 발생했습니다.");
-            }
-          }
-        );
+        let result = await login(data);
+        // console.log("로그인화면에서 받은값 >> ", result);
+        if (result != null) {
+          alert("로그인 성공");
+          //세션 스토리지에 토큰 저장
+          sessionStorage.setItem("access-token", result.accessToken);
+          sessionStorage.setItem("refresh-token", result.refreshToken);
+
+          //임시로 아이디도 전송 >> 이모지 서비스 수정되면 고칠 예정
+          const user = {
+            nickname: result.nickname,
+            id: this.id,
+          };
+          this.setLogin(user); //로그인 정보 설정
+          this.$router.push("/");
+        } else {
+          alert("로그인 실패");
+          this.$router.push("/");
+        }
       }
     },
   },
