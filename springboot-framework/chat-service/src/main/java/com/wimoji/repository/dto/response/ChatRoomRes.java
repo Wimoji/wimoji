@@ -15,8 +15,8 @@ import lombok.NoArgsConstructor;
 public class ChatRoomRes {
 	String id; // 8자리 짧은 아이디
 	String rid; // 12byte ObjectId
-	String emoji;
-	String name;
+	int eid;
+	String title;
 	int participant;
 	int limit;
 	List<String> userList;

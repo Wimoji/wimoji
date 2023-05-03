@@ -4,7 +4,7 @@ import lombok.Data;
 
 @Data
 public class ChatRoomUserReq {
-	String emoji;
-	String name;
+	int eid;
+	String title;
 	int limit;
 }

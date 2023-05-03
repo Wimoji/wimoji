@@ -1,8 +1,11 @@
 package com.wimoji.controller;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import org.springframework.kafka.requestreply.ReplyingKafkaTemplate;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -16,14 +19,20 @@ import com.wimoji.repository.dto.request.ChatRoomUserReq;
 import com.wimoji.repository.dto.request.NewChatReq;
 import com.wimoji.repository.dto.response.ChatRes;
 import com.wimoji.repository.dto.response.ChatRoomRes;
+import com.wimoji.repository.dto.response.UserRes;
 import com.wimoji.service.ChatRoomService;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
+import static com.wimoji.config.KafkaConfig.getUserByToken;
+
+@Slf4j
 @RestController
 @RequiredArgsConstructor
 public class ChatRoomController {
 	private final ChatRoomService chatRoomService;
+	private final ReplyingKafkaTemplate<String, String, String> template;
 
 	/**
 	 * db의 모든 채팅방을 반환(테스트용)
@@ -41,16 +50,6 @@ public class ChatRoomController {
 	}
 
 	/**
-	 * 특정 유저가 참여한 모든 채팅방의 정보를 반환
-	 * @param : 채팅방의 id를 가진 List
-	 * @return : 채팅방의 정보를 담은 ChatRoomRes의 List
-	 **/
-	@GetMapping("/")
-	public DataResponseDto<?> getEnterRoom() {
-		return DataResponseDto.empty();
-	}
-
-	/**
 	 * id가 일치하는 채팅방을 반환
 	 * @param : 채팅방의 id
 	 * @return : 채팅방의 정보 ChatRoomRes 반환
@@ -58,10 +57,11 @@ public class ChatRoomController {
 	@GetMapping("/{rid}")
 	public DataResponseDto<?> getRoom(@RequestHeader("Authorization") String accessToken,
 		@PathVariable String rid) {
+
 		try {
-			String uid = "1"; // user-service 요청
+			UserRes user = getUserByToken(template, accessToken);
 			ChatRoomRes chatRoom = chatRoomService.getRoom(rid);
-			int idx = chatRoomService.getLastChat(uid, rid);
+			int idx = chatRoomService.getLastChat(user.getUid(), rid);
 			if(chatRoom.getContent().size() != idx) {
 				chatRoom.setNew(true);
 			}
@@ -81,12 +81,20 @@ public class ChatRoomController {
 	@PostMapping("/")
 	public DataResponseDto<?> makeRoom(@RequestHeader("Authorization") String accessToken,
 		@RequestBody ChatRoomUserReq chatRoomReq) {
+
 		try {
-			String uid = "1"; // user-service 요청
-			ChatRoomReq makeChatRoomReq = new ChatRoomReq(chatRoomReq, uid);
+			log.info("만들기 요청");
+			UserRes user = getUserByToken(template, accessToken);
+			log.info("아이디>>>"+user.getUid());
+			log.info("이름>>>"+user.getNickname());
+
+			ChatRoomReq makeChatRoomReq = new ChatRoomReq(chatRoomReq, user.getUid());
 
 			String rid = chatRoomService.makeRoom(makeChatRoomReq);
-			return DataResponseDto.of(rid);
+			Map<String, String> result = new HashMap<>();
+			result.put("rid", rid);
+
+			return DataResponseDto.of(result);
 		} catch (Exception e) {
 			throw e;
 		}
@@ -100,9 +108,10 @@ public class ChatRoomController {
 	@PostMapping("/last")
 	public DataResponseDto<?> makeLastChat(@RequestHeader("Authorization") String accessToken,
 		@RequestBody String rid) {
+
 		try {
-			String uid = "1"; // user-service 요청
-			chatRoomService.makeLastChat(uid, rid);
+			UserRes user = getUserByToken(template, accessToken);
+			chatRoomService.makeLastChat(user.getUid(), rid);
 
 			return DataResponseDto.empty();
 		} catch (Exception e) {
@@ -118,9 +127,10 @@ public class ChatRoomController {
 	@GetMapping("/last/{rid}")
 	public DataResponseDto<?> getLastChat(@RequestHeader("Authorization") String accessToken,
 		@PathVariable String rid) {
+
 		try {
-			String uid = "1"; // user-service 요청
-			int lastId = chatRoomService.getLastChat(uid, rid);
+			UserRes user = getUserByToken(template, accessToken);
+			int lastId = chatRoomService.getLastChat(user.getUid(), rid);
 
 			return DataResponseDto.of(lastId);
 		} catch (Exception e) {

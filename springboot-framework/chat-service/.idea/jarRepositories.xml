@@ -26,5 +26,10 @@
       <option name="name" value="maven2" />
       <option name="url" value="https://repo.spring.io/snapshot" />
     </remote-repository>
+    <remote-repository>
+      <option name="id" value="maven3" />
+      <option name="name" value="maven3" />
+      <option name="url" value="https://artifactory-oss.prod.netflix.net/artifactory/maven-oss-candidates" />
+    </remote-repository>
   </component>
 </project>

@@ -2,6 +2,7 @@ package com.wimoji.controller;
 
 import java.util.List;
 
+import org.springframework.kafka.requestreply.ReplyingKafkaTemplate;
 import org.springframework.messaging.handler.annotation.Header;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
@@ -12,14 +13,18 @@ import com.wimoji.base.GeneralException;
 import com.wimoji.base.constant.Code;
 import com.wimoji.repository.dto.response.ChatRes;
 import com.wimoji.repository.dto.request.ChatReq;
+import com.wimoji.repository.dto.response.UserRes;
 import com.wimoji.service.ChatRoomService;
 
 import lombok.RequiredArgsConstructor;
+
+import static com.wimoji.config.KafkaConfig.getUserByToken;
 
 @Controller
 @RequiredArgsConstructor
 public class ChatController {
 	private final SimpMessagingTemplate template; // message broker 사용 template
+	private final ReplyingKafkaTemplate<String, String, String> kafkaTemplate;
 	private final ChatRoomService chatRoomService;
 
 	/**
@@ -28,10 +33,9 @@ public class ChatController {
 	 * @return 채팅을 보낸 채팅방에 대해서만 새로운 채팅 반환
 	**/
 	@MessageMapping("/chat/message")
-	public void chat(@Payload ChatReq chatReq, @Header("Authorization") String token) {
-		String uid = "1"; // user-service 연동
-		String name = "이름"; // user-service 연동
-		ChatRes chatRes = new ChatRes(chatReq.getRid(), name, chatReq.getContent());
+	public void chat(@Payload ChatReq chatReq, @Header("Authorization") String accessToken) {
+		UserRes user = getUserByToken(kafkaTemplate, accessToken);
+		ChatRes chatRes = new ChatRes(chatReq.getRid(), user.getNickname(), chatReq.getContent());
 
 		try {
 			chatRoomService.saveContent(chatRes);
@@ -48,23 +52,22 @@ public class ChatController {
 	 * @return :
 	 **/
 	@MessageMapping("/chat/enter")
-	public void enter(@Header("Authorization") String token, @Header("rid") String rid) {
-		String uid = "1"; // user-service 연동
-		String name = "이름"; // user-service 연동
+	public void enter(@Header("Authorization") String accessToken, @Header("rid") String rid) {
+		UserRes user = getUserByToken(kafkaTemplate, accessToken);
 
-		if(isExist(uid, rid)) {
+		if(isExist(user.getUid(), rid)) {
 			return;
 		}
 
 		try {
 			chatRoomService.incParticipant(rid);
-			chatRoomService.addUserToList(rid, uid);
+			chatRoomService.addUserToList(rid, user.getUid());
 		} catch (Exception e) {
 			throw new GeneralException(Code.INTERNAL_ERROR);
 		}
 
 		// 환영 메시지
-		ChatRes chatRes = new ChatRes(rid, uid, name + "님이 입장하였습니다.");
+		ChatRes chatRes = new ChatRes(rid, user.getUid(), user.getNickname() + "님이 입장하였습니다.");
 		template.convertAndSend("/sub/chat/" + chatRes.getRid(), chatRes);
 	}
 
@@ -74,18 +77,17 @@ public class ChatController {
 	 * @return :
 	**/
 	@MessageMapping("/chat/exit")
-	public void exit(@Header("Authorization") String token, @Header("rid") String rid) {
-		String uid = "1"; // user-service 연동
-		String name = "이름"; // user-service 연동
+	public void exit(@Header("Authorization") String accessToken, @Header("rid") String rid) {
+		UserRes user = getUserByToken(kafkaTemplate, accessToken);
 
 		try {
 			chatRoomService.decParticipant(rid);
-			chatRoomService.deleteUserToList(rid, uid);
+			chatRoomService.deleteUserToList(rid, user.getUid());
 		} catch (Exception e) {
 			throw new GeneralException(Code.INTERNAL_ERROR);
 		}
 
-		ChatRes chatRes = new ChatRes(rid, uid, name + "님이 퇴장하였습니다.");
+		ChatRes chatRes = new ChatRes(rid, user.getUid(), user.getNickname() + "님이 퇴장하였습니다.");
 		template.convertAndSend("/sub/chat/" + chatRes.getRid(), chatRes);
 	}
 
