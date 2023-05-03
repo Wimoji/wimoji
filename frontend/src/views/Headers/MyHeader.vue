@@ -1,17 +1,21 @@
 <template>
-  <div>
-    <div>
-      <v-btn @click="goBack">
+  <v-sheet>
+    <v-toolbar flat height="80px">
+      <v-btn icon @click="goBack">
         <v-icon>mdi-chevron-left</v-icon>
       </v-btn>
-      목록
-      <v-btn @click="deleteUser">
+      <v-toolbar-title>목록</v-toolbar-title>
+      <v-spacer></v-spacer>
+      <v-btn icon @click="deleteUser">
         <v-icon>mdi-account-remove-outline</v-icon>
       </v-btn>
-    </div>
-    <router-link to="chat">채팅</router-link> |
-    <router-link to="myEmoji">나의 이모지</router-link>
-  </div>
+    </v-toolbar>
+
+    <v-tabs fixed-tabs>
+      <v-tab to="/my/chat">채팅</v-tab>
+      <v-tab to="/my/emoji">나의 이모지</v-tab>
+    </v-tabs>
+  </v-sheet>
 </template>
 
 <script>
@@ -20,7 +24,7 @@ import { mapActions } from "vuex";
 
 export default {
   methods: {
-    ...mapActions("userStore", ["setIsLogin"]),
+    ...mapActions("userStore", ["setLogout"]),
     goBack() {
       if (this.$router.history.length > 1) {
         this.$router.go(-1);
@@ -35,10 +39,10 @@ export default {
             console.log(data);
             if (data.success) {
               alert("회원 탈퇴가 완료되었습니다.");
-              //세션에서 토큰 제거
+              //세션에서 유저 정보 제거
               sessionStorage.clear();
               //로그인 상태 변경
-              this.setIsLogin(false);
+              this.setLogout();
               this.$router.push("/");
             }
           },

@@ -1,7 +1,7 @@
 <template>
   <v-container>
     서비스를 소개하는 페이지입니다.
-    <v-btn @click="goLogin">지금 시작하기</v-btn>
+    <router-link to="/login">지금 시작하기</router-link>
   </v-container>
 </template>
 
