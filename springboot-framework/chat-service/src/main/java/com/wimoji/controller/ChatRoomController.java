@@ -79,7 +79,6 @@ public class ChatRoomController {
 	@PostMapping("/")
 	public DataResponseDto<?> makeRoom(@RequestHeader("Authorization") String accessToken,
 		@RequestBody ChatRoomReq chatRoomReq) {
-		// TODO: 이모지 생성 API 호출
 		try {
 			UserRes user = getUserByToken(template, accessToken);
 

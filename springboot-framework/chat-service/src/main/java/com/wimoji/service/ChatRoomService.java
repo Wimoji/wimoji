@@ -95,9 +95,6 @@ public class ChatRoomService {
 	 **/
 	public void decParticipant(String rid) {
 		int participant = chatRoomRepository.decParticipant(rid);
-		if(participant == 0) {
-			// TODO: 이모지 삭제 요청 호출
-		}
 	}
 
 	/**
