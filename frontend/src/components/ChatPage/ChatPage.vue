@@ -65,4 +65,8 @@ export default {
 };
 </script>
 
-<style></style>
+<style scoped>
+.container {
+  margin-top: 130px;
+}
+</style>

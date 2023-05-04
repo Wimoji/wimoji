@@ -1,5 +1,5 @@
 <template>
-  <v-toolbar flat height="80px">
+  <v-toolbar flat height="85px">
     <v-row>
       <v-col align-self="center">
         <v-btn icon @click="goBack">
@@ -8,19 +8,14 @@
       </v-col>
       <v-col>
         <v-toolbar-title class="d-flex flex-column align-center">
-          <v-avatar>
+          <v-avatar size="35">
             <v-img :src="emojiCategory[nowChatRoom.eid].link"></v-img>
           </v-avatar>
-          <div class="xs-font main-font-bd">{{ nowChatRoom.title }}</div>
+          <div class="xs-font main-font-bd pt-2">{{ nowChatRoom.title }}</div>
         </v-toolbar-title>
       </v-col>
       <v-col></v-col>
     </v-row>
-
-    <!-- <v-spacer></v-spacer> -->
-
-    <!-- <div>?</div> -->
-    <!-- <v-spacer></v-spacer> -->
   </v-toolbar>
 </template>
 

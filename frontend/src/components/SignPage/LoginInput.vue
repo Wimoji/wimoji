@@ -12,6 +12,7 @@
       <v-container class="input-form">
         <v-form ref="form">
           <v-text-field
+            class="sign"
             v-model="id"
             :rules="idRules"
             rounded
@@ -28,6 +29,7 @@
             </template>
           </v-text-field>
           <v-text-field
+            class="sign"
             v-model="password"
             :rules="passwordRules"
             rounded
@@ -56,7 +58,7 @@
           ></v-btn>
           <v-btn
             v-else
-            height="55px"
+            height="50px"
             width="100%"
             rounded
             color="var(--main-col-3)"
