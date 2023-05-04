@@ -69,7 +69,7 @@ public class KafkaConfig {
             ConcurrentKafkaListenerContainerFactory<String, String> containerFactory) {
 
         ConcurrentMessageListenerContainer<String, String> repliesContainer =
-                containerFactory.createContainer("kReplies");
+                containerFactory.createContainer("emojiReply");
         repliesContainer.getContainerProperties().setGroupId("repliesGroup");
         repliesContainer.setAutoStartup(false);
         return repliesContainer;
@@ -77,7 +77,7 @@ public class KafkaConfig {
 
     @Bean
     public NewTopic kRequests() {
-        return TopicBuilder.name("kRequests")
+        return TopicBuilder.name("emojiRequest")
                 .partitions(10)
                 .replicas(2)
                 .build();
@@ -85,7 +85,7 @@ public class KafkaConfig {
 
     @Bean
     public NewTopic kReplies() {
-        return TopicBuilder.name("kReplies")
+        return TopicBuilder.name("emojiReply")
                 .partitions(10)
                 .replicas(2)
                 .build();
