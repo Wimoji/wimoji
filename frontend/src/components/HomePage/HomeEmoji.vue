@@ -42,7 +42,7 @@ export default {
     ...mapState("userStore", ["location"]),
     ...mapState("emojiStore", ["emojiCategory"]),
   },
-  async mounted() {
+  async created() {
     //지금 dongcode로 주변 사용자의 이모지 불러오기
     // console.log("주변이모지불러오기");
     // console.log("this location", this.location);
@@ -51,7 +51,8 @@ export default {
       if (result == null) {
         console.log("주변 이모지 불러오기 오류 발생");
       } else {
-        this.aroundEmojis = result.data;
+        // console.log("result >> ", result);
+        this.aroundEmojis = result;
       }
       // console.log("주변 이모지 화면 : 받아온 값", rㅛesult);
       //result가 null이라면 오류, result.length가 0이라면 주변 이모지 없음
@@ -66,6 +67,7 @@ export default {
     joinChat() {
       //지금 선택된 이모지의 채팅방 참여하기
       // this.selectedEmoji;
+      this.$router.push(`/my/chat/${this.selectedEmoji.rid}`);
     },
   },
 };

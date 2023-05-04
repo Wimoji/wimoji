@@ -33,7 +33,7 @@ export default {
   computed: {
     ...mapState("emojiStore", ["emojiCategory"]),
   },
-  mounted() {
+  created() {
     this.getAllRooms();
   },
   methods: {
