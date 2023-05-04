@@ -56,8 +56,9 @@ public class ChatController {
 	 * @return :
 	 **/
 	@MessageMapping("/chat/enter")
-	public void enter(@Header("Authorization") String accessToken, @Header("rid") String rid) {
+	public void enter(@Header("Authorization") String accessToken, @Payload String rid) {
 		UserRes user = getUserByToken(kafkaTemplate, accessToken);
+		rid = rid.replace("\"", "");
 
 		if(isExist(user.getUid(), rid)) {
 			return;
@@ -80,8 +81,9 @@ public class ChatController {
 	 * @return :
 	**/
 	@MessageMapping("/chat/exit")
-	public void exit(@Header("Authorization") String accessToken, @Header("rid") String rid) {
+	public void exit(@Header("Authorization") String accessToken, @Payload String rid) {
 		UserRes user = getUserByToken(kafkaTemplate, accessToken);
+		rid = rid.replace("\"", "");
 
 		try {
 			chatRoomService.decParticipant(rid);
@@ -100,6 +102,7 @@ public class ChatController {
 	 * @return : true or false
 	 **/
 	private boolean isExist(String uid, String rid) {
+		rid = rid.replace("\"", "");
 		List<UserEnterRes> userList = chatRoomService.isExistUser(rid);
 		for(UserEnterRes user : userList) {
 			if(user.getUid().equals(uid)) {
