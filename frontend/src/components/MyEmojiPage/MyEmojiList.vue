@@ -46,7 +46,9 @@ export default {
       ({ data }) => {
         console.log(data);
         if (data.success) {
+          console.log("내 이모지들 화면에 저장하자");
           // this.myEmojis = data.data;
+          this.myEmojis = [];
           data.data.forEach((element) => {
             this.myEmojis.push({ eid: element.eid, title: element.title });
           });
@@ -81,6 +83,9 @@ export default {
 </script>
 
 <style scoped>
+.v-sheet {
+  padding-top: 130px;
+}
 .detail-emoji-modal {
   position: fixed;
   top: 50%;
