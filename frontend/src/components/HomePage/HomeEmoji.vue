@@ -24,12 +24,13 @@
         >함께하기
       </v-btn>
     </v-card>
+    선택된 이모지 {{ selectedEmoji }}
   </v-container>
 </template>
 
 <script>
 import { getAroundEmojis } from "@/api/modules/emoji";
-import { mapState } from "vuex";
+import { mapState, mapActions } from "vuex";
 export default {
   data() {
     return {
@@ -44,8 +45,6 @@ export default {
   },
   async created() {
     //지금 dongcode로 주변 사용자의 이모지 불러오기
-    // console.log("주변이모지불러오기");
-    // console.log("this location", this.location);
     if (this.location.dongCode != null) {
       let result = await getAroundEmojis(this.location);
       if (result == null) {
@@ -54,11 +53,11 @@ export default {
         // console.log("result >> ", result);
         this.aroundEmojis = result;
       }
-      // console.log("주변 이모지 화면 : 받아온 값", rㅛesult);
       //result가 null이라면 오류, result.length가 0이라면 주변 이모지 없음
     }
   },
   methods: {
+    ...mapActions("chatStore", ["setNowChatRoom"]),
     detailAroundEmoji(index) {
       //사용자의 상세 이모지 보기
       this.isClickEmoji = true;
@@ -66,8 +65,11 @@ export default {
     },
     joinChat() {
       //지금 선택된 이모지의 채팅방 참여하기
-      // this.selectedEmoji;
-      this.$router.push(`/my/chat/${this.selectedEmoji.rid}`);
+      this.setNowChatRoom(this.selectedEmoji);
+      this.$router.push({
+        name: "chatting",
+        params: { roomId: this.selectedEmoji.rid, data: this.selectedEmoji },
+      });
     },
   },
 };
