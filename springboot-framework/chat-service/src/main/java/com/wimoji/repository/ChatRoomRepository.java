@@ -10,9 +10,9 @@ import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Repository;
 
-import com.wimoji.repository.dto.request.ChatRoomReq;
+import com.wimoji.repository.dto.entity.Chat;
+import com.wimoji.repository.dto.entity.ChatRoom;
 import com.wimoji.repository.dto.request.NewChatReq;
-import com.wimoji.repository.dto.response.ChatRes;
 import com.wimoji.repository.dto.response.ChatRoomRes;
 
 @Repository
@@ -36,21 +36,21 @@ public class ChatRoomRepository {
 	 * @param : 채팅방의 id
 	 * @return : 채팅방의 정보 ChatRoomRes 반환
 	 **/
-	public ChatRoomRes findById(String rid) {
+	public ChatRoom findById(String rid) {
 		Query query = new Query();
 		query.addCriteria(Criteria.where("_id").is(new ObjectId(rid)));
 
-		ChatRoomRes chatRoom = mongoTemplate.findOne(query, ChatRoomRes.class);
+		ChatRoom chatRoom = mongoTemplate.findOne(query, ChatRoom.class);
 		return chatRoom;
 	}
 
 	/**
 	 * DB에 새로운 정보 저장
-	 * @param : ChatRoomReq entity
+	 * @param : ChatRoom entity
 	 * @return :
 	 **/
-	public ChatRoomReq save(ChatRoomReq chatRoomReq) {
-		return mongoTemplate.insert(chatRoomReq);
+	public ChatRoom save(ChatRoom chatRoom) {
+		return mongoTemplate.insert(chatRoom);
 	}
 
 	/**
@@ -58,11 +58,11 @@ public class ChatRoomRepository {
 	 * @param : 채팅방의 id, 채팅을 보낸 사람, 채팅 내용
 	 * @return :
 	 **/
-	public void saveContent(ChatRes chat) {
+	public void saveContent(Chat chat) {
 		Query query = new Query();
 		query.addCriteria(Criteria.where("_id").is(new ObjectId(chat.getRid())));
 		Update update = new Update().addToSet("content", chat);
-		mongoTemplate.updateFirst(query, update, ChatRoomReq.class);
+		mongoTemplate.updateFirst(query, update, ChatRoom.class);
 	}
 
 	/**
@@ -74,7 +74,7 @@ public class ChatRoomRepository {
 		Query query = new Query();
 		query.addCriteria(Criteria.where("_id").is(new ObjectId(rid)));
 		Update update = new Update().inc("participant", 1);
-		mongoTemplate.updateFirst(query, update, ChatRoomReq.class);
+		mongoTemplate.updateFirst(query, update, ChatRoom.class);
 	}
 
 	/**
@@ -86,8 +86,10 @@ public class ChatRoomRepository {
 		Query query = new Query();
 		query.addCriteria(Criteria.where("_id").is(new ObjectId(rid)));
 		Update update = new Update().inc("participant", -1);
-		mongoTemplate.updateFirst(query, update, ChatRoomReq.class);
-		ChatRoomRes chatRoom = mongoTemplate.findOne(query, ChatRoomRes.class);
+
+		mongoTemplate.updateFirst(query, update, ChatRoom.class);
+
+		ChatRoom chatRoom = mongoTemplate.findOne(query, ChatRoom.class);
 		return chatRoom.getParticipant();
 	}
 
@@ -100,7 +102,7 @@ public class ChatRoomRepository {
 		Query query = new Query();
 		query.addCriteria(Criteria.where("_id").is(new ObjectId(rid)));
 		Update update = new Update().addToSet("userList", uid);
-		mongoTemplate.updateFirst(query, update, ChatRoomReq.class);
+		mongoTemplate.updateFirst(query, update, ChatRoom.class);
 	}
 
 	/**
@@ -112,7 +114,7 @@ public class ChatRoomRepository {
 		Query query = new Query();
 		query.addCriteria(Criteria.where("_id").is(new ObjectId(rid)));
 		Update update = new Update().pull("userList", uid);
-		mongoTemplate.updateFirst(query, update, ChatRoomReq.class);
+		mongoTemplate.updateFirst(query, update, ChatRoom.class);
 	}
 
 	/**
@@ -123,7 +125,7 @@ public class ChatRoomRepository {
 	public int getLastChat(String rid) {
 		Query query = new Query();
 		query.addCriteria(Criteria.where("_id").is(new ObjectId(rid)));
-		ChatRoomReq lastChat = mongoTemplate.findOne(query, ChatRoomReq.class);
+		ChatRoom lastChat = mongoTemplate.findOne(query, ChatRoom.class);
 
 		int listIdx = lastChat.getContent().size();
 		return listIdx;
@@ -134,12 +136,12 @@ public class ChatRoomRepository {
 	 * @param : 채팅방의 id, 메시지를 가져올 시작 인덱스
 	 * @return : 메시지의 List
 	 **/
-	public List<ChatRes> getNewChat(NewChatReq newChatReq) {
+	public List<Chat> getNewChat(NewChatReq newChatReq) {
 		Query query = new Query();
 		query.addCriteria(Criteria.where("_id").is(new ObjectId(newChatReq.getRid())));
 		ChatRoomRes chatRoom = mongoTemplate.findOne(query, ChatRoomRes.class);
 
-		List<ChatRes> content = chatRoom.getContent().subList(newChatReq.getIdx(), chatRoom.getContent().size());
+		List<Chat> content = chatRoom.getContent().subList(newChatReq.getIdx(), chatRoom.getContent().size());
 		return content;
 	}
 
@@ -148,14 +150,14 @@ public class ChatRoomRepository {
 	 * @param : 채팅방의 id, 메시지를 가져올 시작 인덱스
 	 * @return : 메시지의 List
 	 **/
-	public List<ChatRes> getPastChat(NewChatReq newChatReq) {
+	public List<Chat> getPastChat(NewChatReq newChatReq) {
 		Query query = new Query();
 		query.addCriteria(Criteria.where("_id").is(new ObjectId(newChatReq.getRid())));
 		ChatRoomRes chatRoom = mongoTemplate.findOne(query, ChatRoomRes.class);
 
 		int endIdx = (newChatReq.getIdx() < 30)? newChatReq.getIdx() : (newChatReq.getIdx() + 30);
 
-		List<ChatRes> content = chatRoom.getContent().subList(newChatReq.getIdx(), endIdx);
+		List<Chat> content = chatRoom.getContent().subList(newChatReq.getIdx(), endIdx);
 		return content;
 	}
 
@@ -168,7 +170,7 @@ public class ChatRoomRepository {
 		Query query = new Query();
 		query.addCriteria(Criteria.where("_id").is(new ObjectId(rid)));
 		query.fields().include("userList");
-		ChatRoomRes chatRoom = mongoTemplate.findOne(query, ChatRoomRes.class);
+		ChatRoom chatRoom = mongoTemplate.findOne(query, ChatRoom.class);
 
 		return chatRoom.getUserList();
 	}

@@ -14,8 +14,8 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.wimoji.base.dto.DataResponseDto;
+import com.wimoji.repository.dto.entity.ChatRoom;
 import com.wimoji.repository.dto.request.ChatRoomReq;
-import com.wimoji.repository.dto.request.ChatRoomUserReq;
 import com.wimoji.repository.dto.request.NewChatReq;
 import com.wimoji.repository.dto.response.ChatRes;
 import com.wimoji.repository.dto.response.ChatRoomRes;
@@ -23,11 +23,9 @@ import com.wimoji.repository.dto.response.UserRes;
 import com.wimoji.service.ChatRoomService;
 
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 
 import static com.wimoji.config.KafkaConfig.getUserByToken;
 
-@Slf4j
 @RestController
 @RequiredArgsConstructor
 public class ChatRoomController {
@@ -50,24 +48,23 @@ public class ChatRoomController {
 	}
 
 	/**
-	 * id가 일치하는 채팅방을 반환
-	 * @param : 채팅방의 id
-	 * @return : 채팅방의 정보 ChatRoomRes 반환
+	 * 유저가 참여한 채팅방 목록 조회 함수
+	 * @param : accessToken, 참여한 채팅방의 id를 가진 list
+	 * @return : 채팅방의 정보 list
 	 **/
-	@GetMapping("/{rid}")
-	public DataResponseDto<?> getRoom(@RequestHeader("Authorization") String accessToken,
-		@PathVariable String rid) {
-
+	@PostMapping("/my")
+	public DataResponseDto<?> getRoomByUser(@RequestHeader("Authorization") String accessToken,
+		@RequestBody List<String> chatList) {
 		try {
 			UserRes user = getUserByToken(template, accessToken);
-			ChatRoomRes chatRoom = chatRoomService.getRoom(rid);
-			int idx = chatRoomService.getLastChat(user.getUid(), rid);
-			if(chatRoom.getContent().size() != idx) {
-				chatRoom.setNew(true);
-			}
-			chatRoom.setContent(new ArrayList<ChatRes>());
+			List<ChatRoomRes> chatRoomList = new ArrayList<>();
 
-			return DataResponseDto.of(chatRoom);
+			for(String rid : chatList) {
+				ChatRoomRes chatRoom = getRoom(user.getUid(), rid);
+				chatRoomList.add(chatRoom);
+			}
+
+			return DataResponseDto.of(chatRoomList);
 		} catch (Exception e) {
 			throw e;
 		}
@@ -75,22 +72,19 @@ public class ChatRoomController {
 
 	/**
 	 * 이모지의 정보를 담은 새로운 채팅방을 생성
-	 * @param : accessToken, 이모지의 정보를 담은 ChatRoomReq
+	 * @param : accessToken, 이모지의 정보를 담은 ChatRoom
 	 * @return : 성공 또는 실패 메세지
 	 **/
 	@PostMapping("/")
 	public DataResponseDto<?> makeRoom(@RequestHeader("Authorization") String accessToken,
-		@RequestBody ChatRoomUserReq chatRoomReq) {
+		@RequestBody ChatRoomReq chatRoomReq) {
 
 		try {
-			log.info("만들기 요청");
 			UserRes user = getUserByToken(template, accessToken);
-			log.info("아이디>>>"+user.getUid());
-			log.info("이름>>>"+user.getNickname());
 
-			ChatRoomReq makeChatRoomReq = new ChatRoomReq(chatRoomReq, user.getUid());
+			ChatRoom chatRoom = new ChatRoom(chatRoomReq, user.getUid());
 
-			String rid = chatRoomService.makeRoom(makeChatRoomReq);
+			String rid = chatRoomService.makeRoom(chatRoom);
 			Map<String, String> result = new HashMap<>();
 			result.put("rid", rid);
 
@@ -144,9 +138,12 @@ public class ChatRoomController {
 	 * @return : 메시지의 List
 	 **/
 	@GetMapping("/unread/{rid}/{idx}")
-	public DataResponseDto<?> getNewChat(@PathVariable String rid, @PathVariable int idx) {
+	public DataResponseDto<?> getNewChat(@RequestHeader("Authorization") String accessToken,
+		@PathVariable String rid, @PathVariable int idx) {
 		try {
-			NewChatReq newChatReq = new NewChatReq(rid, idx);
+			UserRes user = getUserByToken(template, accessToken);
+
+			NewChatReq newChatReq = new NewChatReq(rid, user.getUid(), idx);
 			List<ChatRes> newChatList = chatRoomService.getNewChat(newChatReq);
 
 			return DataResponseDto.of(newChatList);
@@ -162,10 +159,32 @@ public class ChatRoomController {
 	 * @return : 메시지의 List
 	 **/
 	@GetMapping("/read/{rid}/{idx}")
-	public DataResponseDto<?> getPastChat(@PathVariable String rid, @PathVariable int idx) {
-		NewChatReq newChatReq = new NewChatReq(rid, idx);
-		List<ChatRes> pastChatList = chatRoomService.getPastChat(newChatReq);
+	public DataResponseDto<?> getPastChat(@RequestHeader("Authorization") String accessToken,
+		@PathVariable String rid, @PathVariable int idx) {
+		try {
+			UserRes user = getUserByToken(template, accessToken);
 
-		return DataResponseDto.of(pastChatList);
+			NewChatReq newChatReq = new NewChatReq(rid, user.getUid(), idx);
+			List<ChatRes> pastChatList = chatRoomService.getPastChat(newChatReq);
+
+			return DataResponseDto.of(pastChatList);
+		} catch (Exception e) {
+			throw e;
+		}
+	}
+
+	/**
+	 * id가 일치하는 채팅방을 반환
+	 * @param : 유저의 id, 채팅방의 id
+	 * @return : 채팅방의 정보 ChatRoomRes 반환
+	 **/
+	private ChatRoomRes getRoom(String uid, String rid) {
+		try {
+			int idx = chatRoomService.getLastChat(uid, rid);
+			ChatRoomRes chatRoom = chatRoomService.getRoom(rid, idx);
+			return chatRoom;
+		} catch (Exception e) {
+			throw e;
+		}
 	}
 }

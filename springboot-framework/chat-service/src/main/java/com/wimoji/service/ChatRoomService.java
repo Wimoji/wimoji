@@ -1,5 +1,6 @@
 package com.wimoji.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
@@ -8,7 +9,8 @@ import com.wimoji.base.GeneralException;
 import com.wimoji.base.constant.Code;
 import com.wimoji.repository.ChatRoomRepository;
 import com.wimoji.repository.LastChatRepository;
-import com.wimoji.repository.dto.request.ChatRoomReq;
+import com.wimoji.repository.dto.entity.Chat;
+import com.wimoji.repository.dto.entity.ChatRoom;
 import com.wimoji.repository.dto.request.LastChatReq;
 import com.wimoji.repository.dto.request.NewChatReq;
 import com.wimoji.repository.dto.response.ChatRes;
@@ -38,21 +40,26 @@ public class ChatRoomService {
 	 * @param : 채팅방의 id
 	 * @return : 채팅방의 정보 ChatRoomRes 반환
 	 **/
-	public ChatRoomRes getRoom(String rid) {
-		ChatRoomRes chatRoom = chatRoomRepository.findById(rid);
-		chatRoom.setRid(chatRoom.getId().substring(0, 8));
-		return chatRoom;
+	public ChatRoomRes getRoom(String rid, int idx) {
+		ChatRoom chatRoom = chatRoomRepository.findById(rid);
+
+		boolean isNew = false;
+		if(chatRoom.getContent().size() != idx) {
+			isNew = true;
+		}
+		ChatRoomRes chatRoomRes = new ChatRoomRes(chatRoom, isNew);
+
+		return chatRoomRes;
 	}
 
 	/**
 	 * 이모지의 정보를 담은 새로운 채팅방을 생성
-	 * @param : ChatRoomReq entity
+	 * @param : ChatRoom entity
 	 * @return :
 	 **/
-	public String makeRoom(ChatRoomReq chatRoomReq) {
+	public String makeRoom(ChatRoom chatRoom) {
 		try {
-			ChatRoomReq chatRoom = chatRoomRepository.save(chatRoomReq);
-			return chatRoom.getId();
+			return chatRoomRepository.save(chatRoom).getId();
 		} catch (Exception e) {
 			throw new GeneralException(Code.BAD_REQUEST);
 		}
@@ -63,7 +70,7 @@ public class ChatRoomService {
 	 * @param : 채팅방의 id, 채팅을 보낸 사람, 채팅 내용
 	 * @return :
 	 **/
-	public void saveContent(ChatRes chat) {
+	public void saveContent(Chat chat) {
 		try {
 			chatRoomRepository.saveContent(chat);
 		} catch (Exception e) {
@@ -88,7 +95,7 @@ public class ChatRoomService {
 	public void decParticipant(String rid) {
 		int participant = chatRoomRepository.decParticipant(rid);
 		if(participant == 0) {
-			// 이모지 삭제 요청 호출
+			// TODO: 이모지 삭제 요청 호출
 		}
 	}
 
@@ -156,7 +163,15 @@ public class ChatRoomService {
 			int idx = (newChatReq.getIdx() < 10)? 0 : (newChatReq.getIdx() - 10);
 			newChatReq.setIdx(idx);
 
-			return chatRoomRepository.getNewChat(newChatReq);
+			List<Chat> chatList = chatRoomRepository.getNewChat(newChatReq);
+			List<ChatRes> chatResList = new ArrayList<>();
+
+			for(Chat chat : chatList) {
+				int flag = (newChatReq.getUid().equals(chat.getUid()))? 1 : 2;
+				chatResList.add(new ChatRes(chat.getRid(), chat.getNickname(), chat.getContent(), flag));
+			}
+
+			return chatResList;
 		} catch (Exception e) {
 			throw new GeneralException(Code.BAD_REQUEST);
 		}
@@ -168,9 +183,21 @@ public class ChatRoomService {
 	 * @return : 메시지의 List
 	 **/
 	public List<ChatRes> getPastChat(NewChatReq newChatReq) {
-		int idx = (newChatReq.getIdx() < 30)? 0 : (newChatReq.getIdx() - 30);
-		newChatReq.setIdx(idx);
+		try {
+			int idx = (newChatReq.getIdx() < 30)? 0 : (newChatReq.getIdx() - 30);
+			newChatReq.setIdx(idx);
 
-		return chatRoomRepository.getPastChat(newChatReq);
+			List<Chat> chatList = chatRoomRepository.getPastChat(newChatReq);
+			List<ChatRes> chatResList = new ArrayList<>();
+
+			for(Chat chat : chatList) {
+				int flag = (newChatReq.getUid().equals(chat.getUid()))? 1 : 2;
+				chatResList.add(new ChatRes(chat.getRid(), chat.getNickname(), chat.getContent(), flag));
+			}
+
+			return chatResList;
+		} catch (Exception e) {
+			throw new GeneralException(Code.BAD_REQUEST);
+		}
 	}
 }

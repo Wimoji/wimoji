@@ -25,8 +25,13 @@ public class LastChatRepository {
 	public void save(LastChatReq chatReq) {
 		Query query = new Query();
 		query.addCriteria(Criteria.where("uid").is(chatReq.getUid()).and("rid").is(chatReq.getRid()));
-		Update update = new Update().set("cid", chatReq.getIdx());
+		LastChatReq lastChat = mongoTemplate.findOne(query, LastChatReq.class);
 
+		if(lastChat == null) {
+			mongoTemplate.save(chatReq);
+		}
+
+		Update update = new Update().set("cid", chatReq.getIdx());
 		mongoTemplate.updateFirst(query, update, LastChatReq.class);
 	}
 
@@ -39,9 +44,11 @@ public class LastChatRepository {
 		Query query = new Query();
 		query.addCriteria(Criteria.where("uid").is(uid).and("rid").is(rid));
 		LastChatReq lastChat = mongoTemplate.findOne(query, LastChatReq.class);
+
 		if(lastChat == null) {
 			return 0;
 		}
+
 		return lastChat.getIdx();
 	}
 }

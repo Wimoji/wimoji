@@ -7,5 +7,6 @@ import lombok.Data;
 @AllArgsConstructor
 public class NewChatReq {
 	String rid;
+	String uid;
 	int idx;
 }

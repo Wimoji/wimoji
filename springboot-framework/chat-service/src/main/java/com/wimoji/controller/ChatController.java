@@ -11,6 +11,7 @@ import org.springframework.stereotype.Controller;
 
 import com.wimoji.base.GeneralException;
 import com.wimoji.base.constant.Code;
+import com.wimoji.repository.dto.entity.Chat;
 import com.wimoji.repository.dto.response.ChatRes;
 import com.wimoji.repository.dto.request.ChatReq;
 import com.wimoji.repository.dto.response.UserRes;
@@ -35,10 +36,12 @@ public class ChatController {
 	@MessageMapping("/chat/message")
 	public void chat(@Payload ChatReq chatReq, @Header("Authorization") String accessToken) {
 		UserRes user = getUserByToken(kafkaTemplate, accessToken);
-		ChatRes chatRes = new ChatRes(chatReq.getRid(), user.getNickname(), chatReq.getContent());
+		Chat chat = new Chat(chatReq.getRid(), user.getUid(), user.getNickname(), chatReq.getContent());
+		// TODO: 세션과 사용자ID 대조하여 구분
+		ChatRes chatRes = new ChatRes(chatReq.getRid(), user.getNickname(), chatReq.getContent(), 2);
 
 		try {
-			chatRoomService.saveContent(chatRes);
+			chatRoomService.saveContent(chat);
 		} catch (Exception e) {
 			throw e;
 		}
@@ -66,8 +69,7 @@ public class ChatController {
 			throw new GeneralException(Code.INTERNAL_ERROR);
 		}
 
-		// 환영 메시지
-		ChatRes chatRes = new ChatRes(rid, user.getUid(), user.getNickname() + "님이 입장하였습니다.");
+		ChatRes chatRes = new ChatRes(rid, user.getNickname(), user.getNickname() + "님이 입장하였습니다.", 3);
 		template.convertAndSend("/sub/chat/" + chatRes.getRid(), chatRes);
 	}
 
@@ -87,7 +89,7 @@ public class ChatController {
 			throw new GeneralException(Code.INTERNAL_ERROR);
 		}
 
-		ChatRes chatRes = new ChatRes(rid, user.getUid(), user.getNickname() + "님이 퇴장하였습니다.");
+		ChatRes chatRes = new ChatRes(rid, user.getNickname(), user.getNickname() + "님이 퇴장하였습니다.", 3);
 		template.convertAndSend("/sub/chat/" + chatRes.getRid(), chatRes);
 	}
 

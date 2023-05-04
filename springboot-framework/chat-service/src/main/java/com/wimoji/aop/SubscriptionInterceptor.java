@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 import com.wimoji.base.GeneralException;
 import com.wimoji.base.constant.Code;
 import com.wimoji.repository.ChatRoomRepository;
-import com.wimoji.repository.dto.response.ChatRoomRes;
+import com.wimoji.repository.dto.entity.ChatRoom;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -41,7 +41,7 @@ public class SubscriptionInterceptor implements ChannelInterceptor {
 	 * @return : true or false
 	 **/
 	private boolean validateSubscription(String rid) {
-		ChatRoomRes chatRoom = chatRoomRepository.findById(rid);
+		ChatRoom chatRoom = chatRoomRepository.findById(rid);
 		if (chatRoom != null) {
 			return true;
 		}
