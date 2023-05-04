@@ -79,9 +79,6 @@ import {
   getNewChatMessage,
   saveLastMessage,
 } from "@/api/modules/websocket";
-import { apiInstance } from "@/api/index";
-
-const api = apiInstance();
 
 export default {
   data() {
@@ -147,7 +144,7 @@ export default {
       this.socket = StompJS.over(sockJs);
 
       // console.log("header>>>>", api.headers);
-      let token = api.headers["Authorization"];
+      let token = sessionStorage.getItem("access-token");
 
       const headers = {
         Authorization: token,
@@ -190,7 +187,7 @@ export default {
       //   flag: 1,
       // });
 
-      let token = api.headers["Authorization"];
+      let token = sessionStorage.getItem("access-token");
 
       if (this.socket && this.socket.connected) {
         const msg = {
