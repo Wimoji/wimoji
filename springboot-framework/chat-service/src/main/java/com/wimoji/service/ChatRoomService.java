@@ -15,6 +15,7 @@ import com.wimoji.repository.dto.request.LastChatReq;
 import com.wimoji.repository.dto.request.NewChatReq;
 import com.wimoji.repository.dto.response.ChatRes;
 import com.wimoji.repository.dto.response.ChatRoomRes;
+import com.wimoji.repository.dto.response.UserEnterRes;
 
 import lombok.RequiredArgsConstructor;
 
@@ -105,7 +106,9 @@ public class ChatRoomService {
 	 * @return :
 	 **/
 	public void addUserToList(String rid, String uid) {
-		chatRoomRepository.addUserToList(rid, uid);
+		int idx = chatRoomRepository.getLastChat(rid);
+		UserEnterRes userEnterRes = new UserEnterRes(uid, idx);
+		chatRoomRepository.addUserToList(rid, userEnterRes);
 	}
 
 	/**
@@ -122,7 +125,7 @@ public class ChatRoomService {
 	 * @param : 채팅방의 id
 	 * @return : 유저의 id를 담은 List
 	 **/
-	public List<String> isExistUser(String rid) {
+	public List<UserEnterRes> isExistUser(String rid) {
 		return chatRoomRepository.isExistUser(rid);
 	}
 
@@ -160,8 +163,11 @@ public class ChatRoomService {
 	 **/
 	public List<ChatRes> getNewChat(NewChatReq newChatReq) {
 		try {
-			int idx = (newChatReq.getIdx() < 10)? 0 : (newChatReq.getIdx() - 10);
-			newChatReq.setIdx(idx);
+			if(newChatReq.getStartIdx() < 10) {
+				newChatReq.setStartIdx(0);
+			} else {
+				newChatReq.setStartIdx(newChatReq.getStartIdx() - 10);
+			}
 
 			List<Chat> chatList = chatRoomRepository.getNewChat(newChatReq);
 			List<ChatRes> chatResList = new ArrayList<>();
@@ -184,8 +190,11 @@ public class ChatRoomService {
 	 **/
 	public List<ChatRes> getPastChat(NewChatReq newChatReq) {
 		try {
-			int idx = (newChatReq.getIdx() < 30)? 0 : (newChatReq.getIdx() - 30);
-			newChatReq.setIdx(idx);
+			if(newChatReq.getStartIdx() < 30) {
+				newChatReq.setStartIdx(0);
+			} else {
+				newChatReq.setStartIdx(newChatReq.getStartIdx() - 30);
+			}
 
 			List<Chat> chatList = chatRoomRepository.getPastChat(newChatReq);
 			List<ChatRes> chatResList = new ArrayList<>();

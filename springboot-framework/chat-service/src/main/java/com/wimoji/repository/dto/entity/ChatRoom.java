@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import com.wimoji.repository.dto.request.ChatRoomReq;
+import com.wimoji.repository.dto.response.UserEnterRes;
 
 import lombok.Data;
 
@@ -17,17 +18,17 @@ public class ChatRoom {
 	String title;
 	int participant;
 	int limit;
-	List<String> userList;
+	List<UserEnterRes> userList;
 	List<Chat> content;
 
-	public ChatRoom(ChatRoomReq chatRoomReq, String uid) {
+	public ChatRoom(ChatRoomReq chatRoomReq, UserEnterRes userEnterRes) {
 		this.id = null;
 		this.eid = chatRoomReq.getEid();
 		this.title = chatRoomReq.getTitle();
 		this.participant = 1;
 		this.limit = chatRoomReq.getLimit();
 		this.userList = new ArrayList<>();
-		userList.add(uid);
+		userList.add(userEnterRes);
 		this.content = new ArrayList<>();
 	}
 }

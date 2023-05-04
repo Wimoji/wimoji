@@ -14,6 +14,7 @@ import com.wimoji.repository.dto.entity.Chat;
 import com.wimoji.repository.dto.entity.ChatRoom;
 import com.wimoji.repository.dto.request.NewChatReq;
 import com.wimoji.repository.dto.response.ChatRoomRes;
+import com.wimoji.repository.dto.response.UserEnterRes;
 
 @Repository
 public class ChatRoomRepository {
@@ -98,10 +99,11 @@ public class ChatRoomRepository {
 	 * @param : 채팅방의 id, 유저의 id
 	 * @return :
 	 **/
-	public void addUserToList(String rid, String uid) {
+	public void addUserToList(String rid, UserEnterRes userEnterRes) {
 		Query query = new Query();
 		query.addCriteria(Criteria.where("_id").is(new ObjectId(rid)));
-		Update update = new Update().addToSet("userList", uid);
+		Update update = new Update().addToSet("userList", userEnterRes);
+
 		mongoTemplate.updateFirst(query, update, ChatRoom.class);
 	}
 
@@ -139,9 +141,9 @@ public class ChatRoomRepository {
 	public List<Chat> getNewChat(NewChatReq newChatReq) {
 		Query query = new Query();
 		query.addCriteria(Criteria.where("_id").is(new ObjectId(newChatReq.getRid())));
-		ChatRoomRes chatRoom = mongoTemplate.findOne(query, ChatRoomRes.class);
+		ChatRoom chatRoom = mongoTemplate.findOne(query, ChatRoom.class);
 
-		List<Chat> content = chatRoom.getContent().subList(newChatReq.getIdx(), chatRoom.getContent().size());
+		List<Chat> content = chatRoom.getContent().subList(newChatReq.getStartIdx(), chatRoom.getContent().size());
 		return content;
 	}
 
@@ -153,11 +155,9 @@ public class ChatRoomRepository {
 	public List<Chat> getPastChat(NewChatReq newChatReq) {
 		Query query = new Query();
 		query.addCriteria(Criteria.where("_id").is(new ObjectId(newChatReq.getRid())));
-		ChatRoomRes chatRoom = mongoTemplate.findOne(query, ChatRoomRes.class);
+		ChatRoom chatRoom = mongoTemplate.findOne(query, ChatRoom.class);
 
-		int endIdx = (newChatReq.getIdx() < 30)? newChatReq.getIdx() : (newChatReq.getIdx() + 30);
-
-		List<Chat> content = chatRoom.getContent().subList(newChatReq.getIdx(), endIdx);
+		List<Chat> content = chatRoom.getContent().subList(newChatReq.getStartIdx(), newChatReq.getEndIdx());
 		return content;
 	}
 
@@ -166,7 +166,7 @@ public class ChatRoomRepository {
 	 * @param : 채팅방의 id
 	 * @return : 유저의 id를 담은 List
 	 **/
-	public List<String> isExistUser(String rid) {
+	public List<UserEnterRes> isExistUser(String rid) {
 		Query query = new Query();
 		query.addCriteria(Criteria.where("_id").is(new ObjectId(rid)));
 		query.fields().include("userList");

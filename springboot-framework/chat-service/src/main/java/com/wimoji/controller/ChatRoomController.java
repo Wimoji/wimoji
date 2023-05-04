@@ -19,6 +19,7 @@ import com.wimoji.repository.dto.request.ChatRoomReq;
 import com.wimoji.repository.dto.request.NewChatReq;
 import com.wimoji.repository.dto.response.ChatRes;
 import com.wimoji.repository.dto.response.ChatRoomRes;
+import com.wimoji.repository.dto.response.UserEnterRes;
 import com.wimoji.repository.dto.response.UserRes;
 import com.wimoji.service.ChatRoomService;
 
@@ -78,11 +79,12 @@ public class ChatRoomController {
 	@PostMapping("/")
 	public DataResponseDto<?> makeRoom(@RequestHeader("Authorization") String accessToken,
 		@RequestBody ChatRoomReq chatRoomReq) {
-
+		// TODO: 이모지 생성 API 호출
 		try {
 			UserRes user = getUserByToken(template, accessToken);
 
-			ChatRoom chatRoom = new ChatRoom(chatRoomReq, user.getUid());
+			UserEnterRes userEnterRes = new UserEnterRes(user.getUid(), 0);
+			ChatRoom chatRoom = new ChatRoom(chatRoomReq, userEnterRes);
 
 			String rid = chatRoomService.makeRoom(chatRoom);
 			Map<String, String> result = new HashMap<>();
@@ -143,7 +145,7 @@ public class ChatRoomController {
 		try {
 			UserRes user = getUserByToken(template, accessToken);
 
-			NewChatReq newChatReq = new NewChatReq(rid, user.getUid(), idx);
+			NewChatReq newChatReq = new NewChatReq(rid, user.getUid(), idx, idx);
 			List<ChatRes> newChatList = chatRoomService.getNewChat(newChatReq);
 
 			return DataResponseDto.of(newChatList);
@@ -154,7 +156,6 @@ public class ChatRoomController {
 
 	/**
 	 * 이전 메시지를 30개씩 조회
-	 * TODO: 유저가 참여하기 이전에 채팅방에 존재했던 메시지에 대한 처리
 	 * @param : 채팅방의 id, 마지막 메시지의 인덱스
 	 * @return : 메시지의 List
 	 **/
@@ -164,7 +165,7 @@ public class ChatRoomController {
 		try {
 			UserRes user = getUserByToken(template, accessToken);
 
-			NewChatReq newChatReq = new NewChatReq(rid, user.getUid(), idx);
+			NewChatReq newChatReq = new NewChatReq(rid, user.getUid(), idx, idx);
 			List<ChatRes> pastChatList = chatRoomService.getPastChat(newChatReq);
 
 			return DataResponseDto.of(pastChatList);

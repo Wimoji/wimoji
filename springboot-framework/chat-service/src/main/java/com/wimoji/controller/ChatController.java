@@ -14,6 +14,7 @@ import com.wimoji.base.constant.Code;
 import com.wimoji.repository.dto.entity.Chat;
 import com.wimoji.repository.dto.response.ChatRes;
 import com.wimoji.repository.dto.request.ChatReq;
+import com.wimoji.repository.dto.response.UserEnterRes;
 import com.wimoji.repository.dto.response.UserRes;
 import com.wimoji.service.ChatRoomService;
 
@@ -99,9 +100,9 @@ public class ChatController {
 	 * @return : true or false
 	 **/
 	private boolean isExist(String uid, String rid) {
-		List<String> userList = chatRoomService.isExistUser(rid);
-		for(String userId : userList) {
-			if(userId.equals(uid)) {
+		List<UserEnterRes> userList = chatRoomService.isExistUser(rid);
+		for(UserEnterRes user : userList) {
+			if(user.getUid().equals(uid)) {
 				return true;
 			}
 		}

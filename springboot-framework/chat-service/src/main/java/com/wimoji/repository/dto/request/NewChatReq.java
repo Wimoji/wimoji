@@ -8,5 +8,6 @@ import lombok.Data;
 public class NewChatReq {
 	String rid;
 	String uid;
-	int idx;
+	int startIdx;
+	int endIdx;
 }
