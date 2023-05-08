@@ -16,7 +16,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.wimoji.base.GeneralException;
 import com.wimoji.base.constant.Code;
 import com.wimoji.repository.ChatRoomRepository;
-import com.wimoji.repository.dto.entity.ChatRoom;
 import com.wimoji.repository.dto.response.UserRes;
 import com.wimoji.service.UserServiceClient;
 

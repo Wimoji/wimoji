@@ -1,10 +1,7 @@
 package com.wimoji.repository.dto.response;
 
-import java.util.List;
-
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import com.wimoji.repository.dto.entity.Chat;
 import com.wimoji.repository.dto.entity.ChatRoom;
 
 import lombok.AllArgsConstructor;
