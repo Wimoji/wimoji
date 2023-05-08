@@ -12,6 +12,7 @@
       <v-container class="input-form">
         <v-form ref="form">
           <v-text-field
+            class="sign"
             v-model="nickname"
             :rules="nicknameRules"
             rounded
@@ -28,6 +29,7 @@
             </template>
           </v-text-field>
           <v-text-field
+            class="sign"
             v-model="id"
             :rules="idRules"
             rounded
@@ -44,6 +46,7 @@
             </template>
           </v-text-field>
           <v-text-field
+            class="sign"
             v-model="password"
             :rules="passwordRules"
             rounded
@@ -60,7 +63,7 @@
             </template>
           </v-text-field>
           <v-btn
-            height="55px"
+            height="50px"
             width="100%"
             rounded
             color="var(--main-col-5)"
@@ -133,4 +136,4 @@ export default {
 };
 </script>
 
-<style></style>
+<style scoped></style>

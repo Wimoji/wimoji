@@ -33,7 +33,7 @@ export default {
   computed: {
     ...mapState("emojiStore", ["emojiCategory"]),
   },
-  mounted() {
+  created() {
     this.getAllRooms();
   },
   methods: {
@@ -65,4 +65,8 @@ export default {
 };
 </script>
 
-<style></style>
+<style scoped>
+.container {
+  margin-top: 130px;
+}
+</style>

@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="header-area">
     <home-header v-if="homePage.includes($route.name) && isLogin"></home-header>
     <my-header v-if="myHeaderPage.includes($route.name)"></my-header>
     <chat-room-header
@@ -29,4 +29,11 @@ export default {
 };
 </script>
 
-<style></style>
+<style>
+.header-area {
+  position: fixed;
+  width: 100%;
+  z-index: 2;
+  max-width: 500px;
+}
+</style>
