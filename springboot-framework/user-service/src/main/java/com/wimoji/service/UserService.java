@@ -95,4 +95,12 @@ public class UserService {
         UserEntity userEntity = repository.findAndRemove(id);
     }
 
+    /**
+     * DB의 유저 정보 반환
+     * @param id
+     * @return UserEntity
+     */
+    public List<String> getChatListByUser(String id) {
+        return repository.getChatListByUser(id);
+    }
 }

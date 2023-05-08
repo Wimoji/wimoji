@@ -28,6 +28,8 @@ dependencies {
     // for apache kafka
     implementation 'org.springframework.kafka:spring-kafka:3.0.6'
     implementation 'com.fasterxml.jackson.core:jackson-databind:2.15.0'
+    // feignclient MS간의 통신
+    implementation 'org.springframework.cloud:spring-cloud-starter-openfeign'
 
 
     //JWT

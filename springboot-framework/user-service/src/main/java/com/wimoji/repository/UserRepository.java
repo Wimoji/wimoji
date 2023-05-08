@@ -1,5 +1,7 @@
 package com.wimoji.repository;
 
+import java.util.List;
+
 import com.wimoji.repository.dto.UserEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
@@ -66,5 +68,10 @@ public class UserRepository {
                 UserEntity.class
         );
         return userEntity;
+    }
+
+    public List<String> getChatListByUser(String uid) {
+        UserEntity user = mongoTemplate.findById(uid, UserEntity.class);
+        return user.getChatList();
     }
 }
