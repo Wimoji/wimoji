@@ -1,7 +1,7 @@
 import { apiInstance } from "@/api/index";
 
 const api = apiInstance();
-const baseURL = `${process.env.VUE_APP_API_SERVICE_URL}`;
+const baseURL = `${process.env.VUE_APP_API_SERVICE_URL}/chat-service`;
 
 // [ GET 마지막으로 읽은 채팅 인덱스 가져오기]
 async function getLastReadIdx(params) {
@@ -24,6 +24,7 @@ async function getNewChatMessage(params) {
   await api
     .get(`${baseURL}/unread/${params.id}/${params.idx}`)
     .then((response) => {
+      console.log("읽지않은채팅>>", response);
       result = response.data.data;
     })
     .catch((error) => {
@@ -33,9 +34,10 @@ async function getNewChatMessage(params) {
 }
 
 // [ POST 마지막 메시지 저장 ]
-async function saveLastMessage(data) {
+async function saveLastMessage(params) {
+  console.log("params>>", params);
   await api
-    .post(`${baseURL}/last`, data)
+    .post(`${baseURL}/last/${params}`)
     .then((response) => {
       console.log("마지막 메시지 >>", response);
     })
