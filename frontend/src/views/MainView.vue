@@ -1,8 +1,8 @@
 <template>
-  <v-container>
+  <v-sheet color="var(--col-empty)">
     <info-page v-if="!isLogin"></info-page>
     <home-page v-else></home-page>
-  </v-container>
+  </v-sheet>
 </template>
 
 <script>
