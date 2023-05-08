@@ -38,10 +38,6 @@ public class SubscriptionInterceptor implements ChannelInterceptor {
 		String sessionId = headerAccessor.getSessionId();
 
 		if (StompCommand.CONNECT.equals(headerAccessor.getCommand())) {
-			// String rid = headerAccessor.getFirstNativeHeader("rid");
-			// if (!validateSubscription(rid)) {
-			// 	throw new GeneralException(Code.LIMIT_ERROR);
-			// }
 			String userId = getUidByToken(headerAccessor.getFirstNativeHeader("Authorization"));
 			sessionIdMap.put(userId, sessionId);
 		} else if (headerAccessor.getCommand().equals(StompCommand.DISCONNECT)) {
@@ -55,6 +51,11 @@ public class SubscriptionInterceptor implements ChannelInterceptor {
 		return sessionIdMap;
 	}
 
+	/**
+	 * 토큰에서 사용자 정보 추출
+	 * @param : accessToken
+	 * @return : user Id와 name
+	 **/
 	private String getUidByToken(String accessToken) {
 		try {
 			UserRes user = mapper.readValue(userServiceClient.getUser(accessToken), UserRes.class);
@@ -65,18 +66,5 @@ public class SubscriptionInterceptor implements ChannelInterceptor {
 		} catch (JsonProcessingException e) {
 			throw new GeneralException(Code.UNAUTHORIZED);
 		}
-	}
-
-	/**
-	 * 유효한 채팅방인지 검사
-	 * @param : 채팅방의 id
-	 * @return : true or false
-	 **/
-	private boolean validateSubscription(String rid) {
-		ChatRoom chatRoom = chatRoomRepository.findById(rid);
-		if (chatRoom != null) {
-			return true;
-		}
-		return false;
 	}
 }
