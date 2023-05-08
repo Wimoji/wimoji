@@ -23,71 +23,71 @@ import java.util.concurrent.TimeUnit;
 
 @Configuration
 public class KafkaConfig {
-    private static ObjectMapper mapper;
-    @Autowired
-    public KafkaConfig(ObjectMapper mapper) {
-        this.mapper = mapper;
-    }
-
-    public static User getUserByToken(ReplyingKafkaTemplate<String, String, String> template, String bearerToken){
-
-        SendResult<String, String> sendResult = null;
-        ConsumerRecord<String, String> consumerRecord = null;
-        User user = null;
-
-        try {
-            if (!template.waitForAssignment(Duration.ofSeconds(10))) {
-                throw new IllegalStateException("Reply container did not initialize");
-            }
-            ProducerRecord<String, String> record = new ProducerRecord<>("userRequest", bearerToken);
-            RequestReplyFuture<String, String, String> replyFuture = template.sendAndReceive(record);
-            sendResult = replyFuture.getSendFuture().get(10, TimeUnit.SECONDS);
-
-            System.out.println("Sent ok: " + sendResult.getRecordMetadata());
-            consumerRecord = replyFuture.get(10, TimeUnit.SECONDS);
-
-            System.out.println("Return value: " + consumerRecord.value());
-            String tmp = consumerRecord.value();
-
-            user = mapper.readValue(tmp, User.class);
-        } catch (Exception e) {
-            throw new GeneralException(Code.UNAUTHORIZED);
-        }
-        return user;
-    }
-
-    @Bean
-    public ReplyingKafkaTemplate<String, String, String> replyingTemplate(
-            ProducerFactory<String, String> pf,
-            ConcurrentMessageListenerContainer<String, String> repliesContainer) {
-
-        return new ReplyingKafkaTemplate<>(pf, repliesContainer);
-    }
-
-    @Bean
-    public ConcurrentMessageListenerContainer<String, String> repliesContainer(
-            ConcurrentKafkaListenerContainerFactory<String, String> containerFactory) {
-
-        ConcurrentMessageListenerContainer<String, String> repliesContainer =
-                containerFactory.createContainer("emojiReply");
-        repliesContainer.getContainerProperties().setGroupId("repliesGroup");
-        repliesContainer.setAutoStartup(false);
-        return repliesContainer;
-    }
-
-    @Bean
-    public NewTopic kRequests() {
-        return TopicBuilder.name("emojiRequest")
-                .partitions(10)
-                .replicas(2)
-                .build();
-    }
-
-    @Bean
-    public NewTopic kReplies() {
-        return TopicBuilder.name("emojiReply")
-                .partitions(10)
-                .replicas(2)
-                .build();
-    }
+//    private static ObjectMapper mapper;
+//    @Autowired
+//    public KafkaConfig(ObjectMapper mapper) {
+//        this.mapper = mapper;
+//    }
+//
+//    public static User getUserByToken(ReplyingKafkaTemplate<String, String, String> template, String bearerToken){
+//
+//        SendResult<String, String> sendResult = null;
+//        ConsumerRecord<String, String> consumerRecord = null;
+//        User user = null;
+//
+//        try {
+//            if (!template.waitForAssignment(Duration.ofSeconds(10))) {
+//                throw new IllegalStateException("Reply container did not initialize");
+//            }
+//            ProducerRecord<String, String> record = new ProducerRecord<>("userRequest", bearerToken);
+//            RequestReplyFuture<String, String, String> replyFuture = template.sendAndReceive(record);
+//            sendResult = replyFuture.getSendFuture().get(10, TimeUnit.SECONDS);
+//
+//            System.out.println("Sent ok: " + sendResult.getRecordMetadata());
+//            consumerRecord = replyFuture.get(10, TimeUnit.SECONDS);
+//
+//            System.out.println("Return value: " + consumerRecord.value());
+//            String tmp = consumerRecord.value();
+//
+//            user = mapper.readValue(tmp, User.class);
+//        } catch (Exception e) {
+//            throw new GeneralException(Code.UNAUTHORIZED);
+//        }
+//        return user;
+//    }
+//
+//    @Bean
+//    public ReplyingKafkaTemplate<String, String, String> replyingTemplate(
+//            ProducerFactory<String, String> pf,
+//            ConcurrentMessageListenerContainer<String, String> repliesContainer) {
+//
+//        return new ReplyingKafkaTemplate<>(pf, repliesContainer);
+//    }
+//
+//    @Bean
+//    public ConcurrentMessageListenerContainer<String, String> repliesContainer(
+//            ConcurrentKafkaListenerContainerFactory<String, String> containerFactory) {
+//
+//        ConcurrentMessageListenerContainer<String, String> repliesContainer =
+//                containerFactory.createContainer("emojiReply");
+//        repliesContainer.getContainerProperties().setGroupId("repliesGroup");
+//        repliesContainer.setAutoStartup(false);
+//        return repliesContainer;
+//    }
+//
+//    @Bean
+//    public NewTopic kRequests() {
+//        return TopicBuilder.name("emojiRequest")
+//                .partitions(10)
+//                .replicas(2)
+//                .build();
+//    }
+//
+//    @Bean
+//    public NewTopic kReplies() {
+//        return TopicBuilder.name("emojiReply")
+//                .partitions(10)
+//                .replicas(2)
+//                .build();
+//    }
 }

@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-import static com.wimoji.config.KafkaConfig.getUserByToken;
+//import static com.wimoji.config.KafkaConfig.getUserByToken;
 
 @RestController
 @RequiredArgsConstructor
@@ -27,7 +27,7 @@ public class EmojiController {
 
     private final UserServiceClient userServiceClient;
     private final EmojiService emojiService;
-    private final ReplyingKafkaTemplate<String, String, String> template;
+//    private final ReplyingKafkaTemplate<String, String, String> template;
     private final ObjectMapper mapper;
     //    @Bean
 
