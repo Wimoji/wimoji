@@ -20,14 +20,11 @@ import com.wimoji.repository.dto.response.UserRes;
 import com.wimoji.service.UserServiceClient;
 
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 
-@Slf4j
 @Component
 @RequiredArgsConstructor
 public class SubscriptionInterceptor implements ChannelInterceptor {
 	private final Map<String, String> sessionIdMap = new ConcurrentHashMap<>();
-	private final ChatRoomRepository chatRoomRepository;
 	private final UserServiceClient userServiceClient;
 	private final ObjectMapper mapper;
 
@@ -39,6 +36,7 @@ public class SubscriptionInterceptor implements ChannelInterceptor {
 		if (StompCommand.CONNECT.equals(headerAccessor.getCommand())) {
 			String userId = getUidByToken(headerAccessor.getFirstNativeHeader("Authorization"));
 			sessionIdMap.put(userId, sessionId);
+			// headerAccessor.setHeader("session", sessionId);
 		} else if (headerAccessor.getCommand().equals(StompCommand.DISCONNECT)) {
 			sessionIdMap.remove(sessionId);
 		}
@@ -46,6 +44,11 @@ public class SubscriptionInterceptor implements ChannelInterceptor {
 		return message;
 	}
 
+	/**
+	 * sessionId와 userId가 저장된 map을 반환
+	 * @param :
+	 * @return : sessionIdMap
+	 **/
 	public Map<String, String> getSessionMap() {
 		return sessionIdMap;
 	}
