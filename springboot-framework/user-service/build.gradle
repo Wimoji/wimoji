@@ -28,6 +28,8 @@ dependencies {
     // for apache kafka
     implementation 'org.springframework.kafka:spring-kafka:3.0.6'
     implementation 'com.fasterxml.jackson.core:jackson-databind:2.15.0'
+    implementation 'io.micrometer:micrometer-registry-prometheus:1.10.6'
+	implementation 'org.springframework.boot:spring-boot-starter-actuator:3.0.6'
 
 
     //JWT
