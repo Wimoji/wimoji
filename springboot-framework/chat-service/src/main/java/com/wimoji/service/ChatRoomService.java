@@ -170,7 +170,7 @@ public class ChatRoomService {
 			List<ChatRes> chatResList = new ArrayList<>();
 
 			for(Chat chat : chatList) {
-				int flag = (newChatReq.getUid().equals(chat.getUid()))? 1 : 2;
+				String flag = (newChatReq.getUid().equals(chat.getUid()))? "1" : "2";
 				chatResList.add(new ChatRes(chat.getRid(), chat.getNickname(), chat.getContent(), flag));
 			}
 
@@ -197,7 +197,7 @@ public class ChatRoomService {
 			List<ChatRes> chatResList = new ArrayList<>();
 
 			for(Chat chat : chatList) {
-				int flag = (newChatReq.getUid().equals(chat.getUid()))? 1 : 2;
+				String flag = (newChatReq.getUid().equals(chat.getUid()))? "1" : "2";
 				chatResList.add(new ChatRes(chat.getRid(), chat.getNickname(), chat.getContent(), flag));
 			}
 

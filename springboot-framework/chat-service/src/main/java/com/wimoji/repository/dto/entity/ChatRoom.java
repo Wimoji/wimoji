@@ -8,9 +8,13 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import com.wimoji.repository.dto.request.ChatRoomReq;
 import com.wimoji.repository.dto.response.UserEnterRes;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 @Document(collection = "chat_room")
 public class ChatRoom {
 	String id; // null

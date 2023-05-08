@@ -31,7 +31,7 @@ public class LastChatRepository {
 			mongoTemplate.save(chatReq);
 		}
 
-		Update update = new Update().set("cid", chatReq.getIdx());
+		Update update = new Update().set("idx", chatReq.getIdx()-1);
 		mongoTemplate.updateFirst(query, update, LastChatReq.class);
 	}
 
