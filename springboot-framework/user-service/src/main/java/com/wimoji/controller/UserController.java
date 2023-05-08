@@ -4,6 +4,7 @@ import com.wimoji.base.GeneralException;
 import com.wimoji.base.constant.Code;
 import com.wimoji.base.dto.DataResponseDto;
 import com.wimoji.common.JwtTokenUtil;
+import com.wimoji.repository.dto.UserEntity;
 import com.wimoji.repository.dto.request.UserReq;
 import com.wimoji.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -82,6 +83,33 @@ public class UserController {
             throw e;
         }
 
+    }
+
+    /**
+     *
+     * @param bearerToken
+     * @return userid, usernickname이 들어있는 userEntity
+     * 다른 microservice와의 통신용
+     */
+    @GetMapping("/userinfo")
+    public UserEntity getUser(@RequestParam String bearerToken) {
+
+        try {
+
+            if (bearerToken == null || !bearerToken.startsWith("Bearer ")) {
+                throw new GeneralException(Code.NO_USER);
+            }
+
+            String token = bearerToken.substring(7);
+            String uid = jwtTokenUtil.getUserIdFromToken(token);
+            String nickname = jwtTokenUtil.getUserNicknameFromToken(token);
+
+            UserEntity user = UserEntity.builder().uid(uid).nickname(nickname).build();
+
+            return user;
+        } catch (Exception e) {
+            throw e;
+        }
     }
 
 }
