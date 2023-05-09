@@ -70,8 +70,18 @@ public class UserRepository {
         return userEntity;
     }
 
-    public List<String> getChatListByUser(String uid) {
-        UserEntity user = mongoTemplate.findById(uid, UserEntity.class);
-        return user.getChatList();
+    public void makeChat(String uid, String rid) {
+        Query query = new Query();
+        query.addCriteria(Criteria.where("uid").is(uid));
+        Update update = new Update().addToSet("chatList", rid);
+
+        mongoTemplate.updateFirst(query, update, UserEntity.class);
+    }
+
+    public void removeChat(String uid, String rid) {
+        Query query = new Query();
+        query.addCriteria(Criteria.where("uid").is(uid));
+        Update update = new Update().pull("chatList.", rid);
+        mongoTemplate.updateFirst(query, update, UserEntity.class);
     }
 }

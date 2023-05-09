@@ -101,6 +101,49 @@ public class UserService {
      * @return UserEntity
      */
     public List<String> getChatListByUser(String id) {
-        return repository.getChatListByUser(id);
+        try {
+            UserEntity user = repository.findById(id);
+
+            if(user == null) {
+                throw new GeneralException(Code.NO_USER);
+            }
+
+            return user.getChatList();
+        } catch (Exception e) {
+            throw e;
+        }
+    }
+
+    /**
+     * 유저 정보에 채팅 추가
+     * @param : user의 id, 채팅방의 id
+     * @return :
+     */
+    public void makeChat(String uid, String rid) {
+        repository.makeChat(uid, rid);
+    }
+
+    /**
+     * 유저 정보에 채팅 삭제
+     * @param : user의 id, 채팅방의 id
+     * @return :
+     */
+    public void removeChat(String uid, String rid) {
+        UserEntity user = repository.findById(uid);
+        if(user == null) {
+            throw new GeneralException(Code.NO_USER);
+        }
+
+        List<String> chatList = user.getChatList();
+        if(chatList == null) {
+            throw new GeneralException(Code.NOT_FOUND);
+        }
+
+        int idx = chatList.indexOf(rid);
+        if(idx == -1) {
+            throw new GeneralException(Code.NOT_FOUND);
+        }
+
+        repository.removeChat(uid, rid);
     }
 }
