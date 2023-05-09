@@ -20,5 +20,6 @@ public class UserEntity {
     String nickname;
     String password;
     List<Emoji> emoji;
+    List<String> chatList;
     boolean login = false;
 }
