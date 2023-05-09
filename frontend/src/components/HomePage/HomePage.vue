@@ -1,17 +1,15 @@
 <template>
-  <div>
-    <div>사용자 주변의 이모지가 보이는 홈페이지입니다.</div>
-    <div>
-      <v-btn
-        >이모지 만들기
-        <v-icon>mdi-heart-plus-outline</v-icon>
-      </v-btn>
-    </div>
-  </div>
+  <v-container>
+    <home-page-create-emoji />
+    <home-emoji></home-emoji>
+  </v-container>
 </template>
 
 <script>
-export default {};
+import HomeEmoji from "./HomeEmoji.vue";
+import HomePageCreateEmoji from "./HomePageCreateEmoji.vue";
+export default {
+  components: { HomePageCreateEmoji, HomeEmoji },
+};
 </script>
-
 <style></style>

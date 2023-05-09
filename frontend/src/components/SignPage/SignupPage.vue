@@ -1,19 +1,18 @@
 <template>
-  <div>
-    <div>회원가입 페이지입니다.</div>
-    <div>
-      <v-btn @click="goSignUp">회원가입하기</v-btn>
+  <v-sheet class="sign-page col-transparent">
+    <div class="yellow-circle-area">
+      <yellow-circle></yellow-circle>
     </div>
-  </div>
+    <signup-input></signup-input>
+  </v-sheet>
 </template>
 
 <script>
+import SignupInput from "@/components/SignPage/SignupInput.vue";
+import YellowCircle from "@/common/component/YellowCircle.vue";
+
 export default {
-  methods: {
-    goSignUp() {
-      this.$router.push("/login");
-    },
-  },
+  components: { SignupInput, YellowCircle },
 };
 </script>
 
