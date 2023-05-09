@@ -31,8 +31,8 @@ public class ChatRoomService {
 		List<ChatRoomRes> chatRooms = chatRoomRepository.findAll();
 
 		// 24글자 대신 8글자를 rid로 사용
-		for(ChatRoomRes chatRoom : chatRooms) {
-				chatRoom.setRid(chatRoom.getId().substring(0, 8));
+		for (ChatRoomRes chatRoom : chatRooms) {
+			chatRoom.setRid(chatRoom.getId().substring(0, 8));
 		}
 
 		return chatRooms;
@@ -47,7 +47,7 @@ public class ChatRoomService {
 		ChatRoom chatRoom = chatRoomRepository.findById(rid);
 
 		boolean isNew = false;
-		if(chatRoom.getContent().size() != idx) {
+		if (chatRoom.getContent().size() != idx) {
 			isNew = true;
 		}
 		ChatRoomRes chatRoomRes = new ChatRoomRes(chatRoom, isNew);
@@ -162,7 +162,7 @@ public class ChatRoomService {
 	 **/
 	public Map<String, List> getNewChat(NewChatReq newChatReq) {
 		try {
-			if(newChatReq.getStartIdx() < 10) {
+			if (newChatReq.getStartIdx() < 10) {
 				newChatReq.setStartIdx(0);
 			} else {
 				newChatReq.setStartIdx(newChatReq.getStartIdx() - 10);
@@ -171,8 +171,8 @@ public class ChatRoomService {
 			List<Chat> chatList = chatRoomRepository.getNewChat(newChatReq);
 			List<ChatRes> chatResList = new ArrayList<>();
 
-			for(Chat chat : chatList) {
-				String flag = (newChatReq.getUid().equals(chat.getUid()))? "1" : "2";
+			for (Chat chat : chatList) {
+				String flag = (newChatReq.getUid().equals(chat.getUid())) ? "1" : "2";
 				chatResList.add(new ChatRes(chat.getRid(), chat.getNickname(), chat.getContent(), flag));
 			}
 
@@ -193,19 +193,23 @@ public class ChatRoomService {
 	 * @param : 채팅방의 id, 마지막 메시지의 인덱스
 	 * @return : 메시지의 List
 	 **/
-	public Map<String, List> getPastChat(NewChatReq newChatReq) {
+	public Map<String, List> getPastChat(NewChatReq newChatReq, int enterIdx) {
 		try {
-			if(newChatReq.getStartIdx() < 30) {
+			if (newChatReq.getStartIdx() < 30) {
 				newChatReq.setStartIdx(0);
 			} else {
 				newChatReq.setStartIdx(newChatReq.getStartIdx() - 30);
 			}
 
+			if (newChatReq.getStartIdx() < enterIdx) {
+				newChatReq.setStartIdx(enterIdx);
+			}
+
 			List<Chat> chatList = chatRoomRepository.getPastChat(newChatReq);
 			List<ChatRes> chatResList = new ArrayList<>();
 
-			for(Chat chat : chatList) {
-				String flag = (newChatReq.getUid().equals(chat.getUid()))? "1" : "2";
+			for (Chat chat : chatList) {
+				String flag = (newChatReq.getUid().equals(chat.getUid())) ? "1" : "2";
 				chatResList.add(new ChatRes(chat.getRid(), chat.getNickname(), chat.getContent(), flag));
 			}
 
