@@ -20,6 +20,7 @@ import com.wimoji.base.dto.DataResponseDto;
 import com.wimoji.repository.dto.entity.ChatRoom;
 import com.wimoji.repository.dto.request.ChatRoomReq;
 import com.wimoji.repository.dto.request.NewChatReq;
+import com.wimoji.repository.dto.request.UserChatRoomReq;
 import com.wimoji.repository.dto.response.ChatRes;
 import com.wimoji.repository.dto.response.ChatRoomRes;
 import com.wimoji.repository.dto.response.UserEnterRes;
@@ -58,20 +59,16 @@ public class ChatRoomController {
 	 * @return : 채팅방의 정보 list
 	 **/
 	@PostMapping("/my")
-	public DataResponseDto<?> getRoomByUser(@RequestHeader("Authorization") String accessToken,
-		@RequestBody List<String> chatList) {
+	public List<ChatRoomRes> getRoomByUser(@RequestBody UserChatRoomReq userChatRoom) {
 		try {
-			UserRes user = mapper.readValue(userServiceClient.getUser(accessToken), UserRes.class);
 			List<ChatRoomRes> chatRoomList = new ArrayList<>();
 
-			for(String rid : chatList) {
-				ChatRoomRes chatRoom = getRoom(user.getUid(), rid);
+			for(String rid : userChatRoom.getChatList()) {
+				ChatRoomRes chatRoom = getRoom(userChatRoom.getUid(), rid);
 				chatRoomList.add(chatRoom);
 			}
 
-			return DataResponseDto.of(chatRoomList);
-		} catch (JsonProcessingException ex) {
-			throw new GeneralException(Code.UNAUTHORIZED);
+			return chatRoomList;
 		} catch (Exception e) {
 			throw e;
 		}
