@@ -36,4 +36,14 @@ async function deleteUser(success, fail) {
   await api.delete(`${baseURL}/`).then(success).catch(fail);
 }
 
-export { signup, login, logout, deleteUser };
+// [PUT /] 유저 정보에 채팅방 추가
+async function myChat(params, success, fail) {
+  await api.put(`${baseURL}/chat/${params.rid}`).then(success).catch(fail);
+}
+
+// [ GET / ] 채팅방 불러오기
+async function getUserChatRooms(success, fail) {
+  await api.get(`${baseURL}/chat`).then(success).catch(fail);
+}
+
+export { signup, login, logout, deleteUser, myChat, getUserChatRooms };

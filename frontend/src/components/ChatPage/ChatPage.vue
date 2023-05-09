@@ -18,7 +18,7 @@
 </template>
 
 <script>
-import { getUserChatRooms } from "@/api/modules/chat";
+import { getUserChatRooms } from "@/api/modules/user";
 import { mapState, mapActions } from "vuex";
 
 export default {
@@ -34,11 +34,11 @@ export default {
     ...mapState("emojiStore", ["emojiCategory"]),
   },
   created() {
-    this.getAllRooms();
+    this.getMyRooms();
   },
   methods: {
     ...mapActions("chatStore", ["setNowChatRoom"]),
-    async getAllRooms() {
+    async getMyRooms() {
       //사용자가 참여한 채팅 목록 불러오기
       await getUserChatRooms(
         ({ data }) => {
