@@ -9,11 +9,6 @@ async function makeChatRoom(data, success, fail) {
   await api.post(`${baseURL}/`, data).then(success).catch(fail);
 }
 
-// [ GET / ] 채팅방 불러오기
-async function getUserChatRooms(success, fail) {
-  await api.get(`${baseURL}/test`).then(success).catch(fail);
-}
-
 // [ GET ] 이전 채팅 데이터 불러오기
 async function getPrevChat(params, success, fail) {
   await api
@@ -22,4 +17,4 @@ async function getPrevChat(params, success, fail) {
     .catch(fail);
 }
 
-export { makeChatRoom, getUserChatRooms, getPrevChat };
+export { makeChatRoom, getPrevChat };

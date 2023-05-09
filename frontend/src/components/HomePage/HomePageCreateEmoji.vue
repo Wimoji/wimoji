@@ -78,6 +78,7 @@ import { mapState, mapActions } from "vuex";
 import { makeEmoji } from "@/api/modules/emoji";
 import { getNowPosition } from "@/api/modules/location";
 import { makeChatRoom } from "@/api/modules/chat";
+import { myChat } from "@/api/modules/user";
 
 export default {
   components: {
@@ -194,6 +195,20 @@ export default {
         alert("이모지 생성 중 오류가 발생했습니다. 다시 시도해주세요.");
         // this.$router.go(0);
       }
+
+      // 유저 정보 수정 api 호출
+      const params = {
+        rid: rid,
+      };
+      await myChat(
+        params,
+        ({ data }) => {
+          console.log(data);
+        },
+        (error) => {
+          console.log(error);
+        }
+      );
     },
     async setPosition(position) {
       this.latitude = position.coords.latitude;
