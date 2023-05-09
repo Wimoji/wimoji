@@ -154,9 +154,9 @@ public class ChatRoomController {
 			UserRes user = mapper.readValue(userServiceClient.getUser(accessToken), UserRes.class);
 
 			NewChatReq newChatReq = new NewChatReq(rid, user.getUid(), idx, idx);
-			List<ChatRes> newChatList = chatRoomService.getNewChat(newChatReq);
+			Map<String, List> result = chatRoomService.getNewChat(newChatReq); // chatList, firstIdx
 
-			return DataResponseDto.of(newChatList);
+			return DataResponseDto.of(result);
 		} catch (JsonProcessingException ex) {
 			throw new GeneralException(Code.UNAUTHORIZED);
 		} catch (Exception e) {
@@ -176,9 +176,9 @@ public class ChatRoomController {
 			UserRes user = mapper.readValue(userServiceClient.getUser(accessToken), UserRes.class);
 
 			NewChatReq newChatReq = new NewChatReq(rid, user.getUid(), idx, idx);
-			List<ChatRes> pastChatList = chatRoomService.getPastChat(newChatReq);
+			Map<String, List> result = chatRoomService.getPastChat(newChatReq); // chatList, firstIdx
 
-			return DataResponseDto.of(pastChatList);
+			return DataResponseDto.of(result);
 		} catch (JsonProcessingException ex) {
 			throw new GeneralException(Code.UNAUTHORIZED);
 		} catch (Exception e) {

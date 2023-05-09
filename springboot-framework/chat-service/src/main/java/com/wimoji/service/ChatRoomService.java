@@ -1,7 +1,9 @@
 package com.wimoji.service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.stereotype.Service;
 
@@ -158,7 +160,7 @@ public class ChatRoomService {
 	 * @param : 채팅방의 id, 마지막 메시지의 인덱스
 	 * @return : 메시지의 List
 	 **/
-	public List<ChatRes> getNewChat(NewChatReq newChatReq) {
+	public Map<String, List> getNewChat(NewChatReq newChatReq) {
 		try {
 			if(newChatReq.getStartIdx() < 10) {
 				newChatReq.setStartIdx(0);
@@ -174,7 +176,13 @@ public class ChatRoomService {
 				chatResList.add(new ChatRes(chat.getRid(), chat.getNickname(), chat.getContent(), flag));
 			}
 
-			return chatResList;
+			Map<String, List> result = new HashMap<>();
+			result.put("chatList", chatResList);
+			List<Integer> firstIdx = new ArrayList<>();
+			firstIdx.add(newChatReq.getStartIdx());
+			result.put("firstIdx", firstIdx);
+
+			return result;
 		} catch (Exception e) {
 			throw new GeneralException(Code.BAD_REQUEST);
 		}
@@ -185,7 +193,7 @@ public class ChatRoomService {
 	 * @param : 채팅방의 id, 마지막 메시지의 인덱스
 	 * @return : 메시지의 List
 	 **/
-	public List<ChatRes> getPastChat(NewChatReq newChatReq) {
+	public Map<String, List> getPastChat(NewChatReq newChatReq) {
 		try {
 			if(newChatReq.getStartIdx() < 30) {
 				newChatReq.setStartIdx(0);
@@ -201,7 +209,13 @@ public class ChatRoomService {
 				chatResList.add(new ChatRes(chat.getRid(), chat.getNickname(), chat.getContent(), flag));
 			}
 
-			return chatResList;
+			Map<String, List> result = new HashMap<>();
+			result.put("chatList", chatResList);
+			List<Integer> firstIdx = new ArrayList<>();
+			firstIdx.add(newChatReq.getStartIdx());
+			result.put("firstIdx", firstIdx);
+
+			return result;
 		} catch (Exception e) {
 			throw new GeneralException(Code.BAD_REQUEST);
 		}
