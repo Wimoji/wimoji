@@ -9,6 +9,8 @@ import com.wimoji.repository.dto.request.UserReq;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
@@ -18,6 +20,7 @@ import java.util.*;
 @Service
 @RequiredArgsConstructor
 public class UserService {
+
     private final UserRepository repository;
     private static final boolean LOGIN = true;
     private static final boolean LOGOUT = false;
@@ -88,7 +91,7 @@ public class UserService {
      * 회원 탈퇴
      * @param id
      */
-    public void removeUser(String id){
+    public void deleteUser(String id){
         UserEntity userEntity = repository.findAndRemove(id);
     }
 
@@ -98,49 +101,6 @@ public class UserService {
      * @return UserEntity
      */
     public List<String> getChatListByUser(String id) {
-        try {
-            UserEntity user = repository.findById(id);
-
-            if(user == null) {
-                throw new GeneralException(Code.NO_USER);
-            }
-
-            return user.getChatList();
-        } catch (Exception e) {
-            throw e;
-        }
-    }
-
-    /**
-     * 유저 정보에 채팅 추가
-     * @param : user의 id, 채팅방의 id
-     * @return :
-     */
-    public void makeChat(String uid, String rid) {
-        repository.makeChat(uid, rid);
-    }
-
-    /**
-     * 유저 정보에 채팅 삭제
-     * @param : user의 id, 채팅방의 id
-     * @return :
-     */
-    public void removeChat(String uid, String rid) {
-        UserEntity user = repository.findById(uid);
-        if(user == null) {
-            throw new GeneralException(Code.NO_USER);
-        }
-
-        List<String> chatList = user.getChatList();
-        if(chatList == null) {
-            throw new GeneralException(Code.NOT_FOUND);
-        }
-
-        int idx = chatList.indexOf(rid);
-        if(idx == -1) {
-            throw new GeneralException(Code.NOT_FOUND);
-        }
-
-        repository.removeChat(uid, rid);
+        return repository.getChatListByUser(id);
     }
 }

@@ -1,7 +1,7 @@
 package com.wimoji.repository;
 
-import com.wimoji.base.GeneralException;
-import com.wimoji.base.constant.Code;
+import java.util.List;
+
 import com.wimoji.repository.dto.UserEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
@@ -70,18 +70,8 @@ public class UserRepository {
         return userEntity;
     }
 
-    public void makeChat(String uid, String rid) {
-        Query query = new Query();
-        query.addCriteria(Criteria.where("uid").is(uid));
-        Update update = new Update().addToSet("chatList", rid);
-
-        mongoTemplate.updateFirst(query, update, UserEntity.class);
-    }
-
-    public void removeChat(String uid, String rid) {
-        Query query = new Query();
-        query.addCriteria(Criteria.where("uid").is(uid));
-        Update update = new Update().pull("chatList.", rid);
-        mongoTemplate.updateFirst(query, update, UserEntity.class);
+    public List<String> getChatListByUser(String uid) {
+        UserEntity user = mongoTemplate.findById(uid, UserEntity.class);
+        return user.getChatList();
     }
 }
