@@ -51,6 +51,7 @@
             :rules="passwordRules"
             rounded
             solo
+            type="password"
             background-color="white"
           >
             <template v-slot:label>
