@@ -40,7 +40,7 @@ export default {
       }
     },
     deleteChat() {
-      if (confirm("채팅방을 나가시나요?")) {
+      if (confirm("채팅방을 삭제하시나요?")) {
         this.setIsDelete(true);
       }
     },

@@ -2,7 +2,6 @@ import { apiInstance } from "@/api/index";
 
 const api = apiInstance();
 const baseURL = `${process.env.VUE_APP_API_SERVICE_URL}/user-service`;
-// const baseURL = `${process.env.VUE_APP_API_USER_SERVICE_URL}`; //로컬 테스트
 
 //[ POST /user-service/signup ] 회원 가입
 async function signup(data, success, fail) {
@@ -46,4 +45,17 @@ async function getUserChatRooms(success, fail) {
   await api.get(`${baseURL}/chat`).then(success).catch(fail);
 }
 
-export { signup, login, logout, deleteUser, myChat, getUserChatRooms };
+// [DELETE] 채팅방 삭제
+async function removeChat(params, success, fail) {
+  await api.delete(`${baseURL}/chat/${params}`).then(success).catch(fail);
+}
+
+export {
+  signup,
+  login,
+  logout,
+  deleteUser,
+  myChat,
+  getUserChatRooms,
+  removeChat,
+};
