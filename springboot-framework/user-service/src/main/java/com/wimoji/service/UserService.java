@@ -98,17 +98,13 @@ public class UserService {
      * @return UserEntity
      */
     public List<String> getChatListByUser(String id) {
-        try {
-            UserEntity user = repository.findById(id);
+        UserEntity user = repository.findById(id);
 
-            if(user == null) {
-                throw new GeneralException(Code.NO_USER);
-            }
-
-            return user.getChatList();
-        } catch (Exception e) {
-            throw e;
+        if(user == null) {
+            throw new GeneralException(Code.NO_USER);
         }
+
+        return user.getChatList();
     }
 
     /**
