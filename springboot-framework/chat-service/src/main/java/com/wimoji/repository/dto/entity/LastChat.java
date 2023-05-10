@@ -1,4 +1,4 @@
-package com.wimoji.repository.dto.request;
+package com.wimoji.repository.dto.entity;
 
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -8,7 +8,7 @@ import lombok.Data;
 @Data
 @AllArgsConstructor
 @Document(collection = "last_chat")
-public class LastChatReq {
+public class LastChat {
 	String uid;
 	String rid;
 	int idx;

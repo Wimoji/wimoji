@@ -13,7 +13,7 @@ import com.wimoji.repository.ChatRoomRepository;
 import com.wimoji.repository.LastChatRepository;
 import com.wimoji.repository.dto.entity.Chat;
 import com.wimoji.repository.dto.entity.ChatRoom;
-import com.wimoji.repository.dto.request.LastChatReq;
+import com.wimoji.repository.dto.entity.LastChat;
 import com.wimoji.repository.dto.request.NewChatReq;
 import com.wimoji.repository.dto.response.ChatRes;
 import com.wimoji.repository.dto.response.ChatRoomRes;
@@ -96,7 +96,7 @@ public class ChatRoomService {
 	 * @return :
 	 **/
 	public void decParticipant(String rid) {
-		int participant = chatRoomRepository.decParticipant(rid);
+		chatRoomRepository.decParticipant(rid);
 	}
 
 	/**
@@ -136,7 +136,7 @@ public class ChatRoomService {
 	public void makeLastChat(String uid, String rid) {
 		try {
 			int idx = chatRoomRepository.getLastChat(rid);
-			LastChatReq chatReq = new LastChatReq(uid, rid, idx);
+			LastChat chatReq = new LastChat(uid, rid, idx);
 
 			lastChatRepository.save(chatReq);
 		} catch (NullPointerException e) {

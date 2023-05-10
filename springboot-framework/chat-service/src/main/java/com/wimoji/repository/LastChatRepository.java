@@ -7,7 +7,7 @@ import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Repository;
 
-import com.wimoji.repository.dto.request.LastChatReq;
+import com.wimoji.repository.dto.entity.LastChat;
 
 import lombok.RequiredArgsConstructor;
 
@@ -22,17 +22,17 @@ public class LastChatRepository {
 	 * @param : 채팅방의 id, 유저의 id, 메시지의 id
 	 * @return :
 	 **/
-	public void save(LastChatReq chatReq) {
+	public void save(LastChat chatReq) {
 		Query query = new Query();
 		query.addCriteria(Criteria.where("uid").is(chatReq.getUid()).and("rid").is(chatReq.getRid()));
-		LastChatReq lastChat = mongoTemplate.findOne(query, LastChatReq.class);
+		LastChat lastChat = mongoTemplate.findOne(query, LastChat.class);
 
 		if(lastChat == null) {
 			mongoTemplate.save(chatReq);
 		}
 
 		Update update = new Update().set("idx", chatReq.getIdx()-1);
-		mongoTemplate.updateFirst(query, update, LastChatReq.class);
+		mongoTemplate.updateFirst(query, update, LastChat.class);
 	}
 
 	/**
@@ -43,7 +43,7 @@ public class LastChatRepository {
 	public int getLastChat(String uid, String rid) {
 		Query query = new Query();
 		query.addCriteria(Criteria.where("uid").is(uid).and("rid").is(rid));
-		LastChatReq lastChat = mongoTemplate.findOne(query, LastChatReq.class);
+		LastChat lastChat = mongoTemplate.findOne(query, LastChat.class);
 
 		if(lastChat == null) {
 			return 0;

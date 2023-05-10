@@ -62,7 +62,7 @@ public class ChatRoomRepository {
 	public void saveContent(Chat chat) {
 		Query query = new Query();
 		query.addCriteria(Criteria.where("_id").is(new ObjectId(chat.getRid())));
-		Update update = new Update().addToSet("content", chat);
+		Update update = new Update().push("content", chat);
 		mongoTemplate.updateFirst(query, update, ChatRoom.class);
 	}
 
@@ -115,7 +115,7 @@ public class ChatRoomRepository {
 	public void deleteUserToList(String rid, String uid) {
 		Query query = new Query();
 		query.addCriteria(Criteria.where("_id").is(new ObjectId(rid)));
-		Update update = new Update().pull("userList", uid);
+		Update update = new Update().pull("userList", Query.query(Criteria.where("uid").is(uid)));
 		mongoTemplate.updateFirst(query, update, ChatRoom.class);
 	}
 

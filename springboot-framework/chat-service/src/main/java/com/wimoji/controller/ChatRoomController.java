@@ -21,7 +21,6 @@ import com.wimoji.repository.dto.entity.ChatRoom;
 import com.wimoji.repository.dto.request.ChatRoomReq;
 import com.wimoji.repository.dto.request.NewChatReq;
 import com.wimoji.repository.dto.request.UserChatRoomReq;
-import com.wimoji.repository.dto.response.ChatRes;
 import com.wimoji.repository.dto.response.ChatRoomRes;
 import com.wimoji.repository.dto.response.UserEnterRes;
 import com.wimoji.repository.dto.response.UserRes;
