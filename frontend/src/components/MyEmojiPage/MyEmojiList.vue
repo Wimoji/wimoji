@@ -1,14 +1,16 @@
 <template>
-  <v-sheet v-if="myEmojis.length != 0" color="var(--main-col-1)">
-    <v-avatar
-      size="80"
-      color="white"
+  <v-sheet
+    v-if="myEmojis.length != 0"
+    color="var(--main-col-1)"
+    class="emoji-list"
+  >
+    <v-img
+      class="emoji-item"
       v-for="(item, i) in myEmojis"
       :key="i"
       @click="detailEmoji(i)"
-    >
-      <v-img :src="emojiCategory[item.eid].link"></v-img>
-    </v-avatar>
+      :src="emojiCategory[item.eid].link"
+    ></v-img>
     <transition name="moveInUp">
       <my-emoji-detail
         @closeEmoji="closeEmoji"
@@ -46,7 +48,7 @@ export default {
       ({ data }) => {
         console.log(data);
         if (data.success) {
-          console.log("내 이모지들 화면에 저장하자");
+          // console.log("내 이모지들 화면에 저장하자");
           // this.myEmojis = data.data;
           this.myEmojis = [];
           data.data.forEach((element) => {
@@ -114,5 +116,42 @@ export default {
   100% {
     opacity: 1;
   }
+}
+.emoji-list {
+  display: grid;
+  grid-template-columns: calc(100% / 3) calc(100% / 3) calc(100% / 3);
+  margin: 0 auto;
+}
+
+.emoji-item {
+  background-color: white;
+  margin: 20px;
+  width: 70%;
+  border-radius: 50%;
+}
+
+@-webkit-keyframes emoji-item {
+  to {
+    -webkit-transform: scale(1.1);
+    transform: scale(1.1);
+  }
+}
+@keyframes emoji-item {
+  to {
+    -webkit-transform: scale(1.1);
+    transform: scale(1.1);
+  }
+}
+.emoji-item:active {
+  -webkit-animation-name: emoji-item;
+  animation-name: emoji-item;
+  -webkit-animation-duration: 0.3s;
+  animation-duration: 0.3s;
+  -webkit-animation-timing-function: linear;
+  animation-timing-function: linear;
+  -webkit-animation-iteration-count: infinite;
+  animation-iteration-count: infinite;
+  -webkit-animation-direction: alternate;
+  animation-direction: alternate;
 }
 </style>

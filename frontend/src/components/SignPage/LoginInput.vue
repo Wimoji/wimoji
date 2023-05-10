@@ -11,6 +11,7 @@
       >
       <v-container class="input-form">
         <v-form ref="form">
+          <input type="text" style="display: none" />
           <v-text-field
             class="sign"
             v-model="id"
@@ -36,6 +37,7 @@
             solo
             type="password"
             background-color="white"
+            @keyup.enter="goLogin"
           >
             <template v-slot:label>
               <span class="xs-font text-col-3">비밀번호</span>
@@ -73,16 +75,15 @@
     <v-container
       class="another-area d-flex flex-column align-center justify-space-around text-col-1"
     >
-      <div>다른 방법으로 로그인 하기</div>
-      <div class="social-login">구글 깃허브 페이스북 트위터</div>
-      <div>
-        계정이 없으신가요?
-        <span
-          class="main-font-bd main-col-3"
-          style="cursor: pointer"
-          @click="goSignupPage"
-          >회원가입 하기</span
-        >
+      <!-- <div>다른 방법으로 로그인 하기</div>
+      <div class="social-login">구글 깃허브 페이스북 트위터</div> -->
+      <div>계정이 없으신가요?</div>
+      <div
+        class="main-font-bd main-col-3"
+        style="cursor: pointer"
+        @click="goSignupPage"
+      >
+        회원가입 하기
       </div>
     </v-container>
   </v-sheet>

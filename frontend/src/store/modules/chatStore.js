@@ -12,6 +12,9 @@ const chatStore = {
     SET_NOW_CHAT_ROOM(state, room) {
       state.nowChatRoom = room;
     },
+    CLEAR_NOW_CHAT_ROOM(state) {
+      state.nowChatRoom = null;
+    },
   },
   actions: {
     setIsDelete({ commit }, flag) {
@@ -19,6 +22,9 @@ const chatStore = {
     },
     setNowChatRoom({ commit }, room) {
       commit("SET_NOW_CHAT_ROOM", room);
+    },
+    clearNowChatRoom({ commit }) {
+      commit("CLEAR_NOW_CHAT_ROOM");
     },
   },
   modules: {},
