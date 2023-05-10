@@ -1,5 +1,5 @@
 <template>
-  <v-container v-if="rooms.length != 0">
+  <v-container v-if="rooms != null">
     <v-sheet
       @click="goRoom(room)"
       class="ma-3 d-flex justify-start px-5 py-4 rounded-xl align-center"
@@ -43,6 +43,7 @@ export default {
       await getUserChatRooms(
         ({ data }) => {
           if (data.success) {
+            // console.log("data >> ", data);
             this.rooms = data.data;
             // console.log("this room >> ", this.rooms);
           }
