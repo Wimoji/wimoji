@@ -2,20 +2,17 @@ const userStore = {
   namespaced: true,
   state: {
     isLogin: false,
+    // isLogin: true,
     user: {
       id: null, //추후 제거
       nickname: null,
     },
-    // location: {
-    //   latitude: "37.5013488",
-    //   longitude: "127.0397167",
-    //   dongCode: "1168010800",
-    // },
     location: {
       latitude: null,
       longitude: null,
       dongCode: null,
     },
+    aroundEmojis: [],
   },
   getters: {},
   mutations: {
@@ -36,6 +33,12 @@ const userStore = {
       state.user = null;
       state.location = null;
     },
+    SET_AROUND_EMOJIS(state, emojis) {
+      state.aroundEmojis = emojis;
+    },
+    CLEAR_AROUND_EMOJIS(state) {
+      state.aroundEmojis = [];
+    },
   },
   actions: {
     setLogin({ commit }, user) {
@@ -48,6 +51,12 @@ const userStore = {
     },
     setLogout({ commit }) {
       commit("CLEAR_USER");
+    },
+    setAroundEmojis({ commit }, emojis) {
+      commit("SET_AROUND_EMOJIS", emojis);
+    },
+    clearAroundEmojis({ commit }) {
+      commit("CLEAR_AROUND_EMOJIS");
     },
   },
   modules: {},

@@ -1,6 +1,6 @@
 <template>
   <v-container>
-    <h4 class="text-col-1">지금 나는 {{ myPosition }}에 있어요</h4>
+    <h4 class="text-col-1 my-3">지금 나는 {{ myPosition }}에 있어요</h4>
     <v-dialog v-model="dialog" width="45%">
       <template v-slot:activator="{ on, attrs }">
         <v-btn rounded dark color="var(--main-col-3)" v-bind="attrs" v-on="on">
