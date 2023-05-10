@@ -103,6 +103,9 @@ public class EmojiController {
             User user =  mapper.readValue(userServiceClient.getUser(bearerToken), User.class);
 
             List<EmojiGetRes> emojiList = emojiService.getEmojiList(user.getUid());
+            if(emojiList.size() == 0) {
+                return DataResponseDto.empty(Code.SUCCESS_NODATA,Code.SUCCESS_NODATA.getMessage());
+            }
 
             return DataResponseDto.of(emojiList, Code.SUCCESS, Code.SUCCESS.getMessage());
         } catch (JsonProcessingException je) {
