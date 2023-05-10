@@ -68,12 +68,12 @@ public class UserController {
     }
 
     @DeleteMapping("/")
-    public DataResponseDto<?> deleteUser(HttpServletRequest request){
+    public DataResponseDto<?> removeUser(HttpServletRequest request){
         try{
             String token = getToken(request);
             String uid = jwtTokenUtil.getUserIdFromToken(token);
 
-            service.deleteUser(uid);
+            service.removeUser(uid);
 
             return DataResponseDto.empty();
         }catch (Exception e){
@@ -90,9 +90,7 @@ public class UserController {
      */
     @GetMapping("/userinfo")
     public UserEntity getUser(@RequestParam String bearerToken) {
-
         try {
-
             if (bearerToken == null || !bearerToken.startsWith("Bearer ")) {
                 throw new GeneralException(Code.NO_USER);
             }
@@ -122,7 +120,7 @@ public class UserController {
             String uid = jwtTokenUtil.getUserIdFromToken(token);
 
             List<String> chatList = service.getChatListByUser(uid);
-            if(chatList.size() == 0) {
+            if(chatList.size() == 0 || chatList == null) {
                 return DataResponseDto.empty();
             }
 
@@ -135,7 +133,7 @@ public class UserController {
 
             return DataResponseDto.of(chatRoom);
         } catch (JsonProcessingException e) {
-            throw new RuntimeException(e);
+            throw new GeneralException(Code.UNAUTHORIZED);
         } catch (Exception e) {
             throw e;
         }
