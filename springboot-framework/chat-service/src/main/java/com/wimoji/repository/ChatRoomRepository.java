@@ -166,12 +166,12 @@ public class ChatRoomRepository {
 	 * @param : 채팅방의 id
 	 * @return : 유저의 id를 담은 List
 	 **/
-	public List<UserEnterRes> isExistUser(String rid) {
+	public ChatRoom isExistUser(String rid) {
 		Query query = new Query();
 		query.addCriteria(Criteria.where("_id").is(new ObjectId(rid)));
 		query.fields().include("userList");
 		ChatRoom chatRoom = mongoTemplate.findOne(query, ChatRoom.class);
 
-		return chatRoom.getUserList();
+		return chatRoom;
 	}
 }

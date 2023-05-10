@@ -88,7 +88,6 @@ public class ChatController {
 		} catch (Exception e) {
 			throw new GeneralException(Code.INTERNAL_ERROR);
 		}
-
 	}
 
 	/**

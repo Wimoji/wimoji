@@ -45,6 +45,9 @@ public class ChatRoomService {
 	 **/
 	public ChatRoomRes getRoom(String rid, int idx) {
 		ChatRoom chatRoom = chatRoomRepository.findById(rid);
+		if(chatRoom == null) {
+			throw new GeneralException(Code.NOT_FOUND);
+		}
 
 		boolean isNew = false;
 		if (chatRoom.getContent().size() != idx) {
@@ -125,7 +128,12 @@ public class ChatRoomService {
 	 * @return : 유저의 id를 담은 List
 	 **/
 	public List<UserEnterRes> isExistUser(String rid) {
-		return chatRoomRepository.isExistUser(rid);
+		ChatRoom chatRoom = chatRoomRepository.isExistUser(rid);
+		if(chatRoom == null) {
+			throw new GeneralException(Code.NOT_FOUND);
+		}
+
+		return chatRoom.getUserList();
 	}
 
 	/**
@@ -156,16 +164,16 @@ public class ChatRoomService {
 	}
 
 	/**
-	 * 유저가 마지막으로 읽은 메시지로부터 10번 먼저 온 메시지부터 새로운 모든 메시지 출력
+	 * 유저가 마지막으로 읽은 메시지로부터 15번 먼저 온 메시지부터 새로운 모든 메시지 출력
 	 * @param : 채팅방의 id, 마지막 메시지의 인덱스
 	 * @return : 메시지의 List
 	 **/
 	public Map<String, List> getNewChat(NewChatReq newChatReq) {
 		try {
-			if (newChatReq.getStartIdx() < 10) {
+			if (newChatReq.getStartIdx() < 15) {
 				newChatReq.setStartIdx(0);
 			} else {
-				newChatReq.setStartIdx(newChatReq.getStartIdx() - 10);
+				newChatReq.setStartIdx(newChatReq.getStartIdx() - 15);
 			}
 
 			List<Chat> chatList = chatRoomRepository.getNewChat(newChatReq);
@@ -195,6 +203,9 @@ public class ChatRoomService {
 	 **/
 	public Map<String, List> getPastChat(NewChatReq newChatReq, int enterIdx) {
 		try {
+			Map<String, List> result = new HashMap<>();
+			List<Integer> firstIdx = new ArrayList<>();
+
 			if (newChatReq.getStartIdx() < 30) {
 				newChatReq.setStartIdx(0);
 			} else {
@@ -203,7 +214,11 @@ public class ChatRoomService {
 
 			if (newChatReq.getStartIdx() < enterIdx) {
 				newChatReq.setStartIdx(enterIdx);
+				firstIdx.add(0);
+			} else {
+				firstIdx.add(newChatReq.getStartIdx());
 			}
+			result.put("firstIdx", firstIdx);
 
 			List<Chat> chatList = chatRoomRepository.getPastChat(newChatReq);
 			List<ChatRes> chatResList = new ArrayList<>();
@@ -212,12 +227,7 @@ public class ChatRoomService {
 				String flag = (newChatReq.getUid().equals(chat.getUid())) ? "1" : "2";
 				chatResList.add(new ChatRes(chat.getRid(), chat.getNickname(), chat.getContent(), flag));
 			}
-
-			Map<String, List> result = new HashMap<>();
 			result.put("chatList", chatResList);
-			List<Integer> firstIdx = new ArrayList<>();
-			firstIdx.add(newChatReq.getStartIdx());
-			result.put("firstIdx", firstIdx);
 
 			return result;
 		} catch (Exception e) {

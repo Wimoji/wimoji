@@ -29,10 +29,10 @@ public class LastChatRepository {
 
 		if(lastChat == null) {
 			mongoTemplate.save(chatReq);
+		} else {
+			Update update = new Update().set("idx", chatReq.getIdx()-1);
+			mongoTemplate.updateFirst(query, update, LastChat.class);
 		}
-
-		Update update = new Update().set("idx", chatReq.getIdx()-1);
-		mongoTemplate.updateFirst(query, update, LastChat.class);
 	}
 
 	/**

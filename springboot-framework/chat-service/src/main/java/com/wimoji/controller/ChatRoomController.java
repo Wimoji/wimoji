@@ -107,7 +107,6 @@ public class ChatRoomController {
 	@PostMapping("/last/{rid}")
 	public DataResponseDto<?> makeLastChat(@RequestHeader("Authorization") String accessToken,
 		@PathVariable String rid) {
-
 		try {
 			UserRes user = mapper.readValue(userServiceClient.getUser(accessToken), UserRes.class);
 			chatRoomService.makeLastChat(user.getUid(), rid);
@@ -131,9 +130,9 @@ public class ChatRoomController {
 
 		try {
 			UserRes user = mapper.readValue(userServiceClient.getUser(accessToken), UserRes.class);
-			int lastId = chatRoomService.getLastChat(user.getUid(), rid);
+			int lastIdx = chatRoomService.getLastChat(user.getUid(), rid);
 
-			return DataResponseDto.of(lastId);
+			return DataResponseDto.of(lastIdx);
 		} catch (JsonProcessingException ex) {
 			throw new GeneralException(Code.UNAUTHORIZED);
 		} catch (Exception e) {
@@ -142,9 +141,9 @@ public class ChatRoomController {
 	}
 
 	/**
-	 * 유저가 마지막으로 읽은 메시지로부터 10번 먼저 온 메시지부터 새로운 모든 메시지 출력
+	 * 유저가 마지막으로 읽은 메시지로부터 15번 먼저 온 메시지부터 새로운 모든 메시지 출력
 	 * @param : 채팅방의 id, 마지막 메시지의 인덱스
-	 * @return : 메시지의 List
+	 * @return : 메시지의 List, firstIdx
 	 **/
 	@GetMapping("/unread/{rid}/{idx}")
 	public DataResponseDto<?> getNewChat(@RequestHeader("Authorization") String accessToken,
@@ -166,7 +165,7 @@ public class ChatRoomController {
 	/**
 	 * 이전 메시지를 30개씩 조회
 	 * @param : 채팅방의 id, 마지막 메시지의 인덱스
-	 * @return : 메시지의 List
+	 * @return : 메시지의 List, firstIdx
 	 **/
 	@GetMapping("/read/{rid}/{idx}")
 	public DataResponseDto<?> getPastChat(@RequestHeader("Authorization") String accessToken,
@@ -205,6 +204,11 @@ public class ChatRoomController {
 		}
 	}
 
+	/**
+	 * 유저의 입장 메시지를 조회
+	 * @param : 유저의 id, 채팅방 참여 유저 List
+	 * @return : 입장 메시지 idx
+	 **/
 	private int getEnterChat(List<UserEnterRes> userList, String uid) {
 		for(UserEnterRes user : userList) {
 			if(user.getUid().equals(uid)) {
