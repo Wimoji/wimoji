@@ -55,18 +55,11 @@ public class UserRepository {
     }
 
     public UserEntity findAndRemove(String id) {
-
         Query query = new Query();
         Criteria criteria = new Criteria();
+        query.addCriteria(criteria.andOperator(Criteria.where("uid").is(id)));
 
-        query.addCriteria(criteria.andOperator(
-                Criteria.where("uid").is(id)
-        ));
-
-        UserEntity userEntity = mongoTemplate.findAndRemove(
-                query,
-                UserEntity.class
-        );
+        UserEntity userEntity = mongoTemplate.findAndRemove(query, UserEntity.class);
         return userEntity;
     }
 
