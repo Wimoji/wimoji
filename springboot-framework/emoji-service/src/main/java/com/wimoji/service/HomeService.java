@@ -52,15 +52,15 @@ public class HomeService {
 
             //3. 동 코드가 같은 이모지 리스트 가져오기
             for(Emoji emoji: emojiList){
-                if(!emoji.getDongCode().equals(homeReq.getDongCode()))
-                    continue;
+//                if(!emoji.getDongCode().equals(homeReq.getDongCode()))
+//                    continue;
 
                 //4. 위도 경도로 거리 계산
                 double dis = getDistance(Double.parseDouble(homeReq.getLatitude()), Double.parseDouble(homeReq.getLongitude()),
                         Double.parseDouble(emoji.getLatitude()), Double.parseDouble(emoji.getLongitude()));
 
-                //반경 100m 넘으면 추가 안 함
-                if(dis > 100 || dis < 0)
+                //반경 600m 넘으면 추가 안 함
+                if(dis > 600 || dis < 0)
                     continue;
 
                 //5. 저장
