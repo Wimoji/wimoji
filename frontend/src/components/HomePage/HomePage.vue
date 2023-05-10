@@ -6,7 +6,7 @@
     <div class="yellow-info">
       <yellow-circle></yellow-circle>
     </div>
-    <div class="info-item-component">
+    <div class="info-item-component create-emoji">
       <home-page-create-emoji />
     </div>
     <!-- <div class="info-item-component">
@@ -82,6 +82,7 @@
 </template>
 
 <script>
+import { myChat } from "@/api/modules/user";
 import { getAroundEmojis } from "@/api/modules/emoji";
 import { mapState, mapActions } from "vuex";
 // import HomeEmoji from "@/components/HomePage/HomeEmoji.vue";
@@ -132,9 +133,21 @@ export default {
       this.isClickEmoji = true;
       this.selectedEmoji = this.aroundEmojis[index];
     },
-    joinChat() {
+    async joinChat() {
       //지금 선택된 이모지의 채팅방 참여하기
       this.setNowChatRoom(this.selectedEmoji);
+      const params = {
+        rid: this.selectedEmoji.rid,
+      };
+      await myChat(
+        params,
+        ({ data }) => {
+          console.log(data);
+        },
+        (error) => {
+          console.log(error);
+        }
+      );
       this.$router.push({
         name: "chatting",
         params: { roomId: this.selectedEmoji.rid, data: this.selectedEmoji },
@@ -147,6 +160,9 @@ export default {
 };
 </script>
 <style scoped>
+.create-emoji {
+  z-index: 6;
+}
 .detail-emoji {
   z-index: 5;
   position: fixed;
