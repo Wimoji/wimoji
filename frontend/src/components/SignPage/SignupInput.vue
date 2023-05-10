@@ -11,6 +11,7 @@
       >
       <v-container class="input-form">
         <v-form ref="form">
+          <input type="text" style="display: none" />
           <v-text-field
             class="sign"
             v-model="nickname"
@@ -53,6 +54,7 @@
             solo
             type="password"
             background-color="white"
+            @keyup.enter="goSignup"
           >
             <template v-slot:label>
               <span class="xs-font text-col-3">비밀번호</span>
