@@ -31,6 +31,9 @@ dependencies {
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'io.projectreactor:reactor-test'
 	testImplementation group: 'ch.qos.logback', name: 'logback-classic', version: '0.9.26'
+	implementation 'io.micrometer:micrometer-registry-prometheus:1.10.6'
+	implementation 'org.springframework.boot:spring-boot-starter-actuator:3.0.6'
+
 }
 
 dependencyManagement {
