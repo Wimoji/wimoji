@@ -1,11 +1,11 @@
 <template>
   <v-container>
     <v-sheet ref="chatArea" class="chat-area col-transparent">
-      <!-- <infinite-loading
-        @infinite="infiniteHandler"
-        direction="top"
-      ></infinite-loading> -->
-      <v-row dense class="mx-1" v-for="message in messages" :key="message.id">
+      <infinite-loading @infinite="infiniteHandler" direction="top">
+        <div slot="no-results"></div>
+        <div slot="no-more"></div>
+      </infinite-loading>
+      <v-row dense class="mx-1" v-for="(message, i) in messages" :key="i">
         <!-- 나의 메시지 -->
         <v-col
           class="d-flex flex-column align-end"
@@ -17,7 +17,6 @@
               message.flag == mySessionId)
           "
         >
-          <!-- <v-col class="d-flex flex-column align-end"> -->
           <div class="main-font-bd xs-font pr-1">{{ message.nickname }}</div>
           <v-chip
             class="xs-font pa-4"
@@ -49,10 +48,6 @@
         >
           {{ message.content }}
         </v-col>
-        <!-- 1,2,3이 아닌 경우 : session id를 받음 -->
-        <!-- <v-col v-else class="text-col-1 xs-font text-center my-3">
-          {{ message.content }}
-        </v-col> -->
       </v-row>
     </v-sheet>
     <v-form class="send-area">
@@ -87,16 +82,11 @@
         class="send-btn"
         fab
         small
-        @click="sendMessage"
         disabled
       >
         <v-icon>mdi-arrow-up</v-icon>
       </v-btn>
     </v-form>
-
-    <!-- <div>
-      <button @click="exitWebSocket">채팅방 완전 나가기</button>
-    </div> -->
   </v-container>
 </template>
 
@@ -110,28 +100,34 @@ import {
   saveLastMessage,
 } from "@/api/modules/websocket";
 import { getPrevChat } from "@/api/modules/chat";
-// import InfiniteLoading from "vue-infinite-loading";
+import { removeChat } from "@/api/modules/user";
+import InfiniteLoading from "vue-infinite-loading";
 
 export default {
-  // components: { InfiniteLoading },
+  components: { InfiniteLoading },
   data() {
     return {
       serverURL: `${process.env.VUE_APP_API_SERVICE_URL}/chat-service`,
       messages: [],
       room: [],
       content: null,
-      lastReadIdx: "",
+      lastReadIdx: "", //마지막으로 읽은 채팅 인덱스
       socket: null,
       lastActiveTime: null,
       mySessionId: null,
+      firstIdx: null, //이전 대화 불러올때 인덱스
+      isScroll: false,
     };
   },
   watch: {
     messages() {
       //화면에 추가되었을 때 스크롤 처리
       this.$nextTick(() => {
+        //스크롤 위치 수정
         const chatArea = document.querySelector(".chat-area");
-        chatArea.scrollTo(0, chatArea.scrollHeight);
+        if (!this.isScroll) {
+          chatArea.scrollTo({ top: chatArea.scrollHeight, behavior: "smooth" });
+        }
       });
     },
     isDelete() {
@@ -141,6 +137,8 @@ export default {
         this.exitWebSocket();
         //isDelete -> false 변경
         this.setIsDelete(false);
+        //지금 선택한 채팅방 제거
+        this.clearNowChatRoom();
       }
     },
   },
@@ -166,7 +164,7 @@ export default {
     } else if (this.lastReadIdx == 0) {
       this.connect();
     } else {
-      this.getNewMessage(this.lastReadIdx);
+      // await this.getNewMessage(this.lastReadIdx);
       this.connect();
     }
   },
@@ -176,31 +174,52 @@ export default {
     // 스크롤 처리
     const chatArea = document.querySelector(".chat-area");
     chatArea.scrollTo(0, chatArea.scrollHeight);
-
-    //session id 설정
-    // this.mySessionId = sessionStorage.
   },
   beforeDestroy() {
-    alert("창끔");
     this.disconnectWebSocket();
     // window.removeEventListener("beforeunload", this.disconnectWebSocket);
   },
   methods: {
-    ...mapActions("chatStore", ["setIsDelete"]),
+    ...mapActions("chatStore", ["setIsDelete", "clearNowChatRoom"]),
     async infiniteHandler($state) {
-      //axios 요청
+      // console.log("핸들러요청", $state);
+      if (this.lastReadIdx === "") {
+        // console.log("아직 마지막 인덱스 못불러옴");
+        $state.reset();
+        return;
+      }
+      console.log("있ㅇ요", this.lastReadIdx, this.firstIdx);
+
+      if (this.lastReadIdx == 0) {
+        console.log("채팅방 처음 들어와서 불러올거 없음");
+        $state.complete();
+        return;
+      }
+
+      //읽지 않은 채팅 불러오기
+      if (this.firstIdx == null) {
+        await this.getNewMessage(this.lastReadIdx);
+      }
+
+      //위로 스크롤 했을 때 이전 메시지 불러오기
       const params = {
-        rid: "",
-        idx: "",
+        rid: this.room.id,
+        idx: this.firstIdx,
       };
+
       await getPrevChat(params, ({ data }) => {
-        console.log("이전 채팅 데이터를 불러왔어요", data);
         var result = data.data;
-        if (result != null) {
-          // this.messages앞에 데이터 push
-          this.messages.unshift(result);
+        console.log("이전 채팅 데이터 result >> ", result);
+        if (result.chatList.length > 0) {
+          this.isScroll = true;
+          this.messages.unshift(...result.chatList);
+          this.firstIdx = result.firstIdx[0];
           $state.loaded();
+          if (this.firstIdx == 0) {
+            $state.complete();
+          }
         } else {
+          console.log("이제 이전 채팅 없어");
           $state.complete();
         }
       });
@@ -237,11 +256,6 @@ export default {
             { Authorization: token },
             JSON.stringify(this.room.id)
           );
-          // this.socket.send(
-          //   "/pub/chat/enter",
-          //   { Authorization: token },
-          //   { rid: this.room.id }
-          // );
           console.log("이 사이에 호출");
 
           this.socket.subscribe(`/sub/chat/${this.room.id}`, (msg) => {
@@ -262,15 +276,10 @@ export default {
       );
     },
     sendMessage() {
-      //임시로 붙이기
-      // this.messages.push({
-      //   rid: "6ab2d3ee3edf",
-      //   nickname: "테스트!",
-      //   content: this.content,
-      //   flag: 1,
-      // });
+      if (this.content == null) return;
 
       let token = "Bearer " + sessionStorage.getItem("access-token");
+      this.isScroll = false;
 
       if (this.socket && this.socket.connected) {
         const msg = {
@@ -287,16 +296,21 @@ export default {
       this.lastActiveTime = Date.now();
     },
     async getNewMessage(idx) {
+      //채팅방에 들어왔을 때,
+      //채팅방에 위로 스크롤을 올렸을 때
+
       var result = await getNewChatMessage({ id: this.room.id, idx: idx });
-      console.log("읽지않은채팅 함수후에", result);
-      result.forEach((el) => {
+      console.log("읽지않은채팅 불러오기 >> ", result);
+      //return chatList, firstIdx
+      this.firstIdx = result.firstIdx[0];
+      if (result.chatList.length == 0) return;
+      result.chatList.forEach((el) => {
         this.messages.push({
           nickname: el.nickname,
           flag: el.flag,
           content: el.content,
         });
       });
-      // this.messages.push(result);
     },
     checkUserActivity() {
       const timeDiff = Date.now() - this.lastActiveTime;
@@ -318,11 +332,23 @@ export default {
       // this.$router.push("/my/chat");
     },
     exitWebSocket() {
+      console.log("채팅방 삭제해줘용", this.room.id);
+      let token = "Bearer " + sessionStorage.getItem("access-token");
       this.socket.send(
         "/pub/chat/exit",
-        { Authorization: sessionStorage.getItem("access-token") },
-        { rid: this.room.id }
+        { Authorization: token },
+        JSON.stringify(this.room.id)
       );
+      removeChat(
+        this.room.id,
+        ({ data }) => {
+          console.log("채팅방삭제 ", data);
+        },
+        (error) => {
+          console.log(error);
+        }
+      );
+      this.$router.push("/my/chat");
     },
   },
 };

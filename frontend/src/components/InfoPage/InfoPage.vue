@@ -13,13 +13,14 @@
       width="70%"
       rounded
       color="var(--main-col-3)"
-      class="white-col-1 info-item-component"
+      class="white-col-1 info-item-component-btn"
       to="/login"
     >
       지금 시작하기
     </v-btn>
     <!-- </div> -->
-    <div class="info-title-area">서비스를 소개하는 페이지입니다.</div>
+    <h3 class="info-title-top">같이 해요!</h3>
+    <h3 class="info-title-bottom">이모지를 만들고 참여해요😚</h3>
   </v-sheet>
 </template>
 
@@ -63,9 +64,17 @@ export default {
   scale: 0.8;
   z-index: 1;
 }
-.info-title-area {
+.info-title-top {
+  position: fixed;
+  top: 10%;
+  right: 10%;
   z-index: 2;
-  margin: 0 auto;
+}
+.info-title-bottom {
+  position: fixed;
+  bottom: 10%;
+  left: 10%;
+  z-index: 2;
 }
 .info-item-component {
   position: relative;
@@ -75,7 +84,12 @@ export default {
   transform: translate(-50%, -50%);
   z-index: 1;
 }
-/* .info-item-component a {
-  margin: 0 auto;
-} */
+.info-item-component-btn {
+  position: relative;
+  top: 40%;
+  left: 50%;
+  /* max-width: 500px; */
+  transform: translate(-50%, -50%);
+  z-index: 1;
+}
 </style>

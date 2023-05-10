@@ -9,7 +9,6 @@ async function getLastReadIdx(params) {
   await api
     .get(`${baseURL}/last/${params}`)
     .then((response) => {
-      console.log("마지막으로 읽은 채팅 인덱스", response);
       result = response.data.data;
     })
     .catch((error) => {
@@ -19,12 +18,12 @@ async function getLastReadIdx(params) {
 }
 
 // [ GET 읽지 않은 채팅 불러오기 ]
+// return chatList, firstIdx
 async function getNewChatMessage(params) {
   var result = null;
   await api
     .get(`${baseURL}/unread/${params.id}/${params.idx}`)
     .then((response) => {
-      console.log("읽지않은채팅>>", response);
       result = response.data.data;
     })
     .catch((error) => {

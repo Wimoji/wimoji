@@ -23,12 +23,6 @@ function apiInstance() {
       config.headers["Authorization"] = "Bearer " + token;
     }
 
-    // refresh 토큰
-    // if (refreshToken) {
-    //   config.headers["Refresh"] = "Refresh " + refreshToken;
-    // }
-
-    console.log("config>>>>>>", config);
     return config;
   });
 
