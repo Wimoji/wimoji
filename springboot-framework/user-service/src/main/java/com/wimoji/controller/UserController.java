@@ -120,7 +120,7 @@ public class UserController {
             String uid = jwtTokenUtil.getUserIdFromToken(token);
 
             List<String> chatList = service.getChatListByUser(uid);
-            if(chatList.size() == 0 || chatList == null) {
+            if(chatList == null || chatList.size() == 0) {
                 return DataResponseDto.empty();
             }
 
