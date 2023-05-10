@@ -20,9 +20,9 @@
       color="var(--col-empty)"
       v-for="(item, i) in aroundEmojis"
       :key="i"
-      @click="detailAroundEmoji(i)"
     >
       <v-img
+        @click="detailAroundEmoji(i)"
         v-if="i % 2 == 0"
         class="dot1"
         :src="emojiCategory[item.eid].link"
@@ -34,6 +34,7 @@
       </v-img>
 
       <v-img
+        @click="detailAroundEmoji(i)"
         v-else
         class="dot2"
         :src="emojiCategory[item.eid].link"
