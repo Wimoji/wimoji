@@ -1,14 +1,24 @@
 <template>
-  <v-container>
-    <h4 class="text-col-1 my-3">지금 나는 {{ myPosition }}에 있어요</h4>
-    <v-dialog v-model="dialog" width="45%">
+  <v-sheet color="var(--col-empty)" class="create-emoji-btn-area">
+    <v-dialog v-model="dialog" width="85%">
       <template v-slot:activator="{ on, attrs }">
-        <v-btn rounded dark color="var(--main-col-3)" v-bind="attrs" v-on="on">
+        <!-- <div class="now-position-text">지금 나는 {{ myPosition }}에 있어요</div> -->
+        <v-btn
+          v-if="location.myPosition != null"
+          rounded
+          dark
+          color="var(--main-col-3)"
+          v-bind="attrs"
+          v-on="on"
+        >
+          이모지 만들기<v-icon>mdi-heart-plus-outline</v-icon>
+        </v-btn>
+        <v-btn v-else disabled rounded v-bind="attrs" v-on="on">
           이모지 만들기<v-icon>mdi-heart-plus-outline</v-icon>
         </v-btn>
       </template>
 
-      <v-card max-width="500px" class="pa-2 emoji-card">
+      <v-card width="100%" class="pa-2 emoji-card">
         <v-card-title class="text-h5 d-flex align-center justify-center">
           <v-speed-dial
             v-model="fab"
@@ -31,12 +41,7 @@
                 >
               </div>
             </template>
-            <v-sheet
-              max-width="500px"
-              class="emoji-category pa-3"
-              elevation="10"
-              rounded="xl"
-            >
+            <v-sheet class="emoji-category pa-3" elevation="10" rounded="xl">
               <emoji-list @changeEmoji="changeEmoji" />
             </v-sheet>
           </v-speed-dial>
@@ -54,7 +59,6 @@
         <v-combobox
           hide-details
           v-model="limit"
-          clearable
           outlined
           rounded
           :items="items"
@@ -69,11 +73,11 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
-  </v-container>
+  </v-sheet>
 </template>
 
 <script>
-import EmojiList from "../EmojiList/EmojiList.vue";
+import EmojiList from "@/components/EmojiList/EmojiList.vue";
 import { mapState, mapActions } from "vuex";
 import { makeEmoji } from "@/api/modules/emoji";
 import { getNowPosition } from "@/api/modules/location";
@@ -115,7 +119,7 @@ export default {
   },
   computed: {
     ...mapState("emojiStore", ["emojiCategory"]),
-    ...mapState("userStore", ["user"]),
+    ...mapState("userStore", ["user", "location"]),
   },
   mounted() {
     if (navigator.geolocation) {
@@ -145,6 +149,7 @@ export default {
         return;
       }
 
+      console.log("이모지 생성 요청");
       let rid = null; //채팅방 아이디
 
       //채팅방 생성 API 호출
@@ -211,8 +216,11 @@ export default {
       );
     },
     async setPosition(position) {
-      this.latitude = position.coords.latitude;
-      this.longitude = position.coords.longitude;
+      // this.latitude = position.coords.latitude;
+      // this.longitude = position.coords.longitude;
+      position;
+      this.latitude = this.location.latitude;
+      this.longitude = this.location.longitude;
 
       const data = {
         longitude: this.longitude,
@@ -236,6 +244,7 @@ export default {
             latitude: this.latitude,
             longitude: this.longitude,
             dongCode: this.myDongcode,
+            myPosition: this.myPosition,
           });
         },
         (error) => {
@@ -246,34 +255,41 @@ export default {
       // this.latitude = 37.5013488;
       // this.longitude = 127.0397167;
       // this.dongCode = 1168010800;
-      this.setLocation({
-        latitude: this.latitude,
-        longitude: this.longitude,
-        dongCode: this.myDongcode,
-      });
+      // this.setLocation({
+      //   latitude: this.latitude,
+      //   longitude: this.longitude,
+      //   dongCode: this.myDongcode,
+      // });
     },
   },
 };
 </script>
 
-<style scoped>
+<style>
+.create-emoji-btn-area {
+  position: absolute;
+  left: 50%;
+  transform: translate(-50%, 1200%);
+}
+/* .create-emoji-btn-area {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+}
 .v-speed-dial {
   position: absolute;
 }
 .emoji-card {
   position: fixed;
   width: 80%;
-  max-width: 500px;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
 }
+ */
 .emoji-category {
   position: fixed;
-  /* max-width: 500px; */
 }
-/* 인원수 선택 밑 글씨 */
-/* .v-text-field.v-text-field--enclosed .v-text-field__details {
-  display: none !important;
-} */
 </style>

@@ -1,20 +1,24 @@
 <template>
-  <v-container class="info-area">
-    <div class="blue-info">
+  <v-container class="info-area home-area">
+    <div class="info-blue-circle">
       <blue-circle></blue-circle>
     </div>
-    <div class="yellow-info">
+    <div class="info-yellow-circle">
       <yellow-circle></yellow-circle>
     </div>
-    <div class="info-item-component create-emoji">
+    <div class="resize-white-circle">
+      <white-circle :propsText="mainPageText"></white-circle>
+    </div>
+    <div class="create-emoji">
       <home-page-create-emoji />
     </div>
-    <!-- <div class="info-item-component">
+    <!-- <div class="around-emoji">
       <home-emoji></home-emoji>
     </div> -->
-    <div class="resize-title-circle"></div>
+    <!-- <div class="resize-title-circle"></div> -->
     <!-- <div class="info-item-component"> -->
     <!-- <spinner-item></spinner-item> -->
+
     <v-sheet
       class="spinner"
       color="var(--col-empty)"
@@ -45,7 +49,6 @@
       >
       </v-img>
     </v-sheet>
-    <!-- </div> -->
 
     <v-card
       v-if="isClickEmoji"
@@ -89,6 +92,7 @@ import { mapState, mapActions } from "vuex";
 import HomePageCreateEmoji from "@/components/HomePage/HomePageCreateEmoji.vue";
 import BlueCircle from "@/common/component/BlueCircle.vue";
 import YellowCircle from "@/common/component/YellowCircle.vue";
+import WhiteCircle from "@/common/component/WhiteCircle.vue";
 // import SpinnerItem from "@/components/HomePage/SpinnerItem.vue";
 // import Scene from "scenejs";
 export default {
@@ -97,6 +101,7 @@ export default {
     // HomeEmoji,
     BlueCircle,
     YellowCircle,
+    WhiteCircle,
     // SpinnerItem,
   },
   computed: {
@@ -109,6 +114,7 @@ export default {
       angle: 6,
       isClickEmoji: false,
       selectedEmoji: null,
+      mainPageText: null,
     };
   },
   async created() {
@@ -123,6 +129,13 @@ export default {
         this.setAroundEmojis(result);
       }
       //result가 null이라면 오류, result.length가 0이라면 주변 이모지 없음
+    }
+  },
+  mounted() {
+    if (this.location.myPosition == null) {
+      this.mainPageText = ["위치 권한을 허용해주세요 📍"];
+    } else {
+      this.mainPageText = [`지금 나는 ${this.location.myPosition}에 있어요`];
     }
   },
   methods: {
@@ -159,8 +172,40 @@ export default {
   },
 };
 </script>
-<style scoped>
-.create-emoji {
+<style>
+.info-area .resize-white-circle {
+  position: absolute;
+  top: 50%;
+  transform: translate(0, 100%);
+}
+.info-area .resize-white-circle {
+  position: absolute;
+  top: 50%;
+}
+.home-area {
+  position: relative;
+}
+.home-area .create-emoji {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+/* .main-emoji-area {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+.main-emoji-area .main-blue-circle {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+.main-emoji-area .main-yellow-circle {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+} */
+/* .create-emoji {
   z-index: 6;
 }
 .detail-emoji {
@@ -220,8 +265,6 @@ export default {
   background: rgba(255, 255, 255, 0.31);
 }
 .spinner {
-  /*margin-left: -20px;*/
-  /* margin-top: -20px; */
   z-index: 5;
 
   position: fixed;
@@ -229,14 +272,10 @@ export default {
   left: 50%;
   transform: translate(-50%, -50%);
   text-align: center;
-  /* -webkit-animation: sk-rotate 2.0s infinite linear; */
-  /* animation: sk-rotate 2.0s infinite linear; */
 }
 
 .dot1,
 .dot2 {
-  /* position: absolute; */
-  /* display: inline-block; */
   width: 4rem;
   -webkit-animation: sk-bounce 2s infinite ease-in-out;
   animation: sk-bounce 2s infinite ease-in-out;
@@ -245,12 +284,9 @@ export default {
 .dot2 {
   -webkit-animation-delay: -1s;
   animation-delay: -1s;
-}
+} */
 
-/* @-webkit-keyframes sk-rotate { 100% { -webkit-transform: rotate(360deg) }}
-@keyframes sk-rotate { 100% { transform: rotate(360deg); -webkit-transform: rotate(360deg) }} */
-
-@-webkit-keyframes sk-bounce {
+/* @-webkit-keyframes sk-bounce {
   0%,
   100% {
     -webkit-transform: scale(0.7);
@@ -270,5 +306,5 @@ export default {
     transform: scale(1);
     -webkit-transform: scale(1);
   }
-}
+} */
 </style>

@@ -8,7 +8,7 @@
       v-for="(item, i) in emojiCategory"
       :key="i"
     >
-      <v-img :src="item.link" width="15rem"> </v-img>
+      <v-img :src="item.link" width="10rem"> </v-img>
     </v-sheet>
   </Flicking>
 </template>
@@ -30,7 +30,7 @@ export default {
       // plugins: [
       //   new AutoPlay({ duration: 2000, direction: "NEXT", stopOnHover: false }),
       // ],
-      plugins: [new AutoPlay(), new Perspective({ rotate: 0.1 })],
+      plugins: [new AutoPlay(), new Perspective({ rotate: 0.2 })],
     };
   },
 };
