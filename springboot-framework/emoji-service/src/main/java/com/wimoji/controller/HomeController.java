@@ -12,7 +12,6 @@ import com.wimoji.service.HomeService;
 import com.wimoji.service.UserServiceClient;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
-import org.springframework.kafka.requestreply.ReplyingKafkaTemplate;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;

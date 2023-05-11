@@ -14,7 +14,7 @@ import com.wimoji.service.EmojiService;
 import com.wimoji.service.UserServiceClient;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
-import org.springframework.kafka.requestreply.ReplyingKafkaTemplate;
+//import org.springframework.kafka.requestreply.ReplyingKafkaTemplate;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
