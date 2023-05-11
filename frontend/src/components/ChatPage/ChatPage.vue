@@ -11,6 +11,12 @@
       </v-avatar>
       <div class="xs-font main-font-bd">{{ room.title }}</div>
     </v-sheet>
+    <br />
+    <br />
+    <br />
+    <br />
+    <br />
+    <br />
   </v-sheet>
   <v-sheet v-else>
     <div class="xl-font text-center mt-10">참여한 채팅이 없어요... 😂</div>
@@ -52,6 +58,9 @@ export default {
           console.log(error);
         }
       );
+      //스크롤 영역 설정
+      document.querySelector(".chat-list").style.height =
+        window.innerHeight + "px";
     },
     goRoom(room) {
       //지금 채팅방 정보 설정
@@ -68,8 +77,13 @@ export default {
 
 <style>
 .chat-list {
-  height: 100vh - 130px;
-  margin: 3%;
+  /* height: 100vh - 130px; */
+  /* margin: 3%; */
+  /* overflow: scroll; */
+  /* height: 90vh;
+  overflow: scroll; */
+  /* height: 100vh; */
+  /* height: 80vh; */
   overflow: scroll;
 }
 /* .chat-items {

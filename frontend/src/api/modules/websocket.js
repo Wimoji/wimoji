@@ -45,4 +45,22 @@ async function saveLastMessage(params) {
     });
 }
 
-export { getLastReadIdx, getNewChatMessage, saveLastMessage };
+// [ DELETE 마지막으로 읽은 채팅 삭제]
+async function deleteLastMessage(params) {
+  console.log("params>>", params);
+  await api
+    .delete(`${baseURL}/last/${params}`)
+    .then((response) => {
+      console.log("메시지 삭제", response);
+    })
+    .catch((error) => {
+      console.log("메시지 삭제 실패", error);
+    });
+}
+
+export {
+  getLastReadIdx,
+  getNewChatMessage,
+  saveLastMessage,
+  deleteLastMessage,
+};
