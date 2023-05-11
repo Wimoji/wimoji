@@ -35,7 +35,7 @@ public class LogAspect {
 		log.info("----------> RESPONSE : {}({}) = {} ({}ms)", pjp.getSignature().getDeclaringTypeName(),
 			pjp.getSignature().getName(), result, endAt-startAt);
 
-		return null;
+		return result;
 
 	}    // get requset value
 	private String getRequestParams() {
