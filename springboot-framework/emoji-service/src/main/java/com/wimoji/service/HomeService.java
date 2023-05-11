@@ -6,6 +6,7 @@ import com.wimoji.repository.UserRepository;
 import com.wimoji.repository.dto.request.HomeReq;
 import com.wimoji.repository.dto.response.HomeRes;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +18,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class HomeService {
@@ -59,8 +61,9 @@ public class HomeService {
                 double dis = getDistance(Double.parseDouble(homeReq.getLatitude()), Double.parseDouble(homeReq.getLongitude()),
                         Double.parseDouble(emoji.getLatitude()), Double.parseDouble(emoji.getLongitude()));
 
+                log.info("Distance >> " + dis);
                 //반경 600m 넘으면 추가 안 함
-                if(dis > 600 || dis < 0)
+                if(dis > 600)
                     continue;
 
                 //5. 저장
