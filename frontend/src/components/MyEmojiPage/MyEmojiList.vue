@@ -84,9 +84,9 @@ export default {
 };
 </script>
 
-<style scoped>
-.v-sheet {
-  padding-top: 130px;
+<style>
+.emoji-list {
+  height: 100%;
 }
 .detail-emoji-modal {
   position: fixed;

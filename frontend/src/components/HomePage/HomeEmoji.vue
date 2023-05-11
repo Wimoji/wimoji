@@ -1,30 +1,68 @@
 <template>
-  <v-container>
-    <v-avatar
-      size="80"
-      color="white"
+  <v-sheet color="var(--col-empty)">
+    <v-sheet
+      class="spinner"
+      color="var(--col-empty)"
       v-for="(item, i) in aroundEmojis"
       :key="i"
-      @click="detailAroundEmoji(i)"
     >
-      <v-img :src="emojiCategory[item.eid].link"></v-img>
-    </v-avatar>
-    <v-card v-if="isClickEmoji">
-      <v-avatar>
-        <v-img :src="emojiCategory[selectedEmoji.eid].link"></v-img>
-      </v-avatar>
+      <v-img
+        @click="detailAroundEmoji(i)"
+        v-if="i % 2 == 0"
+        class="dot1"
+        :src="emojiCategory[item.eid].link"
+        :style="{
+          top: radius * Math.sin(((i + 1) * Math.PI) / angle) + 'px',
+          left: radius * Math.cos(((i + 1) * Math.PI) / angle) + 'px',
+        }"
+      >
+      </v-img>
+
+      <v-img
+        @click="detailAroundEmoji(i)"
+        v-else
+        class="dot2"
+        :src="emojiCategory[item.eid].link"
+        :style="{
+          top: radius * Math.sin(((i + 1) * Math.PI) / angle) + 'px',
+          left: radius * Math.cos(((i + 1) * Math.PI) / angle) + 'px',
+        }"
+      >
+      </v-img>
+    </v-sheet>
+
+    <v-card
+      v-if="isClickEmoji"
+      class="detail-emoji d-flex flex-column align-center pa-5"
+    >
+      <v-img width="30%" :src="emojiCategory[selectedEmoji.eid].link"></v-img>
       <v-card-title>{{ selectedEmoji.title }}</v-card-title>
-      <v-btn
-        height="3em"
-        width="6em"
-        rounded
-        color="var(--main-col-3)"
-        class="white-col-1"
-        @click="joinChat"
-        >함께하기
-      </v-btn>
+      <v-row class="d-flex">
+        <v-col>
+          <v-btn
+            height="3em"
+            width="6em"
+            rounded
+            color="var(--main-col-3)"
+            class="white-col-1"
+            @click="joinChat"
+            >함께하기</v-btn
+          >
+        </v-col>
+        <v-col>
+          <v-btn
+            height="3em"
+            width="6em"
+            rounded
+            color="var(--text-col-4)"
+            class="white-col-1"
+            @click="closeEmoji"
+            >닫기</v-btn
+          >
+        </v-col>
+      </v-row>
     </v-card>
-  </v-container>
+  </v-sheet>
 </template>
 
 <script>
@@ -34,7 +72,8 @@ import { mapState, mapActions } from "vuex";
 export default {
   data() {
     return {
-      // aroundEmojis: [], //사용자 주변의 이모지들
+      radius: 160,
+      angle: 6,
       isClickEmoji: false,
       selectedEmoji: null,
     };
@@ -69,7 +108,7 @@ export default {
       //지금 선택된 이모지의 채팅방 참여하기
       this.setNowChatRoom(this.selectedEmoji);
       const params = {
-        rid: rid,
+        rid: this.selectedEmoji.rid,
       };
       await myChat(
         params,
@@ -89,4 +128,48 @@ export default {
 };
 </script>
 
-<style></style>
+<style>
+.spinner {
+  z-index: 5;
+
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+}
+
+.dot1,
+.dot2 {
+  width: 4rem;
+  -webkit-animation: sk-bounce 2s infinite ease-in-out;
+  animation: sk-bounce 2s infinite ease-in-out;
+}
+
+.dot2 {
+  -webkit-animation-delay: -1s;
+  animation-delay: -1s;
+}
+
+@-webkit-keyframes sk-bounce {
+  0%,
+  100% {
+    -webkit-transform: scale(0.7);
+  }
+  50% {
+    -webkit-transform: scale(1);
+  }
+}
+
+@keyframes sk-bounce {
+  0%,
+  100% {
+    transform: scale(0.7);
+    -webkit-transform: scale(0.7);
+  }
+  50% {
+    transform: scale(1);
+    -webkit-transform: scale(1);
+  }
+}
+</style>
