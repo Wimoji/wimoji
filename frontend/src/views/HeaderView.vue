@@ -1,17 +1,17 @@
 <template>
   <div class="header-area">
     <home-header v-if="homePage.includes($route.name) && isLogin"></home-header>
-    <my-header v-if="myHeaderPage.includes($route.name)"></my-header>
+    <!-- <my-header v-if="myHeaderPage.includes($route.name)"></my-header>
     <chat-room-header
       v-if="chatRoomPage.includes($route.name)"
-    ></chat-room-header>
+    ></chat-room-header> -->
   </div>
 </template>
 
 <script>
-import ChatRoomHeader from "@/views/Headers/ChatRoomHeader.vue";
+// import ChatRoomHeader from "@/views/Headers/ChatRoomHeader.vue";
 import HomeHeader from "@/views/Headers/HomeHeader.vue";
-import MyHeader from "@/views/Headers/MyHeader.vue";
+// import MyHeader from "@/views/Headers/MyHeader.vue";
 import { mapState } from "vuex";
 
 export default {
@@ -22,7 +22,11 @@ export default {
       homePage: ["main"],
     };
   },
-  components: { HomeHeader, MyHeader, ChatRoomHeader },
+  components: {
+    HomeHeader,
+    // MyHeader,
+    // ChatRoomHeader,
+  },
   computed: {
     ...mapState("userStore", ["isLogin"]),
   },

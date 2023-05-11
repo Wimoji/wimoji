@@ -190,6 +190,7 @@ export default {
               this.dialog = false;
               this.nowEmoji = "mdi-heart-plus-outline";
               this.title = "";
+              this.limit = null;
             }
           },
           (error) => {

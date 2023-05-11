@@ -127,11 +127,11 @@ export default {
           sessionStorage.setItem("access-token", result.accessToken);
           sessionStorage.setItem("refresh-token", result.refreshToken);
 
-          //임시로 아이디도 전송 >> 이모지 서비스 수정되면 고칠 예정
+          //닉네임 저장
           const user = {
             nickname: result.nickname,
-            id: this.id,
           };
+
           this.setLogin(user); //로그인 정보 설정
           this.$router.push("/");
         } else {

@@ -1,5 +1,5 @@
 <template>
-  <v-container>
+  <v-sheet color="var(--col-empty)" class="chat-room-container">
     <v-sheet ref="chatArea" class="chat-area col-transparent">
       <infinite-loading @infinite="infiniteHandler" direction="top">
         <div slot="no-results"></div>
@@ -87,7 +87,7 @@
         <v-icon>mdi-arrow-up</v-icon>
       </v-btn>
     </v-form>
-  </v-container>
+  </v-sheet>
 </template>
 
 <script>
@@ -239,6 +239,7 @@ export default {
         Authorization: token,
         rid: this.room.id,
       };
+      console.log("this socket>", this.socket);
 
       this.socket.connect(
         headers,
@@ -355,17 +356,23 @@ export default {
 </script>
 
 <style scoped>
-.container {
-  height: 100vh;
+.chat-room-container {
+  /* height: 100vh;
+  overflow: hidden; */
+  height: 90vh;
   overflow: hidden;
 }
 .chat-area {
   height: 90%;
   overflow: scroll;
-  padding-top: 85px;
+  /* height: 90%;
+  overflow: scroll;
+  padding-top: 85px; */
 }
 .send-area {
-  height: 10%;
+  position: absolute;
+  width: 80%;
+  /* height: 10%; */
   bottom: 0;
 
   display: flex;
