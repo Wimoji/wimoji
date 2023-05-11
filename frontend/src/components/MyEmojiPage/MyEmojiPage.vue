@@ -6,7 +6,7 @@
 
 <script>
 import { mapState } from "vuex";
-import MyEmojiList from "./MyEmojiList.vue";
+import MyEmojiList from "@/components/MyEmojiPage/MyEmojiList.vue";
 
 export default {
   components: { MyEmojiList },

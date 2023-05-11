@@ -28,7 +28,7 @@
 import HeaderView from "@/views/HeaderView.vue";
 import YellowCircle from "@/common/component/YellowCircle.vue";
 import BlueCircle from "@/common/component/BlueCircle.vue";
-import WhiteCircle from "./common/component/WhiteCircle.vue";
+import WhiteCircle from "@/common/component/WhiteCircle.vue";
 
 export default {
   components: {

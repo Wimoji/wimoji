@@ -6,7 +6,6 @@
     <div class="info-yellow-circle">
       <yellow-circle></yellow-circle>
     </div>
-    <!-- <div class="info-item-component d-flex flex-column align-center"> -->
     <div class="info-describe">
       <info-item></info-item>
       <v-btn
@@ -40,7 +39,7 @@
 <script>
 import BlueCircle from "@/common/component/BlueCircle.vue";
 import YellowCircle from "@/common/component/YellowCircle.vue";
-import InfoItem from "./InfoItem.vue";
+import InfoItem from "@/components/InfoPage/InfoItem.vue";
 
 export default {
   components: {
