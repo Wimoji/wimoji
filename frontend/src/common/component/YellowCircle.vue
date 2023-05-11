@@ -21,8 +21,6 @@ export default {
 .ellipse1,
 .ellipse2 {
   position: absolute;
-  top: 50%;
-  left: 50%;
   width: 650px;
   height: 700px;
   border-radius: 50%;
@@ -34,7 +32,6 @@ export default {
 }
 
 .ellipse2 {
-  top: 55%;
   background-color: rgba(255, 232, 153, 0.5);
   animation: rotate2 4s linear infinite;
 }

@@ -28,7 +28,7 @@
 <script>
 import { getEmojis } from "@/api/modules/emoji";
 import { mapState } from "vuex";
-import MyEmojiDetail from "./MyEmojiDetail.vue";
+import MyEmojiDetail from "@/components/MyEmojiPage/MyEmojiDetail.vue";
 
 export default {
   components: { MyEmojiDetail },

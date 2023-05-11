@@ -21,8 +21,6 @@ export default {
 .blue-ellipse1,
 .blue-ellipse2 {
   position: absolute;
-  top: 50%;
-  left: 50%;
   width: 750px;
   height: 800px;
   border-radius: 50%;
@@ -34,7 +32,6 @@ export default {
 }
 
 .blue-ellipse2 {
-  top: 55%;
   background-color: rgba(166, 214, 255, 0.5);
   animation: rotate2 4s linear infinite;
 }
