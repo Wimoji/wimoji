@@ -177,12 +177,7 @@ public class ChatRoomService {
 			}
 
 			List<Chat> chatList = chatRoomRepository.getNewChat(newChatReq);
-			List<ChatRes> chatResList = new ArrayList<>();
-
-			for (Chat chat : chatList) {
-				String flag = (newChatReq.getUid().equals(chat.getUid())) ? "1" : "2";
-				chatResList.add(new ChatRes(chat.getRid(), chat.getNickname(), chat.getContent(), flag));
-			}
+			List<ChatRes> chatResList = chatToChatRes(chatList, newChatReq.getUid());
 
 			Map<String, List> result = new HashMap<>();
 			result.put("chatList", chatResList);
@@ -221,17 +216,32 @@ public class ChatRoomService {
 			result.put("firstIdx", firstIdx);
 
 			List<Chat> chatList = chatRoomRepository.getPastChat(newChatReq);
-			List<ChatRes> chatResList = new ArrayList<>();
 
-			for (Chat chat : chatList) {
-				String flag = (newChatReq.getUid().equals(chat.getUid())) ? "1" : "2";
-				chatResList.add(new ChatRes(chat.getRid(), chat.getNickname(), chat.getContent(), flag));
-			}
+			List<ChatRes> chatResList = chatToChatRes(chatList, newChatReq.getUid());
 			result.put("chatList", chatResList);
 
 			return result;
 		} catch (Exception e) {
 			throw new GeneralException(Code.BAD_REQUEST);
 		}
+	}
+
+	private List<ChatRes> chatToChatRes(List<Chat> chatList, String uid) {
+		List<ChatRes> chatResList = new ArrayList<>();
+		String flag;
+
+		for (Chat chat : chatList) {
+			if(chat.getUid().equals(uid)) {
+				flag = "1";
+			} else if(chat.getUid().equals("coment")) {
+				flag = "3";
+			} else {
+				flag = "2";
+			}
+
+			chatResList.add(new ChatRes(chat.getRid(), chat.getNickname(), chat.getContent(), flag));
+		}
+
+		return chatResList;
 	}
 }
