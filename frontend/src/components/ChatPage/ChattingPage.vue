@@ -98,6 +98,7 @@ import {
   getLastReadIdx,
   getNewChatMessage,
   saveLastMessage,
+  deleteLastMessage,
 } from "@/api/modules/websocket";
 import { getPrevChat } from "@/api/modules/chat";
 import { removeChat } from "@/api/modules/user";
@@ -147,9 +148,9 @@ export default {
   },
   async created() {
     this.room = this.nowChatRoom;
-    console.log("이 방의 정보", this.room);
-    console.log("이 방의 rid >>> ", this.room.rid);
-    console.log("이 방의 id >>> ", this.room.id);
+    // console.log("이 방의 정보", this.room);
+    // console.log("이 방의 rid >>> ", this.room.rid);
+    // console.log("이 방의 id >>> ", this.room.id);
 
     this.lastActiveTime = Date.now();
     setInterval(() => {
@@ -158,7 +159,7 @@ export default {
 
     //마지막 메시지 조회
     this.lastReadIdx = await getLastReadIdx(this.room.id);
-    console.log("마지막 메시지 인덱스 axios 이후>>", this.lastReadIdx);
+    // console.log("마지막 메시지 인덱스 axios 이후>>", this.lastReadIdx);
     if (this.lastReadIdx == null) {
       alert("마지막 메시지 조회 실패");
     } else if (this.lastReadIdx == 0) {
@@ -188,10 +189,10 @@ export default {
         $state.reset();
         return;
       }
-      console.log("있ㅇ요", this.lastReadIdx, this.firstIdx);
+      // console.log("있어요", this.lastReadIdx, this.firstIdx);
 
       if (this.lastReadIdx == 0) {
-        console.log("채팅방 처음 들어와서 불러올거 없음");
+        console.log("채팅방 처음 들어와서 불러올 거 없음");
         $state.complete();
         return;
       }
@@ -245,11 +246,11 @@ export default {
         headers,
         (frame) => {
           console.log("소켓 연결 성공: ", frame);
-          console.log("아이디달라고 ", sockJs._transport.url);
+          // console.log("아이디달라고 ", sockJs._transport.url);
           const url = sockJs._transport.url;
           const regex = /\/(\w+)\/websocket$/;
           const sessionId = url.match(regex)[1];
-          console.log("정규식햇덩~", sessionId); // n2dzsmev
+          // console.log("정규식햇덩~", sessionId); // n2dzsmev
           this.mySessionId = sessionId;
 
           this.socket.send(
@@ -257,7 +258,6 @@ export default {
             { Authorization: token },
             JSON.stringify(this.room.id)
           );
-          console.log("이 사이에 호출");
 
           this.socket.subscribe(`/sub/chat/${this.room.id}`, (msg) => {
             this.messages.push(JSON.parse(msg.body));
@@ -301,7 +301,7 @@ export default {
       //채팅방에 위로 스크롤을 올렸을 때
 
       var result = await getNewChatMessage({ id: this.room.id, idx: idx });
-      console.log("읽지않은채팅 불러오기 >> ", result);
+      console.log("읽지 않은 채팅 불러오기 >> ", result);
       //return chatList, firstIdx
       this.firstIdx = result.firstIdx[0];
       if (result.chatList.length == 0) return;
@@ -333,23 +333,26 @@ export default {
       // this.$router.push("/my/chat");
     },
     exitWebSocket() {
-      console.log("채팅방 삭제해줘용", this.room.id);
+      // console.log("채팅방 삭제해줘용", this.room.id);
       let token = "Bearer " + sessionStorage.getItem("access-token");
       this.socket.send(
         "/pub/chat/exit",
         { Authorization: token },
         JSON.stringify(this.room.id)
       );
+      deleteLastMessage(this.room.id);
       removeChat(
         this.room.id,
         ({ data }) => {
-          console.log("채팅방삭제 ", data);
+          console.log("채팅방 삭제 ", data);
+          this.$router.push("/my/chat");
         },
         (error) => {
           console.log(error);
+          alert("삭제 중 문제 발생");
+          this.$router.push("/my/chat");
         }
       );
-      this.$router.push("/my/chat");
     },
   },
 };
