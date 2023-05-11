@@ -164,6 +164,15 @@ public class ChatRoomService {
 	}
 
 	/**
+	 * 퇴장 시 마지막으로 읽은 메시지 삭제
+	 * @param : 채팅방의 id, accessToken
+	 * @return :
+	 **/
+	public void removeLastChat(String uid, String rid) {
+		lastChatRepository.removeLastChat(uid, rid);
+	}
+
+	/**
 	 * 유저가 마지막으로 읽은 메시지로부터 15번 먼저 온 메시지부터 새로운 모든 메시지 출력
 	 * @param : 채팅방의 id, 마지막 메시지의 인덱스
 	 * @return : 메시지의 List
