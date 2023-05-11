@@ -78,8 +78,13 @@ html body {
   width: 100%;
   height: 100%;
   font-family: var(--main-font-1);
+  /* 스크롤 방지 */
   position: fixed;
   overflow: hidden;
+}
+.v-main {
+  width: 100%;
+  height: 100%;
 }
 /* resize */
 .resize-area {

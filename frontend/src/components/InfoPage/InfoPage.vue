@@ -1,26 +1,39 @@
 <template>
   <v-sheet class="info-area" color="var(--col-empty)">
-    <div class="blue-circle-area blue-info">
+    <div class="info-blue-circle">
       <blue-circle></blue-circle>
     </div>
-    <div class="yellow-circle-area yellow-info">
+    <div class="info-yellow-circle">
       <yellow-circle></yellow-circle>
     </div>
     <!-- <div class="info-item-component d-flex flex-column align-center"> -->
-    <info-item class="info-item-component"></info-item>
-    <v-btn
-      height="50px"
-      width="70%"
-      rounded
-      color="var(--main-col-3)"
-      class="white-col-1 info-item-component-btn"
-      to="/login"
-    >
-      지금 시작하기
-    </v-btn>
-    <!-- </div> -->
-    <h3 class="info-title-top">같이 해요!</h3>
-    <h3 class="info-title-bottom">이모지를 만들고 참여해요😚</h3>
+    <div class="info-describe">
+      <info-item></info-item>
+      <v-btn
+        height="50px"
+        width="70%"
+        rounded
+        color="var(--main-col-3)"
+        class="white-col-1"
+        to="/login"
+      >
+        지금 시작하기
+      </v-btn>
+    </div>
+    <div class="info-text">
+      <transition name="moveInUp">
+        <h3 v-if="!textFlag" class="info-text-top">{{ infoText1 }}</h3>
+      </transition>
+      <transition name="moveInUp">
+        <h3 v-if="textFlag" class="info-text-top">{{ infoText3 }}</h3>
+      </transition>
+      <transition name="moveInUp">
+        <h3 v-if="!textFlag" class="info-text-bottom">{{ infoText2 }}</h3>
+      </transition>
+      <transition name="moveInUp">
+        <h3 v-if="textFlag" class="info-text-bottom">{{ infoText4 }}</h3>
+      </transition>
+    </div>
   </v-sheet>
 </template>
 
@@ -35,6 +48,20 @@ export default {
     YellowCircle,
     InfoItem,
   },
+  data() {
+    return {
+      textFlag: false,
+      infoText1: "같이 해요!",
+      infoText2: "이모지를 만들고 참여해요 😚",
+      infoText3: "🤸‍♀️ 친구를 만들어봐요",
+      infoText4: "wimoji를 이용해보세요! 💌",
+    };
+  },
+  mounted() {
+    setInterval(() => {
+      this.textFlag = !this.textFlag;
+    }, 2500);
+  },
   methods: {
     goLogin() {
       this.$router.push("/login");
@@ -45,51 +72,55 @@ export default {
 
 <style>
 .info-area {
-  position: relative;
+  position: absolute;
   width: 100%;
-  height: 100vh;
-  overflow: hidden;
+  height: 100%;
 }
-.blue-info {
+.info-area .info-blue-circle {
   position: absolute;
-  bottom: 50%;
-  right: 50%;
-  scale: 0.7;
-  z-index: 1;
+  top: 0;
+  left: 0;
 }
-.yellow-info {
+.info-area .info-yellow-circle {
   position: absolute;
-  top: 50%;
-  left: 50%;
-  scale: 0.8;
-  z-index: 1;
+  top: 0;
+  left: 0;
+  transform: translate(100%, 200%);
 }
-.info-title-top {
+.info-describe {
+  text-align: center;
+  transform: translateY(120%);
+}
+.info-describe a {
+  margin-top: 5%;
+}
+.info-text-top {
   position: fixed;
   top: 10%;
   right: 10%;
-  z-index: 2;
 }
-.info-title-bottom {
+.info-text-bottom {
   position: fixed;
   bottom: 10%;
   left: 10%;
-  z-index: 2;
 }
-.info-item-component {
-  position: relative;
-  top: 50%;
-  left: 50%;
-  /* max-width: 500px; */
-  transform: translate(-50%, -50%);
-  z-index: 1;
+/* transition */
+.moveInUp-enter-active {
+  opacity: 0;
+  transition: opacity 0.5s ease-in;
 }
-.info-item-component-btn {
-  position: relative;
-  top: 40%;
-  left: 50%;
-  /* max-width: 500px; */
-  transform: translate(-50%, -50%);
-  z-index: 1;
+.moveInUp-enter-active {
+  animation: fadeIn 0.5s ease-in;
+}
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+  50% {
+    opacity: 0.5;
+  }
+  100% {
+    opacity: 1;
+  }
 }
 </style>
