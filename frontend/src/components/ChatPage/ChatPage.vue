@@ -1,5 +1,5 @@
 <template>
-  <v-container v-if="rooms != null">
+  <v-sheet color="var(--col-empty)" class="chat-list" v-if="rooms != null">
     <v-sheet
       @click="goRoom(room)"
       class="ma-3 d-flex justify-start px-5 py-4 rounded-xl align-center"
@@ -11,10 +11,10 @@
       </v-avatar>
       <div class="xs-font main-font-bd">{{ room.title }}</div>
     </v-sheet>
-  </v-container>
-  <v-container v-else>
+  </v-sheet>
+  <v-sheet v-else>
     <div class="xl-font text-center mt-10">참여한 채팅이 없어요... 😂</div>
-  </v-container>
+  </v-sheet>
 </template>
 
 <script>
@@ -66,8 +66,13 @@ export default {
 };
 </script>
 
-<style scoped>
-.container {
-  margin-top: 130px;
+<style>
+.chat-list {
+  height: 100vh - 130px;
+  margin: 3%;
+  overflow: scroll;
 }
+/* .chat-items {
+  height: 100%;
+} */
 </style>

@@ -9,7 +9,7 @@
         </v-col>
         <v-col align="center">
           <v-toolbar-title>
-            <div class="xxl-font">목록</div>
+            <div class="lg-font">마이 페이지</div>
           </v-toolbar-title>
         </v-col>
         <v-col align="right">
@@ -29,9 +29,12 @@
 
 <script>
 import { deleteUser } from "@/api/modules/user";
-import { mapActions } from "vuex";
+import { mapState, mapActions } from "vuex";
 
 export default {
+  computed: {
+    ...mapState("userStore", ["user"]),
+  },
   methods: {
     ...mapActions("userStore", ["setLogout"]),
     goBack() {

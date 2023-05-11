@@ -12,6 +12,7 @@
     <div class="create-emoji">
       <home-page-create-emoji />
     </div>
+    <home-emoji></home-emoji>
     <!-- <div class="around-emoji">
       <home-emoji></home-emoji>
     </div> -->
@@ -19,7 +20,7 @@
     <!-- <div class="info-item-component"> -->
     <!-- <spinner-item></spinner-item> -->
 
-    <v-sheet
+    <!-- <v-sheet
       class="spinner"
       color="var(--col-empty)"
       v-for="(item, i) in aroundEmojis"
@@ -80,29 +81,25 @@
           >
         </v-col>
       </v-row>
-    </v-card>
+    </v-card> -->
   </v-container>
 </template>
 
 <script>
-import { myChat } from "@/api/modules/user";
 import { getAroundEmojis } from "@/api/modules/emoji";
 import { mapState, mapActions } from "vuex";
-// import HomeEmoji from "@/components/HomePage/HomeEmoji.vue";
+import HomeEmoji from "@/components/HomePage/HomeEmoji.vue";
 import HomePageCreateEmoji from "@/components/HomePage/HomePageCreateEmoji.vue";
 import BlueCircle from "@/common/component/BlueCircle.vue";
 import YellowCircle from "@/common/component/YellowCircle.vue";
 import WhiteCircle from "@/common/component/WhiteCircle.vue";
-// import SpinnerItem from "@/components/HomePage/SpinnerItem.vue";
-// import Scene from "scenejs";
 export default {
   components: {
     HomePageCreateEmoji,
-    // HomeEmoji,
+    HomeEmoji,
     BlueCircle,
     YellowCircle,
     WhiteCircle,
-    // SpinnerItem,
   },
   computed: {
     ...mapState("userStore", ["location", "aroundEmojis"]),
@@ -110,8 +107,6 @@ export default {
   },
   data() {
     return {
-      radius: 165,
-      angle: 6,
       isClickEmoji: false,
       selectedEmoji: null,
       mainPageText: null,
@@ -138,37 +133,18 @@ export default {
       this.mainPageText = [`지금 나는 ${this.location.myPosition}에 있어요`];
     }
   },
+  watch: {
+    location() {
+      if (this.location.myPosition == null) {
+        this.mainPageText = ["위치 권한을 허용해주세요 📍"];
+      } else {
+        this.mainPageText = [`지금 나는 ${this.location.myPosition}에 있어요`];
+      }
+    },
+  },
   methods: {
     ...mapActions("chatStore", ["setNowChatRoom"]),
     ...mapActions("userStore", ["setAroundEmojis"]),
-    detailAroundEmoji(index) {
-      //사용자의 상세 이모지 보기
-      this.isClickEmoji = true;
-      this.selectedEmoji = this.aroundEmojis[index];
-    },
-    async joinChat() {
-      //지금 선택된 이모지의 채팅방 참여하기
-      this.setNowChatRoom(this.selectedEmoji);
-      const params = {
-        rid: this.selectedEmoji.rid,
-      };
-      await myChat(
-        params,
-        ({ data }) => {
-          console.log(data);
-        },
-        (error) => {
-          console.log(error);
-        }
-      );
-      this.$router.push({
-        name: "chatting",
-        params: { roomId: this.selectedEmoji.rid, data: this.selectedEmoji },
-      });
-    },
-    closeEmoji() {
-      this.isClickEmoji = false;
-    },
   },
 };
 </script>
@@ -178,10 +154,10 @@ export default {
   top: 50%;
   transform: translate(0, 100%);
 }
-.info-area .resize-white-circle {
+/* .info-area .resize-white-circle {
   position: absolute;
   top: 50%;
-}
+} */
 .home-area {
   position: relative;
 }
@@ -190,121 +166,4 @@ export default {
   width: 100%;
   height: 100%;
 }
-/* .main-emoji-area {
-  position: relative;
-  width: 100%;
-  height: 100%;
-}
-.main-emoji-area .main-blue-circle {
-  position: absolute;
-  top: 0;
-  left: 0;
-}
-.main-emoji-area .main-yellow-circle {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-} */
-/* .create-emoji {
-  z-index: 6;
-}
-.detail-emoji {
-  z-index: 5;
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  max-width: 500px;
-  transform: translate(-50%, -50%);
-  width: 80%;
-}
-.info-area {
-  position: relative;
-  width: 100%;
-  height: 100vh;
-  overflow: hidden;
-}
-.blue-info {
-  position: absolute;
-  bottom: 50%;
-  right: 50%;
-  scale: 0.7;
-  z-index: 1;
-}
-.yellow-info {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  scale: 0.8;
-  z-index: 1;
-}
-.info-item-component {
-  top: 50%;
-  left: 50%;
-  text-align: center;
-  transform: translate(-50%, -50%);
-  z-index: 2;
-}
-.resize-title-circle {
-  z-index: 1;
-  box-sizing: border-box;
-
-  position: fixed;
-  width: 50%;
-  height: 50%;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
-
-  border-radius: 50%;
-  animation: rotate1 8s linear infinite;
-
-  width: 320px;
-  height: 310px;
-  animation: rotate2 4s linear infinite;
-  border: 2px solid #ffffff;
-  background: rgba(255, 255, 255, 0.31);
-}
-.spinner {
-  z-index: 5;
-
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  text-align: center;
-}
-
-.dot1,
-.dot2 {
-  width: 4rem;
-  -webkit-animation: sk-bounce 2s infinite ease-in-out;
-  animation: sk-bounce 2s infinite ease-in-out;
-}
-
-.dot2 {
-  -webkit-animation-delay: -1s;
-  animation-delay: -1s;
-} */
-
-/* @-webkit-keyframes sk-bounce {
-  0%,
-  100% {
-    -webkit-transform: scale(0.7);
-  }
-  50% {
-    -webkit-transform: scale(1);
-  }
-}
-
-@keyframes sk-bounce {
-  0%,
-  100% {
-    transform: scale(0.7);
-    -webkit-transform: scale(0.7);
-  }
-  50% {
-    transform: scale(1);
-    -webkit-transform: scale(1);
-  }
-} */
 </style>

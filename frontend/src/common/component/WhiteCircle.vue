@@ -34,16 +34,16 @@ export default {
 }
 
 .white-ellipse1 {
-  width: 410px;
-  height: 400px;
+  width: 350px;
+  height: 355px;
   background: rgba(255, 255, 255, 0.31);
   border: 2px solid #ffffff;
   animation: rotate1 8s linear infinite;
 }
 
 .white-ellipse2 {
-  width: 415px;
-  height: 405px;
+  width: 380px;
+  height: 385px;
   background: rgba(255, 255, 255, 0.186);
   animation: rotate2 4s linear infinite;
 }
