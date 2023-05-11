@@ -69,7 +69,7 @@ public class ChatController {
 			chatRoomService.incParticipant(rid);
 			chatRoomService.addUserToList(rid, user.getUid());
 
-			Chat chat = new Chat(rid, user.getUid(), user.getNickname(), user.getNickname() + "님이 입장하였습니다.");
+			Chat chat = new Chat(rid, "coment", user.getNickname(), user.getNickname() + "님이 입장하였습니다.");
 			chatRoomService.saveContent(chat);
 
 			ChatRes chatRes = new ChatRes(rid, user.getNickname(), user.getNickname() + "님이 입장하였습니다.", "3");
@@ -95,7 +95,7 @@ public class ChatController {
 			chatRoomService.decParticipant(rid);
 			chatRoomService.deleteUserToList(rid, user.getUid());
 
-			Chat chat = new Chat(rid, user.getUid(), user.getNickname(), user.getNickname() + "님이 퇴장하였습니다.");
+			Chat chat = new Chat(rid, "coment", user.getNickname(), user.getNickname() + "님이 퇴장하였습니다.");
 			chatRoomService.saveContent(chat);
 
 			ChatRes chatRes = new ChatRes(rid, user.getNickname(), user.getNickname() + "님이 퇴장하였습니다.", "3");
