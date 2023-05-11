@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -127,12 +128,31 @@ public class ChatRoomController {
 	@GetMapping("/last/{rid}")
 	public DataResponseDto<?> getLastChat(@RequestHeader("Authorization") String accessToken,
 		@PathVariable String rid) {
-
 		try {
 			UserRes user = mapper.readValue(userServiceClient.getUser(accessToken), UserRes.class);
 			int lastIdx = chatRoomService.getLastChat(user.getUid(), rid);
 
 			return DataResponseDto.of(lastIdx);
+		} catch (JsonProcessingException ex) {
+			throw new GeneralException(Code.UNAUTHORIZED);
+		} catch (Exception e) {
+			throw e;
+		}
+	}
+
+	/**
+	 * 퇴장 시 마지막으로 읽은 메시지 삭제
+	 * @param : 채팅방의 id, accessToken
+	 * @return :
+	 **/
+	@DeleteMapping("/last/{rid}")
+	public DataResponseDto<?> removeLastChat(@RequestHeader("Authorization") String accessToken,
+		@PathVariable String rid) {
+		try {
+			UserRes user = mapper.readValue(userServiceClient.getUser(accessToken), UserRes.class);
+			chatRoomService.removeLastChat(user.getUid(), rid);
+
+			return DataResponseDto.empty();
 		} catch (JsonProcessingException ex) {
 			throw new GeneralException(Code.UNAUTHORIZED);
 		} catch (Exception e) {

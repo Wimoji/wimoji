@@ -51,4 +51,15 @@ public class LastChatRepository {
 
 		return lastChat.getIdx();
 	}
+
+	/**
+	 * 퇴장 시 마지막으로 읽은 메시지 삭제
+	 * @param : 채팅방의 id, accessToken
+	 * @return :
+	 **/
+	public void removeLastChat(String uid, String rid) {
+		Query query = new Query();
+		query.addCriteria(Criteria.where("uid").is(uid).and("rid").is(rid));
+		mongoTemplate.remove(query, LastChat.class);
+	}
 }
