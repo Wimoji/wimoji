@@ -1,5 +1,5 @@
 /* 로그인, 회원가입의 input 영역 커스텀 */
-.sign-page {
+/* .sign-page {
   position: relative;
   width: 100%;
   height: 100vh;
@@ -11,12 +11,18 @@
 }
 .another-area {
   height: 20%;
-}
+} */
 /* 파랑, 노랑 원 */
-.blue-circle-area {
+/* .blue-circle-area {
   top: -10%;
   position: absolute;
 }
 .yellow-circle-area {
   position: absolute;
-}
+} */
+/* .sign-area {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+} */

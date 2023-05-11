@@ -21,10 +21,8 @@ export default {
 .ellipse1,
 .ellipse2 {
   position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 650px;
-  height: 700px;
+  width: 750px;
+  height: 800px;
   border-radius: 50%;
 }
 

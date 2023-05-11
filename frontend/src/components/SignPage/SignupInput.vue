@@ -1,82 +1,89 @@
 <template>
-  <v-sheet
-    class="input-container d-flex flex-column col-transparent mx-auto mt-15"
-    width="80%"
-    height="100%"
-  >
-    <v-container class="input-area">
-      <v-container
-        class="input-title text-col-1 xl-font main-font-bd d-flex justify-center mb-5"
-        >회원가입</v-container
-      >
-      <v-container class="input-form">
-        <v-form ref="form">
-          <input type="text" style="display: none" />
-          <v-text-field
-            class="sign"
-            v-model="nickname"
-            :rules="nicknameRules"
-            rounded
-            solo
-            background-color="white"
-          >
-            <template v-slot:label>
-              <span class="xs-font text-col-3">닉네임</span>
-            </template>
-            <template #prepend-inner>
-              <v-icon :color="'var(--text-col-3)'" size="20" class="mr-4">
-                mdi-rename-outline
-              </v-icon>
-            </template>
-          </v-text-field>
-          <v-text-field
-            class="sign"
-            v-model="id"
-            :rules="idRules"
-            rounded
-            solo
-            background-color="white"
-          >
-            <template v-slot:label>
-              <span class="xs-font text-col-3">아이디</span>
-            </template>
-            <template #prepend-inner>
-              <v-icon :color="'var(--text-col-3)'" size="20" class="mr-4">
-                mdi-account-outline
-              </v-icon>
-            </template>
-          </v-text-field>
-          <v-text-field
-            class="sign"
-            v-model="password"
-            :rules="passwordRules"
-            rounded
-            solo
-            type="password"
-            background-color="white"
-            @keyup.enter="goSignup"
-          >
-            <template v-slot:label>
-              <span class="xs-font text-col-3">비밀번호</span>
-            </template>
-            <template #prepend-inner>
-              <v-icon :color="'var(--text-col-3)'" size="20" class="mr-4">
-                mdi-lock-outline
-              </v-icon>
-            </template>
-          </v-text-field>
-          <v-btn
-            height="50px"
-            width="100%"
-            rounded
-            color="var(--main-col-5)"
-            class="white-col-1"
-            @click="goSignup"
-            >회원가입</v-btn
-          >
-        </v-form>
-      </v-container>
-    </v-container>
+  <v-sheet class="mt-16" height="60vh" color="var(--col-empty)">
+    <v-row>
+      <v-col align="center">
+        <v-container class="mb-8">
+          <div class="text-col-1 xl-font main-font-bd">회원가입</div>
+        </v-container>
+        <v-sheet width="80%" color="var(--col-empty)">
+          <v-form ref="form">
+            <input type="text" style="display: none" />
+            <v-text-field
+              class="sign"
+              v-model="nickname"
+              :rules="nicknameRules"
+              rounded
+              solo
+              background-color="white"
+            >
+              <template v-slot:label>
+                <span class="xs-font text-col-3">닉네임</span>
+              </template>
+              <template #prepend-inner>
+                <v-icon :color="'var(--text-col-3)'" size="20" class="mr-4">
+                  mdi-rename-outline
+                </v-icon>
+              </template>
+            </v-text-field>
+            <v-text-field
+              v-model="id"
+              :rules="idRules"
+              rounded
+              solo
+              background-color="white"
+            >
+              <template v-slot:label>
+                <span class="xs-font text-col-3">아이디</span>
+              </template>
+              <template #prepend-inner>
+                <v-icon :color="'var(--text-col-3)'" size="20" class="mr-4">
+                  mdi-account-outline
+                </v-icon>
+              </template>
+            </v-text-field>
+            <v-text-field
+              v-model="password"
+              :rules="passwordRules"
+              rounded
+              solo
+              type="password"
+              background-color="white"
+              @keyup.enter="goSignup"
+            >
+              <template v-slot:label>
+                <span class="xs-font text-col-3">비밀번호</span>
+              </template>
+              <template #prepend-inner>
+                <v-icon :color="'var(--text-col-3)'" size="20" class="mr-4">
+                  mdi-lock-outline
+                </v-icon>
+              </template>
+            </v-text-field>
+            <v-btn
+              v-if="isClick && isAllOk"
+              rounded
+              width="100%"
+              height="50px"
+              color="var(--main-col-5)"
+              class="white-col-1"
+              loading
+              @click="goSignup"
+            ></v-btn>
+            <v-btn
+              v-else
+              rounded
+              width="100%"
+              height="50px"
+              color="var(--main-col-5)"
+              class="white-col-1"
+              @click="goSignup"
+            >
+              회원가입
+            </v-btn>
+          </v-form>
+        </v-sheet>
+      </v-col>
+    </v-row>
   </v-sheet>
 </template>
 
@@ -101,10 +108,13 @@ export default {
           "비밀번호는 8~16자, 영문과 숫자를 조합해주세요.",
       ],
       nicknameRules: [(v) => !!v || "닉네임을 입력해주세요."],
+      isClick: false, //버튼을 눌렀는지 확인
+      isAllOk: false,
     };
   },
   methods: {
     async goSignup() {
+      this.isClick = true;
       //유효성 검증
       const validate = this.$refs.form.validate();
       const data = {
@@ -114,6 +124,7 @@ export default {
       };
       // console.log("data >> ", data);
       if (validate) {
+        this.isAllOk = true;
         await signup(
           data,
           ({ data }) => {
@@ -125,6 +136,12 @@ export default {
               this.$router.push("/login");
             } else {
               alert("회원가입 중 오류가 발생했습니다. 다시 시도해주세요.");
+              this.isClick = false;
+              this.isAllOk = false;
+              this.id = null;
+              this.password = null;
+              this.nickname = null;
+              this.$router.push("/signup");
             }
           },
           (error) => {
@@ -139,4 +156,4 @@ export default {
 };
 </script>
 
-<style scoped></style>
+<style></style>
