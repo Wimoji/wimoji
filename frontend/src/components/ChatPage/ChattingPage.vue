@@ -189,10 +189,10 @@ export default {
         $state.reset();
         return;
       }
-      // console.log("있어요", this.lastReadIdx, this.firstIdx);
+      // console.log("있ㅇ요", this.lastReadIdx, this.firstIdx);
 
       if (this.lastReadIdx == 0) {
-        console.log("채팅방 처음 들어와서 불러올 거 없음");
+        // console.log("채팅방 처음 들어와서 불러올거 없음");
         $state.complete();
         return;
       }
@@ -301,7 +301,7 @@ export default {
       //채팅방에 위로 스크롤을 올렸을 때
 
       var result = await getNewChatMessage({ id: this.room.id, idx: idx });
-      console.log("읽지 않은 채팅 불러오기 >> ", result);
+      // console.log("읽지않은채팅 불러오기 >> ", result);
       //return chatList, firstIdx
       this.firstIdx = result.firstIdx[0];
       if (result.chatList.length == 0) return;
@@ -368,15 +368,18 @@ export default {
 .chat-area {
   height: 90%;
   overflow: scroll;
+  /* overflow: scroll; */
   /* height: 90%;
   overflow: scroll;
   padding-top: 85px; */
 }
 .send-area {
   position: absolute;
-  width: 80%;
+  width: 100%;
+  padding: 3%;
   /* height: 10%; */
   bottom: 0;
+  /* margin: 3%; */
 
   display: flex;
   justify-content: space-between;

@@ -58,4 +58,9 @@ async function deleteLastMessage(params) {
     });
 }
 
-export { getLastReadIdx, getNewChatMessage, saveLastMessage, deleteLastMessage };
+export {
+  getLastReadIdx,
+  getNewChatMessage,
+  saveLastMessage,
+  deleteLastMessage,
+};

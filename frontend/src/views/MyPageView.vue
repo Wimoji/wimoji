@@ -1,8 +1,10 @@
 <template>
   <div class="my-page d-flex flex-column">
-    <my-header v-if="myHeaderPage.includes($route.name)"></my-header>
-    <chat-room-header v-if="chatRoomPage.includes($route.name)">
-    </chat-room-header>
+    <div class="my-headers">
+      <my-header v-if="myHeaderPage.includes($route.name)"></my-header>
+      <chat-room-header v-if="chatRoomPage.includes($route.name)">
+      </chat-room-header>
+    </div>
     <div class="my-page-view"><router-view></router-view></div>
   </div>
 </template>
@@ -23,10 +25,12 @@ export default {
 
 <style>
 .my-page {
-  height: 100vh;
+  /* height: 100vh; */
+  height: 100%;
 }
 .my-page-view {
+  /* height: 100vh; */
   height: 100%;
-  overflow: scroll;
+  /* overflow: scroll; */
 }
 </style>
