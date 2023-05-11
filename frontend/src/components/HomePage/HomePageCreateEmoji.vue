@@ -216,11 +216,8 @@ export default {
       );
     },
     async setPosition(position) {
-      // this.latitude = position.coords.latitude;
-      // this.longitude = position.coords.longitude;
-      position;
-      this.latitude = this.location.latitude;
-      this.longitude = this.location.longitude;
+      this.latitude = position.coords.latitude;
+      this.longitude = position.coords.longitude;
 
       const data = {
         longitude: this.longitude,
