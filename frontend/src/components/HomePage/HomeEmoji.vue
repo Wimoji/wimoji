@@ -1,34 +1,49 @@
 <template>
-  <v-sheet class="around-emoji-page" color="var(--col-empty)">
+  <v-sheet class="around-emoji-sheet" color="var(--com-empty)">
+    <div class="d-flex pagination-area">
+      <div v-for="(idx, i) in totalEmojis.length" :key="i" class="pagination">
+        <div v-if="i == 0" class="point selected"><a></a></div>
+        <div v-else class="point"><a></a></div>
+      </div>
+    </div>
     <v-sheet
-      class="spinner"
-      color="var(--col-empty)"
-      v-for="(item, i) in aroundEmojis"
-      :key="i"
+      color="var(--com-empty)"
+      class="chunk-area"
+      v-for="(chunk, idx) in totalEmojis"
+      :key="idx"
+      :id="'spin' + idx"
+      ref="getSpin"
     >
-      <v-img
-        @click="detailAroundEmoji(i)"
-        v-if="i % 2 == 0"
-        class="dot1"
-        :src="emojiCategory[item.eid].link"
-        :style="{
-          top: radius * Math.sin(((i + 1) * Math.PI) / angle) + 'px',
-          left: radius * Math.cos(((i + 1) * Math.PI) / angle) + 'px',
-        }"
+      <v-sheet
+        class="spinner"
+        color="var(--col-empty)"
+        v-for="(item, i) in chunk"
+        :key="i"
       >
-      </v-img>
+        <v-img
+          @click="detailAroundEmoji(item)"
+          v-if="i % 2 == 0"
+          class="dot1"
+          :src="emojiCategory[item.eid].link"
+          :style="{
+            top: radius * Math.sin(((i + 1) * Math.PI) / angle) + 'px',
+            left: radius * Math.cos(((i + 1) * Math.PI) / angle) + 'px',
+          }"
+        >
+        </v-img>
 
-      <v-img
-        @click="detailAroundEmoji(i)"
-        v-else
-        class="dot2"
-        :src="emojiCategory[item.eid].link"
-        :style="{
-          top: radius * Math.sin(((i + 1) * Math.PI) / angle) + 'px',
-          left: radius * Math.cos(((i + 1) * Math.PI) / angle) + 'px',
-        }"
-      >
-      </v-img>
+        <v-img
+          @click="detailAroundEmoji(item)"
+          v-else
+          class="dot2"
+          :src="emojiCategory[item.eid].link"
+          :style="{
+            top: radius * Math.sin(((i + 1) * Math.PI) / angle) + 'px',
+            left: radius * Math.cos(((i + 1) * Math.PI) / angle) + 'px',
+          }"
+        >
+        </v-img>
+      </v-sheet>
     </v-sheet>
 
     <v-card
@@ -68,42 +83,70 @@
 
 <script>
 import { myChat } from "@/api/modules/user";
-import { getAroundEmojis } from "@/api/modules/emoji";
+// import { getAroundEmojis, getEmojis } from "@/api/modules/emoji";
 import { mapState, mapActions } from "vuex";
 export default {
   data() {
     return {
       radius: 160,
-      angle: 6,
+      angle: 5,
       isClickEmoji: false,
       selectedEmoji: null,
+      // lines: 0, //이모지 10개 영역 처리
+      totalEmojis: [],
     };
   },
   computed: {
-    ...mapState("userStore", ["location", "aroundEmojis"]),
-    ...mapState("emojiStore", ["emojiCategory"]),
+    ...mapState("userStore", ["location"]),
+    ...mapState("emojiStore", ["emojiCategory", "aroundEmojis"]),
   },
-  async created() {
-    //지금 dongcode로 주변 사용자의 이모지 불러오기
-    if (this.location.dongCode != null) {
-      let result = await getAroundEmojis(this.location);
-      if (result == null) {
-        console.log("주변 이모지 불러오기 오류 발생");
-      } else {
-        // console.log("result >> ", result);
-        // this.aroundEmojis = result;
-        this.setAroundEmojis(result);
+  watch: {
+    aroundEmojis() {
+      if (this.aroundEmojis.length > 0) {
+        //totalEmojis에 10개씩 잘라서 넣기
+        let times = this.aroundEmojis.length / 10;
+        for (let i = 0; i < times; i++) {
+          let temp = [];
+          for (let j = 0; j < 10; j++) {
+            if (this.aroundEmojis[i * 10 + j] == null) {
+              break;
+            }
+            temp.push(this.aroundEmojis[i * 10 + j]);
+          }
+          this.totalEmojis.push(temp);
+        }
+        console.log("최종 배열들", this.totalEmojis);
       }
-      //result가 null이라면 오류, result.length가 0이라면 주변 이모지 없음
-    }
+    },
+    totalEmojis() {
+      if (this.totalEmojis.length > 0) {
+        console.log("지금 이모지들", this.totalEmojis.length);
+        //요소 중 spin0만 먼저 보이게 하기
+        // for (let i = 0; i < this.totalEmojis.length; i++) {
+        //   if (i == 0) {
+        //     let spin = document.querySelector("#spin0");
+        //     console.log("spin", spin);
+        //   }
+        // }
+        // let spin = document.getElementById("spin0");
+        console.log("this ref", this.$refs.getSpin);
+        // console.log("spin", spin);
+      }
+    },
+  },
+  mounted() {
+    // console.log("!this ref", this.$refs.spinId);
   },
   methods: {
-    ...mapActions("chatStore", ["setNowChatRoom"]),
-    ...mapActions("userStore", ["setAroundEmojis"]),
-    detailAroundEmoji(index) {
+    ...mapActions("chatStore", ["setNowChatRoom", "clearNowChatRoom"]),
+    ...mapActions("emojiStore", [
+      "setAroundEmojis",
+      "addMyEmojisToAroundEmojis",
+    ]),
+    detailAroundEmoji(item) {
       //사용자의 상세 이모지 보기
       this.isClickEmoji = true;
-      this.selectedEmoji = this.aroundEmojis[index];
+      this.selectedEmoji = item;
     },
     async joinChat() {
       //지금 선택된 이모지의 채팅방 참여하기
@@ -119,14 +162,11 @@ export default {
         },
         (error) => {
           console.log(error);
-          alert("오류가 발생했습니다. 다시 시도해주세요.");
+          alert("채팅방 인원이 마감됐어요!.");
+          this.clearNowChatRoom();
           this.$router.push("/");
         }
       );
-      // this.$router.push({
-      //   name: "chatting",
-      //   params: { roomId: this.selectedEmoji.rid, data: this.selectedEmoji },
-      // });
     },
     closeEmoji() {
       this.isClickEmoji = false;
@@ -136,6 +176,31 @@ export default {
 </script>
 
 <style>
+.pagination .point {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  margin: 5px 5px;
+  transition: background-color ease 0.5s;
+  cursor: pointer;
+}
+.pagination .point {
+  background: var(--text-col-1);
+}
+.pagination .point.selected {
+  background: var(--main-col-3);
+}
+.pagination-area {
+  position: absolute;
+  bottom: 5%;
+  left: 50%;
+  transform: translateX(-50%);
+}
+.around-emoji-sheet {
+  width: 100%;
+  height: 100%;
+  overflow: scroll;
+}
 .detail-emoji {
   z-index: 10;
   position: fixed;
@@ -150,7 +215,8 @@ export default {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  text-align: center;
+  /* transform: translate(50%, 50%);
+  text-align: center; */
 }
 
 .dot1,
