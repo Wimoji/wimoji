@@ -11,6 +11,7 @@ const userStore = {
       latitude: null,
       longitude: null,
       dongCode: null,
+      myPosition: null,
     },
     aroundEmojis: [],
   },

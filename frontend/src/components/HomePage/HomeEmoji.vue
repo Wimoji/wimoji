@@ -83,7 +83,7 @@ export default {
     ...mapState("userStore", ["location", "aroundEmojis"]),
     ...mapState("emojiStore", ["emojiCategory"]),
   },
-  async created() {
+  async mounted() {
     //지금 dongcode로 주변 사용자의 이모지 불러오기
     if (this.location.dongCode != null) {
       let result = await getAroundEmojis(this.location);

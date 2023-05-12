@@ -1,5 +1,5 @@
 <template>
-  <v-sheet color="var(--col-empty)" class="create-emoji-btn-area">
+  <v-sheet color="var(--col-empty)">
     <v-dialog v-model="dialog" width="85%">
       <template v-slot:activator="{ on, attrs }">
         <!-- <div class="now-position-text">지금 나는 {{ myPosition }}에 있어요</div> -->
@@ -264,11 +264,6 @@ export default {
 </script>
 
 <style>
-.create-emoji-btn-area {
-  position: absolute;
-  left: 50%;
-  transform: translate(-50%, 1200%);
-}
 /* .create-emoji-btn-area {
   position: fixed;
   top: 50%;
