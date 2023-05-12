@@ -10,6 +10,7 @@ import com.wimoji.repository.dto.UserEntity;
 import com.wimoji.repository.dto.request.UserChatRoomReq;
 import com.wimoji.repository.dto.request.UserReq;
 import com.wimoji.repository.dto.response.ChatRoomRes;
+import com.wimoji.repository.dto.response.NumberRes;
 import com.wimoji.service.ChatServiceClient;
 import com.wimoji.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -140,7 +141,7 @@ public class UserController {
     }
 
     /**
-     * user가 만든 채팅방의 정보를 저장
+     * user가 참여한 채팅방의 정보를 저장
      * @param : bearerToken, 채팅방의 id
      * @return :
      */
@@ -149,6 +150,11 @@ public class UserController {
         try {
             String token = getToken(request);
             String uid = jwtTokenUtil.getUserIdFromToken(token);
+
+            NumberRes numberRes = mapper.readValue(chatServiceClient.getNumber(rid), NumberRes.class);
+            if(!numberRes.isEnter()) {
+                throw new GeneralException(Code.NOT_ENTER_CHAT);
+            }
 
             service.makeChat(uid, rid);
 
