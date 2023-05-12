@@ -133,7 +133,9 @@ export default {
               alert(
                 `회원가입이 완료되었습니다. 반갑습니다 ${this.nickname}님!`
               );
-              this.$router.push("/login");
+              setTimeout(() => {
+                this.$router.push("/login");
+              }, 2000);
             } else {
               alert("회원가입 중 오류가 발생했습니다. 다시 시도해주세요.");
               this.isClick = false;

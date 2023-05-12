@@ -44,24 +44,8 @@ export default {
   },
   async created() {
     //나의 이모지 요청
-    await getEmojis(
-      ({ data }) => {
-        console.log(data);
-        if (data.success) {
-          // console.log("내 이모지들 화면에 저장하자");
-          // this.myEmojis = data.data;
-          this.myEmojis = [];
-          data.data.forEach((element) => {
-            this.myEmojis.push({ eid: element.eid, title: element.title });
-          });
-          console.log(this.myEmojis);
-          // this.lines = this.myEmojis.length / 3;
-        }
-      },
-      (error) => {
-        console.log(error);
-      }
-    );
+    const result = await getEmojis();
+    this.myEmojis = result;
   },
   mounted() {},
   methods: {

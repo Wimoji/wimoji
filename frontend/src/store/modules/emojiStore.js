@@ -1,6 +1,8 @@
 const emojiStore = {
   namespaced: true,
   state: {
+    aroundEmojis: [],
+    myPageView: null,
     emojiCategory: [
       {
         id: 0,
@@ -80,8 +82,34 @@ const emojiStore = {
     ],
   },
   getters: {},
-  mutations: {},
-  actions: {},
+  mutations: {
+    SET_MY_PAGE_VIEW(state, myPageView) {
+      state.myPageView = myPageView;
+    },
+    SET_AROUND_EMOJIS(state, emojis) {
+      state.aroundEmojis = emojis;
+    },
+    CLEAR_AROUND_EMOJIS(state) {
+      state.aroundEmojis = [];
+    },
+    ADD_MY_EMOJIS_TO_AROUND_EMOJIS(state, emojis) {
+      state.aroundEmojis.push(...emojis);
+    },
+  },
+  actions: {
+    setMyPageView({ commit }, myPageView) {
+      commit("SET_MY_PAGE_VIEW", myPageView);
+    },
+    setAroundEmojis({ commit }, emojis) {
+      commit("SET_AROUND_EMOJIS", emojis);
+    },
+    clearAroundEmojis({ commit }) {
+      commit("CLEAR_AROUND_EMOJIS");
+    },
+    addMyEmojisToAroundEmojis({ commit }, emojis) {
+      commit("ADD_MY_EMOJIS_TO_AROUND_EMOJIS", emojis);
+    },
+  },
   modules: {},
 };
 

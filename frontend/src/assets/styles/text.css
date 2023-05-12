@@ -1,4 +1,7 @@
 /* 폰트 크기 */
+.rem-font {
+  font-size: 0.9rem;
+}
 .xxs-font {
   font-size: 10px;
 }
