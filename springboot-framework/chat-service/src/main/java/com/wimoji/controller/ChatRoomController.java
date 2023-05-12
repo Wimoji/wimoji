@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -23,6 +24,7 @@ import com.wimoji.repository.dto.request.ChatRoomReq;
 import com.wimoji.repository.dto.request.NewChatReq;
 import com.wimoji.repository.dto.request.UserChatRoomReq;
 import com.wimoji.repository.dto.response.ChatRoomRes;
+import com.wimoji.repository.dto.response.NumberRes;
 import com.wimoji.repository.dto.response.UserEnterRes;
 import com.wimoji.repository.dto.response.UserRes;
 import com.wimoji.service.ChatRoomService;
@@ -95,6 +97,21 @@ public class ChatRoomController {
 			return DataResponseDto.of(result);
 		} catch (JsonProcessingException ex) {
 			throw new GeneralException(Code.UNAUTHORIZED);
+		} catch (Exception e) {
+			throw e;
+		}
+	}
+
+	/**
+	 * 채팅방의 최대 인원과 현재 인원을 반환
+	 * @param : 채팅방의 id
+	 * @return : 최대 인원, 현재 인원
+	 **/
+	@GetMapping("/")
+	public NumberRes getNumber(@RequestParam("rid") String rid) {
+		try {
+			NumberRes numberRes = chatRoomService.getNumber(rid);
+			return numberRes;
 		} catch (Exception e) {
 			throw e;
 		}

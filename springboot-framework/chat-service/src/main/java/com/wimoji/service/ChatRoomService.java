@@ -6,9 +6,12 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import com.wimoji.base.GeneralException;
 import com.wimoji.base.constant.Code;
+import com.wimoji.base.dto.DataResponseDto;
 import com.wimoji.repository.ChatRoomRepository;
 import com.wimoji.repository.LastChatRepository;
 import com.wimoji.repository.dto.entity.Chat;
@@ -18,6 +21,7 @@ import com.wimoji.repository.dto.entity.LastChatId;
 import com.wimoji.repository.dto.request.NewChatReq;
 import com.wimoji.repository.dto.response.ChatRes;
 import com.wimoji.repository.dto.response.ChatRoomRes;
+import com.wimoji.repository.dto.response.NumberRes;
 import com.wimoji.repository.dto.response.UserEnterRes;
 
 import lombok.RequiredArgsConstructor;
@@ -70,6 +74,22 @@ public class ChatRoomService {
 		} catch (Exception e) {
 			throw new GeneralException(Code.BAD_REQUEST);
 		}
+	}
+
+	/**
+	 * 채팅방의 최대 인원과 현재 인원을 반환
+	 * @param : 채팅방의 id
+	 * @return : 최대 인원, 현재 인원
+	 **/
+	public NumberRes getNumber(@PathVariable String rid) {
+		ChatRoom chatRoom = chatRoomRepository.findById(rid);
+		if(chatRoom == null) {
+			throw new GeneralException(Code.NOT_FOUND);
+		}
+
+		boolean isEnter = (chatRoom.getParticipant() == chatRoom.getLimit()) ? false : true;
+		NumberRes numberRes = new NumberRes(chatRoom.getParticipant(), chatRoom.getLimit(), isEnter);
+		return numberRes;
 	}
 
 	/**
