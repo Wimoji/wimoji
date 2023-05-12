@@ -18,4 +18,7 @@ public class HomeRes {
     String longitude;
     String dongCode;
     double dis;
+    int participant;
+    int limit;
+    boolean isEnter;
 }
