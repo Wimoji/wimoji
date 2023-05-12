@@ -17,7 +17,7 @@
 </template>
 
 <script>
-import { getAroundEmojis } from "@/api/modules/emoji";
+import { getAroundEmojis, getEmojis } from "@/api/modules/emoji";
 import { mapState, mapActions } from "vuex";
 // import HomeEmoji from "@/components/HomePage/HomeEmoji.vue";
 // import HomePageCreateEmoji from "@/components/HomePage/HomePageCreateEmoji.vue";
@@ -35,8 +35,8 @@ export default {
     // WhiteCircle,
   },
   computed: {
-    ...mapState("userStore", ["location", "aroundEmojis"]),
-    ...mapState("emojiStore", ["emojiCategory"]),
+    ...mapState("userStore", ["location"]),
+    ...mapState("emojiStore", ["emojiCategory", "aroundEmojis"]),
   },
   data() {
     return {
@@ -48,13 +48,20 @@ export default {
   async created() {
     //지금 dongcode로 주변 사용자의 이모지 불러오기
     if (this.location.dongCode != null) {
-      let result = await getAroundEmojis(this.location);
-      if (result == null) {
-        console.log("주변 이모지 불러오기 오류 발생");
+      let resultAround = await getAroundEmojis(this.location);
+      let resultMyEmoji = await getEmojis();
+      if (resultAround == null || resultMyEmoji == null) {
+        console.log(
+          "주변 이모지 불러오기 오류 발생",
+          resultAround,
+          resultMyEmoji
+        );
       } else {
-        // console.log("result >> ", result);
-        // this.aroundEmojis = result;
-        this.setAroundEmojis(result);
+        //내 주변 이모지 설정
+        this.setAroundEmojis(resultAround);
+        //나의 이모지 추가
+        this.addMyEmojisToAroundEmojis(resultMyEmoji);
+        console.log("total emojis", this.aroundEmojis);
       }
       //result가 null이라면 오류, result.length가 0이라면 주변 이모지 없음
     }
@@ -81,7 +88,10 @@ export default {
   // },
   methods: {
     ...mapActions("chatStore", ["setNowChatRoom"]),
-    ...mapActions("userStore", ["setAroundEmojis"]),
+    ...mapActions("emojiStore", [
+      "setAroundEmojis",
+      "addMyEmojisToAroundEmojis",
+    ]),
   },
 };
 </script>

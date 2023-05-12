@@ -10,8 +10,21 @@ async function makeEmoji(data, success, fail) {
 }
 
 // [GET /emoji-service/ ] 유저의 이모지 불러오기
-async function getEmojis(success, fail) {
-  await api.get(`${baseURL}/`).then(success).catch(fail);
+async function getEmojis() {
+  // await api.get(`${baseURL}/`).then(success).catch(fail);
+  var result = null;
+  await api
+    .get(`${baseURL}/`)
+    .then(({ data }) => {
+      // console.log("나의 이모지", data);
+      if (data.success) {
+        result = data.data;
+      }
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+  return await Promise.resolve(result);
 }
 
 // [PUT /emoji-service/ ] 유저의 이모지 삭제하기

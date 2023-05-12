@@ -88,8 +88,6 @@
 import { login } from "@/api/modules/user";
 import { mapActions } from "vuex";
 
-const userStore = "userStore";
-
 export default {
   data() {
     return {
@@ -103,7 +101,7 @@ export default {
   },
   computed: {},
   methods: {
-    ...mapActions(userStore, ["setLogin"]),
+    ...mapActions("userStore", ["setLogin"]),
     goSignupPage() {
       this.$router.push("/signup");
     },
@@ -118,7 +116,6 @@ export default {
 
       if (validate) {
         this.isAllOk = true;
-
         let result = await login(data);
         // console.log("로그인화면에서 받은값 >> ", result);
         if (result != null) {

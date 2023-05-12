@@ -192,6 +192,7 @@ export default {
               this.title = "";
               this.limit = null;
             }
+            this.$router.go();
           },
           (error) => {
             console.log(error);

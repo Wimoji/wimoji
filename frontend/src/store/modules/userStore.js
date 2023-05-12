@@ -13,7 +13,7 @@ const userStore = {
       dongCode: null,
       myPosition: null,
     },
-    aroundEmojis: [],
+    // aroundEmojis: [],
   },
   getters: {},
   mutations: {
@@ -34,12 +34,15 @@ const userStore = {
       state.user = null;
       state.location = null;
     },
-    SET_AROUND_EMOJIS(state, emojis) {
-      state.aroundEmojis = emojis;
-    },
-    CLEAR_AROUND_EMOJIS(state) {
-      state.aroundEmojis = [];
-    },
+    // SET_AROUND_EMOJIS(state, emojis) {
+    //   state.aroundEmojis = emojis;
+    // },
+    // CLEAR_AROUND_EMOJIS(state) {
+    //   state.aroundEmojis = [];
+    // },
+    // ADD_MY_EMOJIS_TO_AROUND_EMOJIS(state, emojis) {
+    //   state.aroundEmojis.push(...emojis);
+    // },
   },
   actions: {
     setLogin({ commit }, user) {
@@ -53,12 +56,15 @@ const userStore = {
     setLogout({ commit }) {
       commit("CLEAR_USER");
     },
-    setAroundEmojis({ commit }, emojis) {
-      commit("SET_AROUND_EMOJIS", emojis);
-    },
-    clearAroundEmojis({ commit }) {
-      commit("CLEAR_AROUND_EMOJIS");
-    },
+    // setAroundEmojis({ commit }, emojis) {
+    //   commit("SET_AROUND_EMOJIS", emojis);
+    // },
+    // clearAroundEmojis({ commit }) {
+    //   commit("CLEAR_AROUND_EMOJIS");
+    // },
+    // addMyEmojisToAroundEmojis({ commit }, emojis) {
+    //   commit("ADD_MY_EMOJIS_TO_AROUND_EMOJIS", emojis);
+    // },
   },
   modules: {},
 };
