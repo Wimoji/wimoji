@@ -10,33 +10,30 @@ import com.wimoji.repository.dto.request.EmojiDeleteReq;
 import com.wimoji.repository.dto.request.EmojiModifyReq;
 import com.wimoji.repository.dto.request.EmojiSaveReq;
 import com.wimoji.repository.dto.response.EmojiGetRes;
+import com.wimoji.repository.dto.response.NumberRes;
+import com.wimoji.service.ChatServiceClient;
 import com.wimoji.service.EmojiService;
 import com.wimoji.service.UserServiceClient;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
-import org.springframework.kafka.requestreply.ReplyingKafkaTemplate;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-
-//import static com.wimoji.config.KafkaConfig.getUserByToken;
 
 @RestController
 @RequiredArgsConstructor
 public class EmojiController {
 
     private final UserServiceClient userServiceClient;
+    private final ChatServiceClient chatServiceClient;
     private final EmojiService emojiService;
-//    private final ReplyingKafkaTemplate<String, String, String> template;
     private final ObjectMapper mapper;
-    //    @Bean
 
     /**
      * 새로운 이모지 작성
      * @param emoji
      * @return
      */
-
     @PostMapping("/")
     public DataResponseDto<?> saveEmoji(HttpServletRequest request, @RequestBody EmojiSaveReq emoji) {
         try{
@@ -105,6 +102,13 @@ public class EmojiController {
             List<EmojiGetRes> emojiList = emojiService.getEmojiList(user.getUid());
             if(emojiList.size() == 0) {
                 return DataResponseDto.empty(Code.SUCCESS_NODATA,Code.SUCCESS_NODATA.getMessage());
+            }
+
+            for(EmojiGetRes emojiGetRes : emojiList) {
+                NumberRes numberRes = mapper.readValue(chatServiceClient.getNumber(emojiGetRes.getRid()), NumberRes.class);
+                emojiGetRes.setParticipant(numberRes.getParticipant());
+                emojiGetRes.setLimit(numberRes.getLimit());
+                emojiGetRes.setEnter(numberRes.isEnter());
             }
 
             return DataResponseDto.of(emojiList, Code.SUCCESS, Code.SUCCESS.getMessage());

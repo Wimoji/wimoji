@@ -16,4 +16,7 @@ public class EmojiGetRes {
     String latitude;
     String longitude;
     String dongCode;
+    int participant;
+    int limit;
+    boolean isEnter;
 }
