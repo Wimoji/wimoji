@@ -2,7 +2,7 @@
 FROM openjdk:17
 
 # 컨테이너가 리스닝할 포트
-EXPOSE 8081
+EXPOSE 8080
 
 # 해당 경로의 모든 jar파일을 변수로 담기
 ARG JAR_FILE=build/libs/*.jar
