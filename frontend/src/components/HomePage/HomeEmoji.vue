@@ -1,5 +1,5 @@
 <template>
-  <v-sheet class="around-emoji-sheet" color="var(--main-col-1)">
+  <v-sheet class="around-emoji-sheet" color="var(--com-empty)">
     <div class="d-flex pagination-area">
       <div v-for="(idx, i) in totalEmojis.length" :key="i" class="pagination">
         <div v-if="i == 0" class="point selected"><a></a></div>
@@ -7,7 +7,7 @@
       </div>
     </div>
     <v-sheet
-      color="var(--main-col-1)"
+      color="var(--com-empty)"
       class="chunk-area"
       v-for="(chunk, idx) in totalEmojis"
       :key="idx"
