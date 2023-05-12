@@ -392,6 +392,7 @@ export default {
 }
 .send-area {
   height: 10%;
+  margin: 3%;
   /* position: absolute;
   width: 100%;
   padding: 3%;
