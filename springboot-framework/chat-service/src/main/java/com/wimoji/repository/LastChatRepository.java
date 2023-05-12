@@ -71,7 +71,7 @@ public class LastChatRepository {
 	public synchronized void removeLastChat(LastChatId id) {
 		Query query = new Query();
 		query.addCriteria(Criteria.where("_id.uid").is(id.getUid()).and("_id.rid").is(id.getRid()));
-		Update update = new Update().set("idx", 0);
+		Update update = new Update().unset("idx");
 		mongoTemplate.updateFirst(query, update, LastChat.class);
 	}
 }
