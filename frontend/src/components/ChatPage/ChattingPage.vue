@@ -145,6 +145,7 @@ export default {
   },
   computed: {
     ...mapState("chatStore", ["nowChatRoom", "isDelete"]),
+    ...mapState("emojiStore", ["myPageView"]),
   },
   async created() {
     this.room = this.nowChatRoom;
@@ -170,6 +171,10 @@ export default {
     }
   },
   mounted() {
+    // 상위 스크롤 막기
+    let myPageView = this.myPageView;
+    console.log("상위 스크롤 스타일 값", myPageView.style);
+    myPageView.style.overflow = "hidden";
     // alert("마운트 됨 이벤트 등록");
     // window.addEventListener("beforeunload", this.disconnectWebSocket);
     // 스크롤 처리
@@ -177,6 +182,11 @@ export default {
     chatArea.scrollTo(0, chatArea.scrollHeight);
   },
   beforeDestroy() {
+    //상위 스크롤 되돌리기
+    // 상위 스크롤 막기
+    let myPageView = this.myPageView;
+    console.log("나가기 전 상위 스크롤 스타일 값", myPageView.style);
+    myPageView.style.overflow = "scroll";
     this.disconnectWebSocket();
     // window.removeEventListener("beforeunload", this.disconnectWebSocket);
   },
@@ -362,23 +372,31 @@ export default {
 .chat-room-container {
   /* height: 100vh;
   overflow: hidden; */
-  height: 90vh;
+  /* height: 90vh; */
+  height: 100%;
   overflow: hidden;
+
+  display: flex;
+  flex-direction: column;
 }
 .chat-area {
   height: 90%;
   overflow: scroll;
+  /* height: 90%;
+  overflow: scroll;
+  margin-bottom: 5%; */
   /* overflow: scroll; */
   /* height: 90%;
   overflow: scroll;
   padding-top: 85px; */
 }
 .send-area {
-  position: absolute;
+  height: 10%;
+  /* position: absolute;
   width: 100%;
   padding: 3%;
+  bottom: 0; */
   /* height: 10%; */
-  bottom: 0;
   /* margin: 3%; */
 
   display: flex;

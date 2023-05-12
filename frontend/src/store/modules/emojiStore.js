@@ -1,6 +1,7 @@
 const emojiStore = {
   namespaced: true,
   state: {
+    myPageView: null,
     emojiCategory: [
       {
         id: 0,
@@ -80,8 +81,16 @@ const emojiStore = {
     ],
   },
   getters: {},
-  mutations: {},
-  actions: {},
+  mutations: {
+    SET_MY_PAGE_VIEW(state, myPageView) {
+      state.myPageView = myPageView;
+    },
+  },
+  actions: {
+    setMyPageView({ commit }, myPageView) {
+      commit("SET_MY_PAGE_VIEW", myPageView);
+    },
+  },
   modules: {},
 };
 
