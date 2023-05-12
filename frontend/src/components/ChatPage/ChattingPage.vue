@@ -137,7 +137,7 @@ export default {
         //채팅방 삭제
         this.exitWebSocket();
         //isDelete -> false 변경
-        this.setIsDelete(false);
+        // this.setIsDelete(false);
         //지금 선택한 채팅방 제거
         this.clearNowChatRoom();
       }
@@ -331,14 +331,18 @@ export default {
       }
     },
     disconnectWebSocket() {
-      // 마지막 메시지 저장
-      saveLastMessage(this.room.id);
+      // 마지막 메시지 저장 -> 그냥 나가기에만 실행, 삭제시는 실행 X
+      if (!this.isDelete) {
+        saveLastMessage(this.room.id);
+      }
 
       // this.socket.disconnect(() => {
       //   console.log("WebSocket 연결 종료");
       //   this.$router.push("/my/chat");
       // });
+
       this.socket.disconnect(() => {});
+      this.setIsDelete(false);
       console.log("WebSocket 연결 종료");
       // this.$router.push("/my/chat");
     },
