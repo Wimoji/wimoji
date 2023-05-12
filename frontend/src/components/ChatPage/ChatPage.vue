@@ -18,7 +18,7 @@
     <br />
     <br />
   </v-sheet>
-  <v-sheet v-else>
+  <v-sheet color="var(--col-empty)" v-else>
     <div class="xl-font text-center mt-10">참여한 채팅이 없어요... 😂</div>
   </v-sheet>
 </template>
@@ -84,7 +84,7 @@ export default {
   overflow: scroll; */
   /* height: 100vh; */
   /* height: 80vh; */
-  overflow: scroll;
+  /* overflow: scroll; */
 }
 /* .chat-items {
   height: 100%;
