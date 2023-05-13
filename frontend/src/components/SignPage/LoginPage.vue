@@ -1,8 +1,8 @@
 <template>
   <v-sheet class="sign-area col-transparent">
+    <the-footer></the-footer>
     <div class="login-blue-circle"><blue-circle></blue-circle></div>
     <div class="login-input"><login-input></login-input></div>
-    <the-footer></the-footer>
   </v-sheet>
 </template>
 
@@ -19,6 +19,8 @@ export default {
 <style>
 .sign-area {
   height: 100%;
+  display: flex;
+  flex-direction: column;
 }
 .sign-area .login-blue-circle {
   position: absolute;
@@ -31,10 +33,6 @@ export default {
 }
 .login-input {
   position: relative;
-}
-footer {
-  position: fixed;
-  bottom: 0;
-  margin-top: 20%;
+  height: 100%;
 }
 </style>

@@ -38,6 +38,5 @@ export default {
   position: fixed;
   width: 100%;
   z-index: 2;
-  max-width: 500px;
 }
 </style>

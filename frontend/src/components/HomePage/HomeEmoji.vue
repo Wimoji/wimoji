@@ -1,51 +1,57 @@
 <template>
   <v-sheet class="around-emoji-sheet" color="var(--com-empty)">
-    <div class="d-flex pagination-area">
-      <div v-for="(idx, i) in totalEmojis.length" :key="i" class="pagination">
-        <div v-if="i == 0" class="point selected"><a></a></div>
-        <div v-else class="point"><a></a></div>
-      </div>
-    </div>
-    <v-sheet
-      color="var(--com-empty)"
-      class="chunk-area"
-      v-for="(chunk, idx) in totalEmojis"
-      :key="idx"
-      :id="'spin' + idx"
-      ref="getSpin"
+    <Flicking
+      class="home-flicking"
+      :options="{ gap: 30, horizontal: true }"
+      :plugins="plugins"
     >
+      <!-- 10개씩 분리 -->
       <v-sheet
-        class="spinner"
-        color="var(--col-empty)"
-        v-for="(item, i) in chunk"
-        :key="i"
+        class="chunk-area"
+        color="var(--main-col-4)"
+        v-for="(chunk, idx) in totalEmojis"
+        :key="idx"
       >
-        <v-img
-          @click="detailAroundEmoji(item)"
-          v-if="i % 2 == 0"
-          class="dot1"
-          :src="emojiCategory[item.eid].link"
-          :style="{
-            top: radius * Math.sin(((i + 1) * Math.PI) / angle) + 'px',
-            left: radius * Math.cos(((i + 1) * Math.PI) / angle) + 'px',
-          }"
+        <!-- 분리된 최대 10개의 이모지 -->
+        <v-sheet
+          class="inner-emojis"
+          color="var(--col-empty)"
+          v-for="(item, i) in chunk"
+          :key="i"
         >
-        </v-img>
-
-        <v-img
-          @click="detailAroundEmoji(item)"
-          v-else
-          class="dot2"
-          :src="emojiCategory[item.eid].link"
-          :style="{
-            top: radius * Math.sin(((i + 1) * Math.PI) / angle) + 'px',
-            left: radius * Math.cos(((i + 1) * Math.PI) / angle) + 'px',
-          }"
-        >
-        </v-img>
+          <v-img
+            @click="detailAroundEmoji(item)"
+            v-if="i % 2 == 0"
+            class="dot1"
+            :src="emojiCategory[item.eid].link"
+            :style="{
+              top:
+                radius * Math.sin(((i + 1) * Math.PI) / (chunk.length / 2)) +
+                'px',
+              left:
+                radius * Math.cos(((i + 1) * Math.PI) / (chunk.length / 2)) +
+                'px',
+            }"
+          ></v-img>
+          <v-img
+            @click="detailAroundEmoji(item)"
+            v-else
+            class="dot2"
+            :src="emojiCategory[item.eid].link"
+            :style="{
+              top:
+                radius * Math.sin(((i + 1) * Math.PI) / (chunk.length / 2)) +
+                'px',
+              left:
+                radius * Math.cos(((i + 1) * Math.PI) / (chunk.length / 2)) +
+                'px',
+            }"
+          ></v-img>
+        </v-sheet>
       </v-sheet>
-    </v-sheet>
-
+      <div slot="viewport" class="flicking-pagination"></div>
+    </Flicking>
+    <!-- 이모지 상세 보기 -->
     <v-card
       width="85%"
       v-if="isClickEmoji"
@@ -82,17 +88,20 @@
 </template>
 
 <script>
+import { Flicking } from "@egjs/vue-flicking";
+import { Pagination } from "@egjs/flicking-plugins";
+import "@egjs/flicking-plugins/dist/pagination.css";
+
 import { myChat } from "@/api/modules/user";
-// import { getAroundEmojis, getEmojis } from "@/api/modules/emoji";
 import { mapState, mapActions } from "vuex";
 export default {
+  components: { Flicking },
   data() {
     return {
       radius: 160,
-      angle: 5,
+      plugins: [new Pagination({ type: "bullet" })],
       isClickEmoji: false,
       selectedEmoji: null,
-      // lines: 0, //이모지 10개 영역 처리
       totalEmojis: [],
     };
   },
@@ -105,6 +114,7 @@ export default {
       if (this.aroundEmojis.length > 0) {
         //totalEmojis에 10개씩 잘라서 넣기
         let times = this.aroundEmojis.length / 10;
+        //이모지 합치기
         for (let i = 0; i < times; i++) {
           let temp = [];
           for (let j = 0; j < 10; j++) {
@@ -113,30 +123,13 @@ export default {
             }
             temp.push(this.aroundEmojis[i * 10 + j]);
           }
-          this.totalEmojis.push(temp);
+          this.totalEmojis.push(temp); //각도 인덱스와 이모지 저장
         }
-        console.log("최종 배열들", this.totalEmojis);
-      }
-    },
-    totalEmojis() {
-      if (this.totalEmojis.length > 0) {
-        console.log("지금 이모지들", this.totalEmojis.length);
-        //요소 중 spin0만 먼저 보이게 하기
-        // for (let i = 0; i < this.totalEmojis.length; i++) {
-        //   if (i == 0) {
-        //     let spin = document.querySelector("#spin0");
-        //     console.log("spin", spin);
-        //   }
-        // }
-        // let spin = document.getElementById("spin0");
-        console.log("this ref", this.$refs.getSpin);
-        // console.log("spin", spin);
+        // console.log("최종 배열들", this.totalEmojis);
       }
     },
   },
-  mounted() {
-    // console.log("!this ref", this.$refs.spinId);
-  },
+
   methods: {
     ...mapActions("chatStore", ["setNowChatRoom", "clearNowChatRoom"]),
     ...mapActions("emojiStore", [
@@ -176,30 +169,37 @@ export default {
 </script>
 
 <style>
-.pagination .point {
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-  margin: 5px 5px;
-  transition: background-color ease 0.5s;
-  cursor: pointer;
-}
-.pagination .point {
-  background: var(--text-col-1);
-}
-.pagination .point.selected {
-  background: var(--main-col-3);
-}
-.pagination-area {
-  position: absolute;
-  bottom: 5%;
-  left: 50%;
-  transform: translateX(-50%);
-}
 .around-emoji-sheet {
   width: 100%;
   height: 100%;
-  overflow: scroll;
+  position: relative;
+}
+.home-flicking {
+  position: relative;
+  top: 50%;
+}
+.chunk-area {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  margin-right: 100%;
+  animation: rotate_image 35s linear infinite;
+  transform-origin: 50% 50%;
+}
+.inner-emojis {
+  position: absolute;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+.inner-emojis .v-image {
+  width: 3rem;
+}
+.dot1 {
+  animation: rotate_image_reverse1 35s ease-in-out infinite;
+}
+
+.dot2 {
+  animation: rotate_image_reverse2 35s ease-in-out infinite;
 }
 .detail-emoji {
   z-index: 10;
@@ -207,49 +207,5 @@ export default {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-}
-.spinner {
-  z-index: 5;
-
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  /* transform: translate(50%, 50%);
-  text-align: center; */
-}
-
-.dot1,
-.dot2 {
-  width: 4rem;
-  -webkit-animation: sk-bounce 2s infinite ease-in-out;
-  animation: sk-bounce 2s infinite ease-in-out;
-}
-
-.dot2 {
-  -webkit-animation-delay: -1s;
-  animation-delay: -1s;
-}
-
-@-webkit-keyframes sk-bounce {
-  0%,
-  100% {
-    -webkit-transform: scale(0.7);
-  }
-  50% {
-    -webkit-transform: scale(1);
-  }
-}
-
-@keyframes sk-bounce {
-  0%,
-  100% {
-    transform: scale(0.7);
-    -webkit-transform: scale(0.7);
-  }
-  50% {
-    transform: scale(1);
-    -webkit-transform: scale(1);
-  }
 }
 </style>

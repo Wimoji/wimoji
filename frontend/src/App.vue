@@ -1,10 +1,10 @@
 <template>
   <v-app>
-    <div class="resize-area" v-if="!isMobile">
-      <div class="resize-blue-circle">
+    <div class="resize-area home-area" v-if="!isMobile">
+      <div class="home-blue-circle">
         <blue-circle></blue-circle>
       </div>
-      <div class="resize-yellow-circle">
+      <div class="home-yellow-circle">
         <yellow-circle></yellow-circle>
       </div>
       <div class="resize-white-circle">
@@ -40,6 +40,7 @@ export default {
   name: "App",
   data: () => ({
     isMobile: false,
+    // isMobile: true,
     resizeText: [
       "Wimoji는 모바일 환경에 최적화되어있어요!",
       "화면 사이즈를 줄여주세요! 👩‍🏭",
@@ -65,7 +66,7 @@ export default {
 @import "@/assets/styles/text.css";
 @import "@/assets/styles/variable.css";
 @import "@/assets/styles/override.css";
-@import "@/assets/styles/input.css";
+@import "@/assets/styles/globalEtc.css";
 
 html body {
   background: #fafafa;
@@ -87,12 +88,12 @@ html body {
   height: 100%;
 }
 /* resize */
-.resize-area {
+/* .resize-area {
   position: relative;
   width: 100%;
   height: 100%;
-}
-.resize-blue-circle {
+} */
+/* .resize-blue-circle {
   position: absolute;
   top: 0;
   left: 0;
@@ -103,7 +104,7 @@ html body {
   bottom: 0;
   right: 0;
   transform: translate(50%, 50%);
-}
+} */
 .resize-white-circle {
   position: absolute;
   top: 50%;

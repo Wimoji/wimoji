@@ -1,9 +1,9 @@
 <template>
-  <v-sheet class="info-area" color="var(--col-empty)">
-    <div class="info-blue-circle">
+  <v-sheet class="info-area home-area" color="var(--col-empty)">
+    <div class="home-blue-circle">
       <blue-circle></blue-circle>
     </div>
-    <div class="info-yellow-circle">
+    <div class="home-yellow-circle">
       <yellow-circle></yellow-circle>
     </div>
     <div class="info-describe">
@@ -70,12 +70,12 @@ export default {
 </script>
 
 <style>
-.info-area {
+/* .info-area {
   position: absolute;
   width: 100%;
   height: 100%;
-}
-.info-area .info-blue-circle {
+} */
+/* .info-area .info-blue-circle {
   position: absolute;
   top: 0;
   left: 0;
@@ -85,10 +85,13 @@ export default {
   top: 0;
   left: 0;
   transform: translate(100%, 200%);
-}
+} */
 .info-describe {
   text-align: center;
-  transform: translateY(120%);
+  position: absolute;
+  width: 100%;
+  top: 50%;
+  transform: translateY(-50%);
 }
 .info-describe a {
   margin-top: 5%;
@@ -114,12 +117,15 @@ export default {
 @keyframes fadeIn {
   0% {
     opacity: 0;
+    -webkit-opacity: 0;
   }
   50% {
     opacity: 0.5;
+    -webkit-opacity: 0.5;
   }
   100% {
     opacity: 1;
+    -webkit-opacity: 1;
   }
 }
 </style>
