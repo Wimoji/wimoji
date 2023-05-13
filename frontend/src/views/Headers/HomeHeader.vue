@@ -15,11 +15,14 @@
         <v-icon v-else> mdi-menu </v-icon>
       </v-btn>
     </template>
+    <v-btn fab color="white" @click="goRefresh">
+      <v-icon>mdi-refresh</v-icon>
+    </v-btn>
     <v-btn fab color="white" @click="goChat">
-      <v-icon>mdi-chat-outline</v-icon>
+      <v-icon>mdi-comment-text-outline</v-icon>
     </v-btn>
     <v-btn fab color="white" @click="goLogout">
-      <v-icon>mdi-logout</v-icon>
+      <v-icon>mdi-power-standby</v-icon>
     </v-btn>
   </v-speed-dial>
 </template>
@@ -46,6 +49,9 @@ export default {
   },
   methods: {
     ...mapActions("userStore", ["setLogout"]),
+    goRefresh() {
+      this.$router.go();
+    },
     goChat() {
       this.$router.push("/my/chat");
     },
