@@ -125,7 +125,7 @@ export default {
           }
           this.totalEmojis.push(temp); //각도 인덱스와 이모지 저장
         }
-        console.log("최종 배열들", this.totalEmojis);
+        // console.log("최종 배열들", this.totalEmojis);
       }
     },
   },

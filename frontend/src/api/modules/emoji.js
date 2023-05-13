@@ -38,7 +38,7 @@ async function getAroundEmojis(data) {
   await api
     .post(`${baseURL}/location`, data)
     .then(({ data }) => {
-      console.log("사용자 주변 정보 이모지 >> ", data);
+      // console.log("사용자 주변 정보 이모지 >> ", data);
       if (data.success) {
         result = data.data;
       }
