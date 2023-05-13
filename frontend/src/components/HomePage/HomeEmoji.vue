@@ -20,6 +20,7 @@
           :key="i"
         >
           <v-img
+            @click="detailAroundEmoji(item)"
             v-if="i % 2 == 0"
             class="dot1"
             :src="emojiCategory[item.eid].link"
@@ -33,6 +34,7 @@
             }"
           ></v-img>
           <v-img
+            @click="detailAroundEmoji(item)"
             v-else
             class="dot2"
             :src="emojiCategory[item.eid].link"
@@ -49,6 +51,39 @@
       </v-sheet>
       <div slot="viewport" class="flicking-pagination"></div>
     </Flicking>
+    <!-- 이모지 상세 보기 -->
+    <v-card
+      width="85%"
+      v-if="isClickEmoji"
+      class="detail-emoji d-flex flex-column align-center pa-5"
+    >
+      <v-img width="30%" :src="emojiCategory[selectedEmoji.eid].link"></v-img>
+      <v-card-title>{{ selectedEmoji.title }}</v-card-title>
+      <v-row class="d-flex">
+        <v-col>
+          <v-btn
+            height="3em"
+            width="6em"
+            rounded
+            color="var(--main-col-3)"
+            class="white-col-1"
+            @click="joinChat"
+            >함께하기</v-btn
+          >
+        </v-col>
+        <v-col>
+          <v-btn
+            height="3em"
+            width="6em"
+            rounded
+            color="var(--text-col-4)"
+            class="white-col-1"
+            @click="closeEmoji"
+            >닫기</v-btn
+          >
+        </v-col>
+      </v-row>
+    </v-card>
   </v-sheet>
 </template>
 
@@ -58,7 +93,6 @@ import { Pagination } from "@egjs/flicking-plugins";
 import "@egjs/flicking-plugins/dist/pagination.css";
 
 import { myChat } from "@/api/modules/user";
-// import { getAroundEmojis, getEmojis } from "@/api/modules/emoji";
 import { mapState, mapActions } from "vuex";
 export default {
   components: { Flicking },
@@ -138,21 +172,19 @@ export default {
 .around-emoji-sheet {
   width: 100%;
   height: 100%;
-  /* position: absolute; */
   position: relative;
-  /* overflow: scroll; */
 }
 .home-flicking {
   position: relative;
   top: 50%;
-  /* left: 50%; */
-  /* width: 100%; */
 }
 .chunk-area {
   position: relative;
   width: 100%;
   height: 100%;
   margin-right: 100%;
+  animation: rotate_image 35s linear infinite;
+  transform-origin: 50% 50%;
 }
 .inner-emojis {
   position: absolute;
@@ -160,6 +192,20 @@ export default {
   transform: translate(-50%, -50%);
 }
 .inner-emojis .v-image {
-  /* width: 10%; */
+  width: 3rem;
+}
+.dot1 {
+  animation: rotate_image_reverse1 35s ease-in-out infinite;
+}
+
+.dot2 {
+  animation: rotate_image_reverse2 35s ease-in-out infinite;
+}
+.detail-emoji {
+  z-index: 10;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }
 </style>

@@ -10,6 +10,9 @@
       <div class="emoji-white-ellipse1 white-ellipse1"></div>
       <div class="emoji-white-ellipse2 white-ellipse2"></div>
     </div>
+
+    <!-- 내 주변 이모지 -->
+    <home-emoji></home-emoji>
     <!-- 내 위치 및 이모지 생성 -->
     <div class="home-page-create-emoji">
       <div v-for="(text, i) in mainPageText" :key="i" class="mb-3 rem-font">
@@ -17,8 +20,6 @@
       </div>
       <home-page-create-emoji class="mt-3"></home-page-create-emoji>
     </div>
-    <!-- 내 주변 이모지 -->
-    <home-emoji></home-emoji>
   </v-sheet>
 </template>
 
