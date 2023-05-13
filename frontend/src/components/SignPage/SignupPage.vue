@@ -1,8 +1,8 @@
 <template>
   <v-sheet class="sign-area col-transparent">
+    <the-footer></the-footer>
     <div class="signup-yellow-circle"><yellow-circle></yellow-circle></div>
     <div class="signup-input"><signup-input></signup-input></div>
-    <the-footer></the-footer>
   </v-sheet>
 </template>
 
@@ -28,10 +28,5 @@ export default {
 }
 .signup-input {
   position: relative;
-}
-footer {
-  position: fixed;
-  bottom: 0;
-  margin-top: 20%;
 }
 </style>
