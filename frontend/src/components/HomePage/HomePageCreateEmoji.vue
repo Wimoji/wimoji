@@ -2,9 +2,8 @@
   <v-sheet color="var(--col-empty)">
     <v-dialog v-model="dialog" width="85%">
       <template v-slot:activator="{ on, attrs }">
-        <!-- <div class="now-position-text">지금 나는 {{ myPosition }}에 있어요</div> -->
         <v-btn
-          v-if="location.myPosition != null"
+          v-if="posFlag"
           rounded
           dark
           color="var(--main-col-3)"
@@ -80,7 +79,7 @@
 import EmojiList from "@/components/EmojiList/EmojiList.vue";
 import { mapState, mapActions } from "vuex";
 import { makeEmoji } from "@/api/modules/emoji";
-import { getNowPosition } from "@/api/modules/location";
+
 import { makeChatRoom } from "@/api/modules/chat";
 import { myChat } from "@/api/modules/user";
 
@@ -88,6 +87,7 @@ export default {
   components: {
     EmojiList,
   },
+  props: ["posFlag"],
   data() {
     return {
       //dialog 관련 설정
@@ -120,13 +120,6 @@ export default {
   computed: {
     ...mapState("emojiStore", ["emojiCategory"]),
     ...mapState("userStore", ["user", "location"]),
-  },
-  mounted() {
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(this.setPosition);
-    } else {
-      alert("Geolocation is not supported by this browser.");
-    }
   },
   methods: {
     ...mapActions("userStore", ["setLocation"]),
@@ -216,49 +209,6 @@ export default {
           console.log(error);
         }
       );
-    },
-    async setPosition(position) {
-      this.latitude = position.coords.latitude;
-      this.longitude = position.coords.longitude;
-
-      const data = {
-        longitude: this.longitude,
-        latitude: this.latitude,
-      };
-      // 현재 위치 정보 받아오기
-      await getNowPosition(
-        data,
-        ({ data }) => {
-          // console.log(data);
-          const temp = data.documents.filter(
-            (item) => item.region_type == "B"
-          )[0];
-
-          // console.log("지금!! temp >>> ", temp);
-          this.myPosition = temp.address_name;
-          this.myDongcode = temp.code;
-
-          //store에 현재 위치 정보 저장
-          this.setLocation({
-            latitude: this.latitude,
-            longitude: this.longitude,
-            dongCode: this.myDongcode,
-            myPosition: this.myPosition,
-          });
-        },
-        (error) => {
-          console.log(error);
-        }
-      );
-
-      // this.latitude = 37.5013488;
-      // this.longitude = 127.0397167;
-      // this.dongCode = 1168010800;
-      // this.setLocation({
-      //   latitude: this.latitude,
-      //   longitude: this.longitude,
-      //   dongCode: this.myDongcode,
-      // });
     },
   },
 };
