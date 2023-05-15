@@ -399,6 +399,7 @@ export default {
   overflow: hidden; */
   /* height: 90vh; */
   height: 100%;
+  height: -webkit-fill-available;
   overflow: hidden;
 
   display: flex;
