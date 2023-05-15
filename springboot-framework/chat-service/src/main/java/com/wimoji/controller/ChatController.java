@@ -1,5 +1,7 @@
 package com.wimoji.controller;
 
+import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.messaging.handler.annotation.Header;
@@ -41,10 +43,10 @@ public class ChatController {
 		try {
 			UserRes user = mapper.readValue(userServiceClient.getUser(bearerToken), UserRes.class);
 
-			Chat chat = new Chat(chatReq.getRid(), user.getUid(), user.getNickname(), chatReq.getContent());
+			Chat chat = new Chat(chatReq.getRid(), user.getUid(), user.getNickname(), chatReq.getContent(), LocalDateTime.now());
 			chatRoomService.saveContent(chat);
 
-			ChatRes chatRes = new ChatRes(chatReq.getRid(), user.getNickname(), chatReq.getContent(), sessionId);
+			ChatRes chatRes = new ChatRes(chatReq.getRid(), user.getNickname(), chatReq.getContent(), sessionId, LocalDateTime.now());
 			template.convertAndSend("/sub/chat/" + chatReq.getRid(), chatRes);
 		} catch (JsonProcessingException je) {
 			throw new GeneralException(Code.UNAUTHORIZED);
@@ -69,10 +71,10 @@ public class ChatController {
 			chatRoomService.incParticipant(rid);
 			chatRoomService.addUserToList(rid, user.getUid());
 
-			Chat chat = new Chat(rid, "coment", user.getNickname(), user.getNickname() + "님이 입장하였습니다.");
+			Chat chat = new Chat(rid, "coment", user.getNickname(), user.getNickname() + "님이 입장하였습니다.", LocalDateTime.now());
 			chatRoomService.saveContent(chat);
 
-			ChatRes chatRes = new ChatRes(rid, user.getNickname(), user.getNickname() + "님이 입장하였습니다.", "3");
+			ChatRes chatRes = new ChatRes(rid, user.getNickname(), user.getNickname() + "님이 입장하였습니다.", "3", LocalDateTime.now());
 			template.convertAndSend("/sub/chat/" + chatRes.getRid(), chatRes);
 		} catch (JsonProcessingException je) {
 			throw new GeneralException(Code.UNAUTHORIZED);
@@ -95,10 +97,10 @@ public class ChatController {
 			chatRoomService.decParticipant(rid);
 			chatRoomService.deleteUserToList(rid, user.getUid());
 
-			Chat chat = new Chat(rid, "coment", user.getNickname(), user.getNickname() + "님이 퇴장하였습니다.");
+			Chat chat = new Chat(rid, "coment", user.getNickname(), user.getNickname() + "님이 퇴장하였습니다.", LocalDateTime.now());
 			chatRoomService.saveContent(chat);
 
-			ChatRes chatRes = new ChatRes(rid, user.getNickname(), user.getNickname() + "님이 퇴장하였습니다.", "3");
+			ChatRes chatRes = new ChatRes(rid, user.getNickname(), user.getNickname() + "님이 퇴장하였습니다.", "3", LocalDateTime.now());
 			template.convertAndSend("/sub/chat/" + chatRes.getRid(), chatRes);
 		} catch (JsonProcessingException je) {
 			throw new GeneralException(Code.UNAUTHORIZED);
