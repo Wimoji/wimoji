@@ -6,26 +6,26 @@
       type="avatar"
     ></v-skeleton-loader>
     <v-img v-else width="30%" :src="selectedEmoji.link"></v-img>
-    <v-card-title>{{ selectedEmoji.title }}</v-card-title>
+    <div class="md-font my-4">{{ selectedEmoji.title }}</div>
     <v-row class="d-flex">
       <v-col>
         <v-btn
-          height="3em"
-          width="6em"
+          height="2.7em"
+          width="6.5em"
           rounded
           color="var(--main-col-6)"
-          class="white-col-1"
+          class="white-col-1 xs-font"
           @click="deleteEmoji"
           >삭제</v-btn
         >
       </v-col>
       <v-col>
         <v-btn
-          height="3em"
-          width="6em"
+          height="2.7em"
+          width="6.5em"
           rounded
           color="var(--text-col-4)"
-          class="white-col-1"
+          class="white-col-1 xs-font"
           @click="closeEmoji"
           >닫기</v-btn
         >

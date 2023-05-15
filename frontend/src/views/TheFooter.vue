@@ -16,6 +16,6 @@ export default {};
 <style>
 .v-footer {
   position: fixed;
-  bottom: 5%;
+  bottom: 1%;
 }
 </style>

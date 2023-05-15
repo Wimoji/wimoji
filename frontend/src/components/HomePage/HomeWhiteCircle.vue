@@ -15,10 +15,13 @@
     <home-emoji></home-emoji>
     <!-- 내 위치 및 이모지 생성 -->
     <div class="home-page-create-emoji">
-      <div v-for="(text, i) in mainPageText" :key="i" class="mb-3 rem-font">
+      <div v-for="(text, i) in locText" :key="i" class="mb-3 rem-font">
         {{ text }}
       </div>
-      <home-page-create-emoji class="mt-3"></home-page-create-emoji>
+      <home-page-create-emoji
+        :posFlag="posFlag"
+        class="mt-3"
+      ></home-page-create-emoji>
     </div>
   </v-sheet>
 </template>
@@ -26,39 +29,21 @@
 <script>
 import HomeEmoji from "@/components/HomePage/HomeEmoji.vue";
 import HomePageCreateEmoji from "./HomePageCreateEmoji.vue";
-import { mapState } from "vuex";
 export default {
   components: {
     HomeEmoji,
     HomePageCreateEmoji,
   },
+  props: ["locText"],
   data() {
     return {
-      mainPageText: null,
+      posFlag: false,
     };
   },
-  computed: {
-    ...mapState("userStore", ["user", "location"]),
-  },
-  mounted() {
-    if (this.location.myPosition == null) {
-      this.mainPageText = ["위치 권한을 허용해주세요 📍"];
-    } else {
-      this.mainPageText = [
-        `${this.user.nickname}님 안녕하세요😆`,
-        `지금 ${this.location.myPosition}에 있어요`,
-      ];
-    }
-  },
   watch: {
-    location() {
-      if (this.location.myPosition == null) {
-        this.mainPageText = ["위치 권한을 허용해주세요 📍"];
-      } else {
-        this.mainPageText = [
-          `${this.user.nickname}님 안녕하세요😁`,
-          `지금 ${this.location.myPosition}에 있어요`,
-        ];
+    locText() {
+      if (this.locText.length > 1) {
+        this.posFlag = true;
       }
     },
   },
