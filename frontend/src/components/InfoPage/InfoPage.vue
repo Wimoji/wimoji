@@ -33,6 +33,7 @@
         <h3 v-if="textFlag" class="info-text-bottom">{{ infoText4 }}</h3>
       </transition>
     </div>
+    <the-footer></the-footer>
   </v-sheet>
 </template>
 
@@ -40,12 +41,14 @@
 import BlueCircle from "@/common/component/BlueCircle.vue";
 import YellowCircle from "@/common/component/YellowCircle.vue";
 import InfoItem from "@/components/InfoPage/InfoItem.vue";
+import TheFooter from "@/views/TheFooter.vue";
 
 export default {
   components: {
     BlueCircle,
     YellowCircle,
     InfoItem,
+    TheFooter,
   },
   data() {
     return {
@@ -70,22 +73,6 @@ export default {
 </script>
 
 <style>
-/* .info-area {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-} */
-/* .info-area .info-blue-circle {
-  position: absolute;
-  top: 0;
-  left: 0;
-}
-.info-area .info-yellow-circle {
-  position: absolute;
-  top: 0;
-  left: 0;
-  transform: translate(100%, 200%);
-} */
 .info-describe {
   text-align: center;
   position: absolute;
@@ -98,12 +85,12 @@ export default {
 }
 .info-text-top {
   position: fixed;
-  top: 10%;
+  top: 15%;
   right: 10%;
 }
 .info-text-bottom {
   position: fixed;
-  bottom: 10%;
+  bottom: 15%;
   left: 10%;
 }
 /* transition */
