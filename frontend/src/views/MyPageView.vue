@@ -24,7 +24,6 @@ export default {
   mounted() {
     this.$nextTick(() => {
       const myPageView = this.$refs.myPageView;
-      console.log("지금 마이페이지 값", myPageView.style);
       this.setMyPageView(myPageView);
     });
   },

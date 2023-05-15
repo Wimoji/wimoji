@@ -1,9 +1,8 @@
 <template>
-  <v-sheet
-    v-if="myEmojis.length != 0"
-    color="var(--main-col-1)"
-    class="emoji-list"
-  >
+  <v-sheet color="var(--main-col-1)" v-if="myEmojis == null">
+    <div class="xl-font text-center mt-10">나의 이모지가 없어요... 😂</div>
+  </v-sheet>
+  <v-sheet v-else color="var(--main-col-1)" class="emoji-list">
     <v-img
       class="emoji-item"
       v-for="(item, i) in myEmojis"
@@ -19,9 +18,6 @@
         :selectedEmoji="selectedEmoji"
       />
     </transition>
-  </v-sheet>
-  <v-sheet color="var(--main-col-1)" v-else>
-    <div class="xl-font text-center mt-10">나의 이모지가 없어요... 😂</div>
   </v-sheet>
 </template>
 

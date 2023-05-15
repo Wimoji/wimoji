@@ -58,28 +58,47 @@
       class="detail-emoji d-flex flex-column align-center pa-5"
     >
       <v-img width="30%" :src="emojiCategory[selectedEmoji.eid].link"></v-img>
-      <v-card-title>{{ selectedEmoji.title }}</v-card-title>
+      <div class="md-font my-4">{{ selectedEmoji.title }}</div>
       <v-row class="d-flex">
         <v-col>
           <v-btn
-            height="3em"
-            width="6em"
+            v-if="selectedEmoji.participant == selectedEmoji.limit"
+            height="2.7em"
+            width="6.5em"
+            rounded
+            disabled
+            color="var(--main-col-3)"
+            class="white-col-1 xs-font"
+            >함께하기</v-btn
+          >
+          <v-btn
+            v-else
+            height="2.7em"
+            width="6.5em"
             rounded
             color="var(--main-col-3)"
-            class="white-col-1"
+            class="white-col-1 xs-font"
             @click="joinChat"
             >함께하기</v-btn
           >
         </v-col>
         <v-col>
           <v-btn
-            height="3em"
-            width="6em"
+            height="2.7em"
+            width="6.5em"
             rounded
             color="var(--text-col-4)"
-            class="white-col-1"
+            class="white-col-1 xs-font"
             @click="closeEmoji"
             >닫기</v-btn
+          >
+        </v-col>
+      </v-row>
+      <v-row no-gutters>
+        <v-col class="text-col-1 xsm-font mt-4">
+          <span
+            >( {{ selectedEmoji.participant }} /
+            {{ selectedEmoji.limit }} )</span
           >
         </v-col>
       </v-row>
@@ -125,7 +144,7 @@ export default {
           }
           this.totalEmojis.push(temp); //각도 인덱스와 이모지 저장
         }
-        // console.log("최종 배열들", this.totalEmojis);
+        console.log("최종 배열들", this.totalEmojis);
       }
     },
   },
@@ -155,9 +174,9 @@ export default {
         },
         (error) => {
           console.log(error);
-          alert("채팅방 인원이 마감됐어요!.");
+          alert("채팅방 인원이 마감됐어요!");
           this.clearNowChatRoom();
-          this.$router.push("/");
+          this.$router.go();
         }
       );
     },
