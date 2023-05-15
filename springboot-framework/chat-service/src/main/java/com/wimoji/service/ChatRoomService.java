@@ -275,7 +275,7 @@ public class ChatRoomService {
 				flag = "2";
 			}
 
-			chatResList.add(new ChatRes(chat.getRid(), chat.getNickname(), chat.getContent(), flag));
+			chatResList.add(new ChatRes(chat.getRid(), chat.getNickname(), chat.getContent(), flag, chat.getMTime()));
 		}
 
 		return chatResList;
