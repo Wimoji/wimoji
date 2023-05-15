@@ -54,7 +54,7 @@ public class ChatRoomService {
 		}
 
 		boolean isNew = false;
-		if (chatRoom.getContent().size() != idx) {
+		if (chatRoom.getContent().size()-1 != idx) {
 			isNew = true;
 		}
 		ChatRoomRes chatRoomRes = new ChatRoomRes(chatRoom, isNew);
