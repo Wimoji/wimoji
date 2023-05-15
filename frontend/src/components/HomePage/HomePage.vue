@@ -6,10 +6,19 @@
     <div class="home-yellow-circle">
       <yellow-circle></yellow-circle>
     </div>
+    <div class="refresh-text text-center">
+      <div class="xs-font main-col-1">
+        이모지가 안 보이시나요? 새로고침을 해보세요 👾
+      </div>
+    </div>
     <div class="home-center-area">
       <home-white-circle :locText="locText"></home-white-circle>
     </div>
     <the-footer></the-footer>
+    <!-- 새로고침 버튼 -->
+    <v-btn class="refresh-btn" color="white" @click="goRefresh" fab>
+      <v-icon>mdi-refresh</v-icon>
+    </v-btn>
   </v-sheet>
 </template>
 
@@ -48,6 +57,7 @@ export default {
     };
   },
   async mounted() {
+    // console.log("요청...");
     //1 geolocation으로 현재 위치 설정
     if (navigator.geolocation) {
       // console.log("위치꼬");
@@ -92,34 +102,40 @@ export default {
           `지금 ${this.loc.address}에 있어요`,
         ];
       }
+
+      // //7 주변 이모지 불러오기
+      // let data = {
+      //   latitude: `${this.loc.latitude}`,
+      //   longitude: `${this.loc.longitude}`,
+      //   dongCode: this.loc.dongCode,
+      // };
+      // let resultAround = await getAroundEmojis(data);
+
+      // //8 내 이모지 불러오기
+      // let resultMyEmoji = await getEmojis();
+
+      // //9 전체 이모지 합치기
+      // this.setAroundEmojis(resultAround);
+      // this.addMyEmojisToAroundEmojis(resultMyEmoji);
+      // console.log("위치설정끗!");
     } else {
       alert("현재 브라우저에서 geolocation을 지원하지 않습니다.");
     }
-    // console.log("위치밖이지롱");
-  },
-  watch: {
-    loc() {
-      if (this.loc.dongCode != null) {
-        //7 주변 이모지 불러오기
-        let data = {
-          latitude: `${this.loc.latitude}`,
-          longitude: `${this.loc.longitude}`,
-          dongCode: this.loc.dongCode,
-        };
-        let resultAround = getAroundEmojis(data);
+    console.log("위치밖이지롱");
+    //7 주변 이모지 불러오기
+    let data = {
+      latitude: `${this.loc.latitude}`,
+      longitude: `${this.loc.longitude}`,
+      dongCode: `${this.loc.dongCode}`,
+    };
+    let resultAround = await getAroundEmojis(data);
 
-        //8 내 이모지 불러오기
-        let resultMyEmoji = getEmojis();
+    //8 내 이모지 불러오기
+    let resultMyEmoji = await getEmojis();
 
-        //9 전체 이모지 합치기
-        if (resultAround != null) {
-          this.setAroundEmojis(resultAround);
-        }
-        if (resultMyEmoji != null) {
-          this.addMyEmojisToAroundEmojis(resultMyEmoji);
-        }
-      }
-    },
+    //9 전체 이모지 합치기
+    this.setAroundEmojis(resultAround);
+    this.addMyEmojisToAroundEmojis(resultMyEmoji);
   },
   destroyed() {
     this.clearAroundEmojis();
@@ -132,6 +148,9 @@ export default {
       "addMyEmojisToAroundEmojis",
       "clearAroundEmojis",
     ]),
+    goRefresh() {
+      this.$router.go();
+    },
   },
 };
 </script>
@@ -142,5 +161,15 @@ export default {
   justify-content: center;
   width: 100%;
   height: 100%;
+}
+.refresh-text {
+  position: absolute;
+  top: 15%;
+  width: 100%;
+}
+.refresh-btn {
+  position: fixed;
+  bottom: 5%;
+  right: 5%;
 }
 </style>
