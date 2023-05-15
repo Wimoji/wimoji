@@ -102,7 +102,7 @@ public class HomeService {
      * @return
      */
     public double getDistance(double lat1, double long1, double lat2, double long2){
-        double EARTH_RADIUS = 6371000;//6371km
+        double EARTH_RADIUS = 6371;//6371km
         double dLat = Math.toRadians(lat2 - lat1);
         double dLon = Math.toRadians(long2 - long1);
 
