@@ -197,22 +197,28 @@ public class ChatRoomService {
 	 * @param : 채팅방의 id, 마지막 메시지의 인덱스
 	 * @return : 메시지의 List
 	 **/
-	public Map<String, List> getNewChat(NewChatReq newChatReq) {
+	public Map<String, List> getNewChat(NewChatReq newChatReq, int enterIdx) {
 		try {
+			Map<String, List> result = new HashMap<>();
+			List<Integer> firstIdx = new ArrayList<>();
+
 			if (newChatReq.getStartIdx() < 15) {
 				newChatReq.setStartIdx(0);
 			} else {
 				newChatReq.setStartIdx(newChatReq.getStartIdx() - 15);
 			}
 
+			if (newChatReq.getStartIdx() < enterIdx) {
+				newChatReq.setStartIdx(enterIdx);
+				firstIdx.add(0);
+			} else {
+				firstIdx.add(newChatReq.getStartIdx());
+			}
+			result.put("firstIdx", firstIdx);
+
 			List<Chat> chatList = chatRoomRepository.getNewChat(newChatReq);
 			List<ChatRes> chatResList = chatToChatRes(chatList, newChatReq.getUid());
-
-			Map<String, List> result = new HashMap<>();
 			result.put("chatList", chatResList);
-			List<Integer> firstIdx = new ArrayList<>();
-			firstIdx.add(newChatReq.getStartIdx());
-			result.put("firstIdx", firstIdx);
 
 			return result;
 		} catch (Exception e) {
