@@ -179,7 +179,7 @@ export default {
   mounted() {
     // 상위 스크롤 막기
     let myPageView = this.myPageView;
-    console.log("상위 스크롤 스타일 값", myPageView.style);
+    // console.log("상위 스크롤 스타일 값", myPageView.style);
     myPageView.style.overflow = "hidden";
     // alert("마운트 됨 이벤트 등록");
     // window.addEventListener("beforeunload", this.disconnectWebSocket);
@@ -191,7 +191,7 @@ export default {
     //상위 스크롤 되돌리기
     // 상위 스크롤 막기
     let myPageView = this.myPageView;
-    console.log("나가기 전 상위 스크롤 스타일 값", myPageView.style);
+    // console.log("나가기 전 상위 스크롤 스타일 값", myPageView.style);
     myPageView.style.overflow = "scroll";
     this.disconnectWebSocket();
     // window.removeEventListener("beforeunload", this.disconnectWebSocket);
@@ -199,23 +199,31 @@ export default {
   methods: {
     ...mapActions("chatStore", ["setIsDelete", "clearNowChatRoom"]),
     async infiniteHandler($state) {
-      // console.log("핸들러요청", $state);
+      // console.log("0 핸들러요청", $state);
       if (this.lastReadIdx === "") {
-        // console.log("아직 마지막 인덱스 못불러옴");
+        // console.log(" 1아직 마지막 인덱스 못불러옴");
         $state.reset();
         return;
       }
-      // console.log("있ㅇ요", this.lastReadIdx, this.firstIdx);
+      // console.log(" 1있ㅇ요", this.lastReadIdx, this.firstIdx);
 
       if (this.lastReadIdx == 0) {
-        // console.log("채팅방 처음 들어와서 불러올거 없음");
+        // console.log("2 채팅방 처음 들어와서 불러올거 없음");
         $state.complete();
         return;
       }
 
       //읽지 않은 채팅 불러오기
       if (this.firstIdx == null) {
+        // console.log("3 안 읽은 채팅 불러올게");
         await this.getNewMessage(this.lastReadIdx);
+      }
+
+      //처음 입장시 모든 요청 받아옴. 더이상 핸들러 처리 불필요
+      if (this.firstIdx == 0) {
+        // console.log("3 퍼스트인덱스 0이라서 핸들러 종료");
+        $state.complete();
+        return;
       }
 
       //위로 스크롤 했을 때 이전 메시지 불러오기
@@ -224,15 +232,17 @@ export default {
         idx: this.firstIdx,
       };
 
+      // console.log("3 퍼스트인덱스 0 아니라서 이전 메시지 더 불러올게");
       await getPrevChat(params, ({ data }) => {
         var result = data.data;
-        console.log("이전 채팅 데이터 result >> ", result);
+        // console.log("이전 채팅 데이터 result >> ", result);
         if (result.chatList.length > 0) {
           this.isScroll = true;
           this.messages.unshift(...result.chatList);
           this.firstIdx = result.firstIdx[0];
           $state.loaded();
           if (this.firstIdx == 0) {
+            // console.log("4 이전 채팅 불러왔는데 퍼스트인덱스 0 이라서 끝낼게");
             $state.complete();
           }
         } else {
