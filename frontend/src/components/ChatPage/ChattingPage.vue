@@ -18,13 +18,16 @@
           "
         >
           <div class="main-font-bd xs-font pr-1">{{ message.nickname }}</div>
-          <v-chip
-            class="xs-font pa-4"
-            text-color="white"
-            color="var(--main-col-3)"
-          >
-            {{ message.content }}
-          </v-chip>
+          <div class="d-flex align-end">
+            <div class="xxxs-font mr-2">{{ message.mTime }}</div>
+            <v-chip
+              class="xs-font pa-4"
+              text-color="white"
+              color="var(--main-col-3)"
+            >
+              {{ message.content }}
+            </v-chip>
+          </div>
         </v-col>
         <!-- 남의 메시지 -->
         <v-col
@@ -37,9 +40,12 @@
           "
         >
           <div class="main-font-bd xs-font pl-1">{{ message.nickname }}</div>
-          <v-chip class="xs-font pa-4" color="white">{{
-            message.content
-          }}</v-chip>
+          <div class="d-flex align-end">
+            <v-chip class="xs-font pa-4" color="white">{{
+              message.content
+            }}</v-chip>
+            <div class="xxxs-font ml-2">{{ message.mTime }}</div>
+          </div>
         </v-col>
         <!-- 입퇴장 -->
         <v-col
@@ -296,7 +302,9 @@ export default {
         const msg = {
           rid: this.room.id,
           content: this.content,
+          mTime: new Date(),
         };
+        // console.log("시간!!", new Date());
         this.socket.send(
           "/pub/chat/message",
           { Authorization: token },
@@ -315,13 +323,14 @@ export default {
       //return chatList, firstIdx
       this.firstIdx = result.firstIdx[0];
       if (result.chatList.length == 0) return;
-      result.chatList.forEach((el) => {
-        this.messages.push({
-          nickname: el.nickname,
-          flag: el.flag,
-          content: el.content,
-        });
-      });
+      // result.chatList.forEach((el) => {
+      //   this.messages.push({
+      //     nickname: el.nickname,
+      //     flag: el.flag,
+      //     content: el.content,
+      //   });
+      // });
+      this.messages.push(...result.chatList);
     },
     checkUserActivity() {
       const timeDiff = Date.now() - this.lastActiveTime;
