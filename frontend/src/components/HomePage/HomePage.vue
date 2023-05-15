@@ -9,6 +9,7 @@
     <div class="home-center-area">
       <home-white-circle :locText="locText"></home-white-circle>
     </div>
+    <the-footer></the-footer>
   </v-sheet>
 </template>
 
@@ -19,12 +20,15 @@ import { getNowPosition } from "@/api/modules/location";
 
 import BlueCircle from "@/common/component/BlueCircle.vue";
 import YellowCircle from "@/common/component/YellowCircle.vue";
-import HomeWhiteCircle from "./HomeWhiteCircle.vue";
+import HomeWhiteCircle from "@/components/HomePage/HomeWhiteCircle.vue";
+import TheFooter from "@/views/TheFooter.vue";
+
 export default {
   components: {
     BlueCircle,
     YellowCircle,
     HomeWhiteCircle,
+    TheFooter,
   },
   computed: {
     ...mapState("userStore", ["user", "location"]),
@@ -46,6 +50,7 @@ export default {
   async mounted() {
     //1 geolocation으로 현재 위치 설정
     if (navigator.geolocation) {
+      // console.log("위치꼬");
       // 현재 위치 await
       const getGeolocation = function () {
         return new Promise(function (resolve, reject) {
@@ -87,23 +92,37 @@ export default {
           `지금 ${this.loc.address}에 있어요`,
         ];
       }
-      //7 주변 이모지 불러오기
-      let data = {
-        latitude: `${this.loc.latitude}`,
-        longitude: `${this.loc.longitude}`,
-        dongCode: this.loc.dongCode,
-      };
-      let resultAround = await getAroundEmojis(data);
-
-      //8 내 이모지 불러오기
-      let resultMyEmoji = await getEmojis();
-
-      //9 전체 이모지 합치기
-      this.setAroundEmojis(resultAround);
-      this.addMyEmojisToAroundEmojis(resultMyEmoji);
     } else {
       alert("현재 브라우저에서 geolocation을 지원하지 않습니다.");
     }
+    // console.log("위치밖이지롱");
+  },
+  watch: {
+    loc() {
+      if (this.loc.dongCode != null) {
+        //7 주변 이모지 불러오기
+        let data = {
+          latitude: `${this.loc.latitude}`,
+          longitude: `${this.loc.longitude}`,
+          dongCode: this.loc.dongCode,
+        };
+        let resultAround = getAroundEmojis(data);
+
+        //8 내 이모지 불러오기
+        let resultMyEmoji = getEmojis();
+
+        //9 전체 이모지 합치기
+        if (resultAround != null) {
+          this.setAroundEmojis(resultAround);
+        }
+        if (resultMyEmoji != null) {
+          this.addMyEmojisToAroundEmojis(resultMyEmoji);
+        }
+      }
+    },
+  },
+  destroyed() {
+    this.clearAroundEmojis();
   },
   methods: {
     ...mapActions("userStore", ["setLocation"]),
@@ -111,6 +130,7 @@ export default {
     ...mapActions("emojiStore", [
       "setAroundEmojis",
       "addMyEmojisToAroundEmojis",
+      "clearAroundEmojis",
     ]),
   },
 };
@@ -123,22 +143,4 @@ export default {
   width: 100%;
   height: 100%;
 }
-.create-emoji {
-  position: fixed;
-  top: 0;
-
-  z-index: 100;
-}
-/* .info-area .resize-white-circle {
-  position: absolute;
-  top: 50%;
-} */
-/* .home-area {
-  position: relative;
-} */
-/* .home-area .create-emoji {
-  position: relative;
-  width: 100%;
-  height: 100%;
-} */
 </style>
