@@ -324,7 +324,6 @@ export default {
           rid: this.room.id,
           content: this.content,
         };
-        // console.log("시간!!", new Date());
         this.socket.send(
           "/pub/chat/message",
           { Authorization: token },

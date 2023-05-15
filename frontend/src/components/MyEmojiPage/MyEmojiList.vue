@@ -2,7 +2,7 @@
   <v-sheet color="var(--main-col-1)" v-if="myEmojis == null">
     <div class="xl-font text-center mt-10">나의 이모지가 없어요... 😂</div>
   </v-sheet>
-  <v-sheet v-else color="var(--main-col-1)" class="emoji-list">
+  <v-sheet v-else color="var(--main-col-1)" class="in-my-emoji-list">
     <v-img
       class="emoji-item"
       v-for="(item, i) in myEmojis"
@@ -65,7 +65,7 @@ export default {
 </script>
 
 <style>
-.emoji-list {
+.in-my-emoji-list {
   height: 100%;
 }
 .detail-emoji-modal {
@@ -97,7 +97,7 @@ export default {
     opacity: 1;
   }
 }
-.emoji-list {
+.in-my-emoji-list {
   display: grid;
   grid-template-columns: calc(100% / 3) calc(100% / 3) calc(100% / 3);
   margin: 0 auto;
