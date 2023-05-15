@@ -121,7 +121,7 @@ export default {
     } else {
       alert("현재 브라우저에서 geolocation을 지원하지 않습니다.");
     }
-    console.log("위치밖이지롱");
+    // console.log("위치밖이지롱");
     //7 주변 이모지 불러오기
     let data = {
       latitude: `${this.loc.latitude}`,
