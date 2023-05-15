@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.wimoji.repository.dto.request.UserChatRoomReq;
 
-@FeignClient(name="chat-service", url = "127.0.0.1:8080")
+@FeignClient(name="chat-service", url = "k8a501.p.ssafy.io:8080")
 public interface ChatServiceClient {
 	@GetMapping("/api/chat-service/my")
 	String getRoomByUser(@RequestBody UserChatRoomReq userChatReq);
