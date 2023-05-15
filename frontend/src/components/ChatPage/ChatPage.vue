@@ -2,14 +2,19 @@
   <v-sheet color="var(--col-empty)" class="chat-list" v-if="rooms != null">
     <v-sheet
       @click="goRoom(room)"
-      class="ma-3 d-flex justify-start px-5 py-4 rounded-xl align-center"
+      class="ma-3 d-flex justify-space-between px-5 py-4 rounded-xl align-center"
       v-for="room in rooms"
       :key="room.id"
     >
-      <v-avatar class="mr-5">
-        <v-img :src="emojiCategory[room.eid].link"></v-img>
+      <div class="d-flex align-center">
+        <v-avatar class="mr-5">
+          <v-img :src="emojiCategory[room.eid].link"></v-img>
+        </v-avatar>
+        <div class="xs-font main-font-bd">{{ room.title }}</div>
+      </div>
+      <v-avatar v-if="room.new" color="var(--main-col-3)" size="16">
+        <span class="white-col-1 xxxs-font">N</span>
       </v-avatar>
-      <div class="xs-font main-font-bd">{{ room.title }}</div>
     </v-sheet>
     <br />
     <br />
@@ -75,18 +80,4 @@ export default {
 };
 </script>
 
-<style>
-.chat-list {
-  /* height: 100vh - 130px; */
-  /* margin: 3%; */
-  /* overflow: scroll; */
-  /* height: 90vh;
-  overflow: scroll; */
-  /* height: 100vh; */
-  /* height: 80vh; */
-  /* overflow: scroll; */
-}
-/* .chat-items {
-  height: 100%;
-} */
-</style>
+<style></style>
