@@ -87,13 +87,17 @@ const emojiStore = {
       state.myPageView = myPageView;
     },
     SET_AROUND_EMOJIS(state, emojis) {
-      state.aroundEmojis = emojis;
+      if (emojis != null) {
+        state.aroundEmojis = emojis;
+      }
     },
     CLEAR_AROUND_EMOJIS(state) {
       state.aroundEmojis = [];
     },
     ADD_MY_EMOJIS_TO_AROUND_EMOJIS(state, emojis) {
-      state.aroundEmojis.push(...emojis);
+      if (emojis != null) {
+        state.aroundEmojis.push(...emojis);
+      }
     },
   },
   actions: {

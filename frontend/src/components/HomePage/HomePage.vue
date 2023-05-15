@@ -40,20 +40,10 @@ export default {
     if (this.location.dongCode != null) {
       let resultAround = await getAroundEmojis(this.location);
       let resultMyEmoji = await getEmojis();
-      if (resultAround == null || resultMyEmoji == null) {
-        console.log(
-          "주변 이모지 불러오기 오류 발생",
-          resultAround,
-          resultMyEmoji
-        );
-      } else {
-        //내 주변 이모지 설정
-        this.setAroundEmojis(resultAround);
-        //나의 이모지 추가
-        this.addMyEmojisToAroundEmojis(resultMyEmoji);
-        // console.log("total emojis", this.aroundEmojis);
-      }
-      //result가 null이라면 오류, result.length가 0이라면 주변 이모지 없음
+      //내 주변 이모지 설정
+      this.setAroundEmojis(resultAround);
+      //나의 이모지 추가
+      this.addMyEmojisToAroundEmojis(resultMyEmoji);
     }
   },
   methods: {
