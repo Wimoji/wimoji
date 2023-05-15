@@ -19,7 +19,7 @@
         >
           <div class="main-font-bd xs-font pr-1">{{ message.nickname }}</div>
           <div class="d-flex align-end">
-            <div class="xxxs-font mr-2">{{ message.mtime }}</div>
+            <div class="xxxs-font mr-1">{{ message.mtime }}</div>
             <v-chip
               class="xs-font pa-4"
               text-color="white"
@@ -44,7 +44,7 @@
             <v-chip class="xs-font pa-4" color="white">{{
               message.content
             }}</v-chip>
-            <div class="xxxs-font ml-2">{{ message.mtime }}</div>
+            <div class="xxxs-font ml-1">{{ message.mtime }}</div>
           </div>
         </v-col>
         <!-- 입퇴장 -->
