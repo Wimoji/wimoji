@@ -1,68 +1,66 @@
 import AroundEmojis from "@/components/molecules/HomeEmoji/AroundEmojis";
 import CreateEmoji from "@/components/molecules/HomeEmoji/CreateEmoji";
-import useGeolocation from "@/components/molecules/HomeEmoji/useGeolocation";
-import { kakaoApi } from "@/lib/emoji";
+import { getAddressFromKakao } from "@/lib/modules/kakao";
 import { useEffect, useState } from "react";
 
-interface Location {
-  lat: number;
-  lon: number;
-}
-
-interface HomeReq {
-  latitude: string;
-  longitude: string;
-  dongCode: string;
-}
-
 const HomeComponent = () => {
-  var { latitude, longitude, error } = useGeolocation();
-
-  if (error) {
-    console.log("geolocation error", error);
-  }
-  console.log("!!", latitude, longitude);
-
-  //카카오 지도 요청
-  const [location, setLocation] = useState<Location>({
-    lat: latitude,
-    lon: longitude,
+  //마운트 될 때마다, 현재 위치 정보 가져오기 (geolocation, kakao local api)
+  const [location, setLocation] = useState({
+    latitude: "",
+    longitude: "",
+    dongCode: "",
+    address: "",
   });
-  console.log("다시 설정한 로케이션", location);
 
-  if (location.lat != 0 && location.lon != 0) {
-    console.log("카카오요청가야돼");
-    try {
-      const result = kakaoApi({
-        x: location.lon,
-        y: location.lat,
-      });
-      console.log("kakao result>>", result);
-    } catch (error) {
-      console.log(error);
+  useEffect(() => {
+    //1) geolocation
+    const { geolocation } = navigator;
+
+    geolocation.getCurrentPosition(
+      (position) => {
+        //success
+        //위도 경도 업데이트
+        setLocation({
+          ...location,
+          latitude: position.coords.latitude.toString(),
+          longitude: position.coords.longitude.toString(),
+        });
+      },
+      (error) => {
+        console.log("Geolocation을 지원하지 않는 브라우저입니다.");
+      }
+    );
+
+    //2) kakao
+    if (location.latitude != "" && location.longitude != "") {
+      //위도 경도 값이 존재할 때 kakao local API 호출
+      const params = {
+        x: location.longitude,
+        y: location.latitude,
+      };
+      getAddressFromKakao(params)
+        .then((res) => {
+          console.log(res);
+          //정상 처리 확인 후 B 위치 저장 -> res 값 확인 후 처리
+          // const temp = res.data.documents.filter(
+          //   (item: any) => item.region_type == "B"
+          // )[0];
+
+          // setLocation({
+          //   ...location,
+          //   dongCode: temp.code,
+          //   address: temp.address_name,
+          // });
+        })
+        .catch((err) => console.log(err));
     }
-  }
-  // useEffect(() => {
-  //   console.log("호출", location);
-  //   if (location.longitude != 0 && location.latitude != 0) {
-  //     console.log("카카오요청가야돼");
-  //     try {
-  //       const result = kakaoApi({
-  //         x: location.longitude,
-  //         y: location.latitude,
-  //       });
-  //       console.log("kakao result>>", result);
-  //     } catch (error) {
-  //       console.log(error);
-  //     }
-  //   }
-  // }, [location]);
+  }, []);
 
   return (
     <div className="bg-slate-100">
       <h1>로그인 한 메인화면</h1>
       <h1>주변 이모지 화면</h1>
-      {/* <AroundEmojis /> */}
+      <AroundEmojis location={location} />
       {/* <h1>이모지 생성하기 화면</h1> */}
       <CreateEmoji />
       <button className="bg-blue-300">새로고침 버튼</button>
