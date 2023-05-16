@@ -162,16 +162,10 @@ public class ChatRoomService {
 	 * @return :
 	 **/
 	public void makeLastChat(String uid, String rid) {
-		try {
-			int idx = chatRoomRepository.getLastChat(rid);
-			LastChat chatReq = new LastChat(uid, rid, idx);
+		int idx = chatRoomRepository.getLastChat(rid);
+		LastChat chatReq = new LastChat(uid, rid, idx);
 
-			lastChatRepository.save(chatReq);
-		} catch (NullPointerException e) {
-			return;
-		} catch (Exception e) {
-			throw new GeneralException(Code.BAD_REQUEST);
-		}
+		lastChatRepository.save(chatReq);
 	}
 
 	/**
@@ -200,20 +194,9 @@ public class ChatRoomService {
 	public Map<String, List> getNewChat(NewChatReq newChatReq, int enterIdx) {
 		try {
 			Map<String, List> result = new HashMap<>();
+
 			List<Integer> firstIdx = new ArrayList<>();
-
-			if (newChatReq.getStartIdx() < 15) {
-				newChatReq.setStartIdx(0);
-			} else {
-				newChatReq.setStartIdx(newChatReq.getStartIdx() - 15);
-			}
-
-			if (newChatReq.getStartIdx() < enterIdx) {
-				newChatReq.setStartIdx(enterIdx);
-				firstIdx.add(0);
-			} else {
-				firstIdx.add(newChatReq.getStartIdx());
-			}
+			firstIdx.add(setIdx(newChatReq.getStartIdx(), 15, enterIdx));
 			result.put("firstIdx", firstIdx);
 
 			List<Chat> chatList = chatRoomRepository.getNewChat(newChatReq);
@@ -234,24 +217,12 @@ public class ChatRoomService {
 	public Map<String, List> getPastChat(NewChatReq newChatReq, int enterIdx) {
 		try {
 			Map<String, List> result = new HashMap<>();
+
 			List<Integer> firstIdx = new ArrayList<>();
-
-			if (newChatReq.getStartIdx() < 30) {
-				newChatReq.setStartIdx(0);
-			} else {
-				newChatReq.setStartIdx(newChatReq.getStartIdx() - 30);
-			}
-
-			if (newChatReq.getStartIdx() < enterIdx) {
-				newChatReq.setStartIdx(enterIdx);
-				firstIdx.add(0);
-			} else {
-				firstIdx.add(newChatReq.getStartIdx());
-			}
+			firstIdx.add(setIdx(newChatReq.getStartIdx(), 30, enterIdx));
 			result.put("firstIdx", firstIdx);
 
 			List<Chat> chatList = chatRoomRepository.getPastChat(newChatReq);
-
 			List<ChatRes> chatResList = chatToChatRes(chatList, newChatReq.getUid());
 			result.put("chatList", chatResList);
 
@@ -278,5 +249,15 @@ public class ChatRoomService {
 		}
 
 		return chatResList;
+	}
+
+	private int setIdx(int nowIdx, int targetIdx, int enterIdx) {
+		int result = (nowIdx < targetIdx) ? 0 : (nowIdx - targetIdx);
+
+		if(result < enterIdx) {
+			result = enterIdx;
+		}
+
+		return result;
 	}
 }
