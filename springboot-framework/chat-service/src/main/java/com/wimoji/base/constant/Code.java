@@ -21,6 +21,8 @@ public enum Code {
     INTERNAL_ERROR(20000, HttpStatus.INTERNAL_SERVER_ERROR, "Internal error"),
     DATA_ACCESS_ERROR(20001, HttpStatus.INTERNAL_SERVER_ERROR, "Data access error"),
 
+    LIMIT_ERROR(30001, HttpStatus.CONFLICT, "Unable to enter error"),
+
     UNAUTHORIZED(40000, HttpStatus.UNAUTHORIZED, "User unauthorized");
 
 
@@ -29,7 +31,7 @@ public enum Code {
     private final String message;
 
     public String getMessage(Throwable e) {
-        return this.getMessage(this.getMessage() + " - " + e.getMessage());
+        return this.getMessage(e.getMessage());
         // 결과 예시 - "Validation error - Reason why it isn't valid"
     }
 

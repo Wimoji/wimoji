@@ -18,6 +18,11 @@ public enum Code {
     VALIDATION_ERROR(10001, HttpStatus.BAD_REQUEST, "Validation error"),
     NOT_FOUND(10002, HttpStatus.NOT_FOUND, "Requested resource is not found"),
 
+    NO_USER(10003, HttpStatus.NOT_FOUND, "등록된 사용자 정보를 찾을 수 없습니다."),
+    TOKEN_ERROR(10004, HttpStatus.UNAUTHORIZED, "Token 정보가 잘못됐습니다."),
+    ALREADY_USER(10005, HttpStatus.CONFLICT, "중복된 아이디입니다. 다른 아이디를 입력해주세요."),
+    NOT_ENTER_CHAT(10006, HttpStatus.ALREADY_REPORTED, "채팅방의 인원이 최대입니다."),
+
     INTERNAL_ERROR(20000, HttpStatus.INTERNAL_SERVER_ERROR, "Internal error"),
     DATA_ACCESS_ERROR(20001, HttpStatus.INTERNAL_SERVER_ERROR, "Data access error"),
 
@@ -29,7 +34,7 @@ public enum Code {
     private final String message;
 
     public String getMessage(Throwable e) {
-        return this.getMessage(this.getMessage() + " - " + e.getMessage());
+        return this.getMessage(e.getMessage());
         // 결과 예시 - "Validation error - Reason why it isn't valid"
     }
 

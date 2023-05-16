@@ -5,7 +5,6 @@ import com.wimoji.base.constant.Code;
 import com.wimoji.base.dto.ErrorResponseDto;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -14,7 +13,6 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 
 @RestControllerAdvice(annotations = {RestController.class})
 public class ExceptionHandler extends ResponseEntityExceptionHandler {
-
     @org.springframework.web.bind.annotation.ExceptionHandler
     public ResponseEntity<Object> general(GeneralException e, WebRequest request) {
         return handleExceptionInternal(e, e.getErrorCode(), request);
@@ -32,7 +30,8 @@ public class ExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
     private ResponseEntity<Object> handleExceptionInternal(Exception e, Code errorCode,
-                                                           HttpHeaders headers, HttpStatus status, WebRequest request) {
+        HttpHeaders headers, HttpStatus status, WebRequest request) {
+
         return super.handleExceptionInternal(
                 e,
                 ErrorResponseDto.of(errorCode, errorCode.getMessage(e)),

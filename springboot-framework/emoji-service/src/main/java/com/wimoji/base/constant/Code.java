@@ -13,6 +13,8 @@ import org.springframework.http.HttpStatus;
 @RequiredArgsConstructor
 public enum Code {
     OK(0, HttpStatus.OK, "Ok"),
+    SUCCESS(200, HttpStatus.OK, "SUCCESS"),
+    SUCCESS_NODATA(201, HttpStatus.CREATED, "SUCCESS"),
 
     BAD_REQUEST(10000, HttpStatus.BAD_REQUEST, "Bad request"),
     VALIDATION_ERROR(10001, HttpStatus.BAD_REQUEST, "Validation error"),
@@ -20,6 +22,7 @@ public enum Code {
 
     INTERNAL_ERROR(20000, HttpStatus.INTERNAL_SERVER_ERROR, "Internal error"),
     DATA_ACCESS_ERROR(20001, HttpStatus.INTERNAL_SERVER_ERROR, "Data access error"),
+    NO_EMOJI(20002, HttpStatus.NOT_FOUND, "이모지를 찾을 수 없습니다."),
 
     UNAUTHORIZED(40000, HttpStatus.UNAUTHORIZED, "User unauthorized");
 
@@ -29,7 +32,7 @@ public enum Code {
     private final String message;
 
     public String getMessage(Throwable e) {
-        return this.getMessage(this.getMessage() + " - " + e.getMessage());
+        return this.getMessage(e.getMessage());
         // 결과 예시 - "Validation error - Reason why it isn't valid"
     }
 
