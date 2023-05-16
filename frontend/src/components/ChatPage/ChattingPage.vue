@@ -395,35 +395,22 @@ export default {
 
 <style scoped>
 .chat-room-container {
-  /* height: 100vh;
-  overflow: hidden; */
-  /* height: 90vh; */
   height: 100%;
   overflow: hidden;
-
   display: flex;
   flex-direction: column;
 }
 .chat-area {
-  height: 90%;
+  padding-top: 3%;
+  /* 모바일 실제 영역 설정 */
+  height: 100vh;
+  height: calc(100vh - 170px);
+  height: calc(var(--vh, 1vh) * 100 - 170px);
   overflow: scroll;
-  /* height: 90%;
-  overflow: scroll;
-  margin-bottom: 5%; */
-  /* overflow: scroll; */
-  /* height: 90%;
-  overflow: scroll;
-  padding-top: 85px; */
 }
 .send-area {
-  height: 10%;
+  height: 75px;
   margin: 3%;
-  /* position: absolute;
-  width: 100%;
-  padding: 3%;
-  bottom: 0; */
-  /* height: 10%; */
-  /* margin: 3%; */
 
   display: flex;
   justify-content: space-between;

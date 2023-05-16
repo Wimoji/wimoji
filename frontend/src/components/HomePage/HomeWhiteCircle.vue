@@ -19,6 +19,7 @@
         {{ text }}
       </div>
       <home-page-create-emoji
+        :loc="loc"
         :posFlag="posFlag"
         class="mt-3"
       ></home-page-create-emoji>
@@ -34,7 +35,7 @@ export default {
     HomeEmoji,
     HomePageCreateEmoji,
   },
-  props: ["locText"],
+  props: ["locText", "loc"],
   data() {
     return {
       posFlag: false,

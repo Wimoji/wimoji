@@ -87,7 +87,7 @@ export default {
   components: {
     EmojiList,
   },
-  props: ["posFlag"],
+  props: ["posFlag", "loc"],
   data() {
     return {
       //dialog 관련 설정
@@ -168,9 +168,9 @@ export default {
         const data = {
           eid: this.nowEmoji,
           title: this.title,
-          latitude: this.latitude,
-          longitude: this.longitude,
-          dongCode: this.myDongcode,
+          latitude: this.loc.latitude,
+          longitude: this.loc.longitude,
+          dongCode: this.loc.dongCode,
           rid: rid,
         };
         await makeEmoji(
