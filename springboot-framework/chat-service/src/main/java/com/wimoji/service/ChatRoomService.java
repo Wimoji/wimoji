@@ -127,7 +127,12 @@ public class ChatRoomService {
 	 * @return :
 	 **/
 	public void addUserToList(String rid, String uid) {
-		int idx = chatRoomRepository.getLastChat(rid);
+		ChatRoom chatRoom = chatRoomRepository.findById(rid);
+		if(chatRoom == null) {
+			throw new GeneralException(Code.NOT_FOUND);
+		}
+
+		int idx = chatRoom.getContent().size();
 		UserEnterRes userEnterRes = new UserEnterRes(uid, idx);
 		chatRoomRepository.addUserToList(rid, userEnterRes);
 	}
@@ -161,7 +166,12 @@ public class ChatRoomService {
 	 * @return :
 	 **/
 	public void makeLastChat(String uid, String rid) {
-		int idx = chatRoomRepository.getLastChat(rid);
+		ChatRoom chatRoom = chatRoomRepository.findById(uid);
+		if(chatRoom == null) {
+			throw new GeneralException(Code.NOT_FOUND);
+		}
+
+		int idx = chatRoom.getContent().size();
 		LastChat chatReq = new LastChat(new LastChatId(uid, rid), idx);
 
 		lastChatRepository.save(chatReq);

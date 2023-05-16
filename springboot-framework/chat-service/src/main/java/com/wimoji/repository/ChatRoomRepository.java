@@ -120,20 +120,6 @@ public class ChatRoomRepository {
 	}
 
 	/**
-	 * 채팅방의 마지막 메세지 인덱스 반환
-	 * @param : 채팅방의 id
-	 * @return : 채팅방의 메시지 크기
-	 **/
-	public int getLastChat(String rid) {
-		Query query = new Query();
-		query.addCriteria(Criteria.where("_id").is(new ObjectId(rid)));
-		ChatRoom lastChat = mongoTemplate.findOne(query, ChatRoom.class);
-
-		int listIdx = lastChat.getContent().size();
-		return listIdx;
-	}
-
-	/**
 	 * 유저가 마지막으로 읽은 메시지로부터 10번 먼저 온 메시지부터 새로운 모든 메시지 출력
 	 * @param : 채팅방의 id, 메시지를 가져올 시작 인덱스
 	 * @return : 메시지의 List
