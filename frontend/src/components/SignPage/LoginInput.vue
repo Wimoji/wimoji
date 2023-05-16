@@ -130,14 +130,14 @@ export default {
           };
 
           this.setLogin(user); //로그인 정보 설정
-          this.$router.push("/");
+          this.$router.replace("/");
         } else {
           alert("등록된 사용자 정보가 없습니다.");
           this.isClick = false;
           this.isAllOk = false;
           this.id = null;
           this.password = null;
-          this.$router.push("/login");
+          this.$router.replace("/login");
         }
       }
     },

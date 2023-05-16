@@ -175,7 +175,7 @@ export default {
         };
         await makeEmoji(
           data,
-          ({ data }) => {
+          async ({ data }) => {
             // console.log(data);
             if (data.success) {
               alert("이모지 등록 완료!");
@@ -184,6 +184,20 @@ export default {
               this.nowEmoji = "mdi-heart-plus-outline";
               this.title = "";
               this.limit = null;
+
+              // 유저 정보 수정 api 호출
+              const params = {
+                rid: rid,
+              };
+              await myChat(
+                params,
+                ({ data }) => {
+                  console.log(data);
+                },
+                (error) => {
+                  console.log(error);
+                }
+              );
             }
             this.$router.go();
           },
@@ -195,44 +209,12 @@ export default {
         alert("이모지 생성 중 오류가 발생했습니다. 다시 시도해주세요.");
         // this.$router.go(0);
       }
-
-      // 유저 정보 수정 api 호출
-      const params = {
-        rid: rid,
-      };
-      await myChat(
-        params,
-        ({ data }) => {
-          console.log(data);
-        },
-        (error) => {
-          console.log(error);
-        }
-      );
     },
   },
 };
 </script>
 
 <style>
-/* .create-emoji-btn-area {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  text-align: center;
-}
-.v-speed-dial {
-  position: absolute;
-}
-.emoji-card {
-  position: fixed;
-  width: 80%;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-}
- */
 .emoji-category {
   position: fixed;
   top: 50%;
