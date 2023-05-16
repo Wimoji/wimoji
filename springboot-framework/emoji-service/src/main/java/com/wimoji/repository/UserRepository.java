@@ -25,8 +25,8 @@ public class UserRepository {
      */
     public List<User> findLoginedUser(String uid) {
         //select * from user where login == true and uid = uid;
-        Criteria criteria = Criteria.where("login").is(true)
-                .andOperator(Criteria.where("uid").ne(uid));
+        Criteria criteria = Criteria.where("login").is(true);
+//                .andOperator(Criteria.where("uid").ne(uid));
         Query query = new Query(criteria);
         List<User> userList = mongoTemplate.find(query, User.class);
         return userList;
