@@ -37,7 +37,7 @@ dependencies {
 	implementation 'org.springframework.cloud:spring-cloud-starter-openfeign'
 	implementation 'io.micrometer:micrometer-registry-prometheus:1.10.6'
 	implementation 'org.springframework.boot:spring-boot-starter-actuator:3.0.6'
-
+	implementation 'org.springframework:spring-aop'
 }
 
 dependencyManagement {
