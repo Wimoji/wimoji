@@ -80,15 +80,16 @@ public class HomeService {
         }//userList
 
         //6. 거리순 정렬하여 30개 뽑기
-        Collections.sort(list, new Comparator<HomeRes>() {
-            @Override
-            public int compare(HomeRes o1, HomeRes o2) {
-                if(o1.getDis() >= o2.getDis())
-                    return 1;
-                else
-                    return -1;
-            }
-        });
+        if (!list.isEmpty())
+            Collections.sort(list, new Comparator<HomeRes>() {
+                @Override
+                public int compare(HomeRes o1, HomeRes o2) {
+                    if(o1.getDis() >= o2.getDis())
+                        return 1;
+                    else
+                        return -1;
+                }
+            });
         return list;
     }
 
