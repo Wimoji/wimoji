@@ -174,7 +174,7 @@ public class ChatRoomService {
 	 * @return : 마지막 메시지의 인덱스
 	 **/
 	public int getLastChat(String uid, String rid) {
-		return lastChatRepository.getLastChat(uid, rid);
+		return lastChatRepository.getLastChat(new LastChatId(uid, rid));
 	}
 
 	/**
@@ -183,7 +183,7 @@ public class ChatRoomService {
 	 * @return :
 	 **/
 	public void removeLastChat(String uid, String rid) {
-		lastChatRepository.removeLastChat(uid, rid);
+		lastChatRepository.removeLastChat(new LastChatId(uid, rid));
 	}
 
 	/**
