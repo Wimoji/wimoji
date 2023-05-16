@@ -12,7 +12,7 @@
       </div>
     </div>
     <div class="home-center-area">
-      <home-white-circle :locText="locText"></home-white-circle>
+      <home-white-circle :loc="loc" :locText="locText"></home-white-circle>
     </div>
     <the-footer></the-footer>
     <!-- 새로고침 버튼 -->
@@ -23,7 +23,10 @@
 </template>
 
 <script>
-import { getAroundEmojis, getEmojis } from "@/api/modules/emoji";
+import {
+  getAroundEmojis,
+  //  getEmojis
+} from "@/api/modules/emoji";
 import { mapState, mapActions } from "vuex";
 import { getNowPosition } from "@/api/modules/location";
 
@@ -102,40 +105,52 @@ export default {
           `지금 ${this.loc.address}에 있어요`,
         ];
       }
-
-      // //7 주변 이모지 불러오기
+      // console.log(
+      //   "type >> ",
+      //   typeof this.loc.latitude,
+      //   typeof this.loc.longitude,
+      //   typeof this.loc.dongCode
+      // );
+      //7 주변 이모지 불러오기
+      let data = {
+        latitude: this.loc.latitude.toString(),
+        longitude: this.loc.longitude.toString(),
+        dongCode: this.loc.dongCode,
+      };
       // let data = {
       //   latitude: `${this.loc.latitude}`,
       //   longitude: `${this.loc.longitude}`,
       //   dongCode: this.loc.dongCode,
       // };
-      // let resultAround = await getAroundEmojis(data);
+      let resultAround = await getAroundEmojis(data);
 
-      // //8 내 이모지 불러오기
+      //8 내 이모지 불러오기
       // let resultMyEmoji = await getEmojis();
 
-      // //9 전체 이모지 합치기
-      // this.setAroundEmojis(resultAround);
+      //9 전체 이모지 합치기
+      this.setAroundEmojis(resultAround);
       // this.addMyEmojisToAroundEmojis(resultMyEmoji);
-      // console.log("위치설정끗!");
+      console.log("위치설정끗!");
     } else {
       alert("현재 브라우저에서 geolocation을 지원하지 않습니다.");
     }
     // console.log("위치밖이지롱");
-    //7 주변 이모지 불러오기
-    let data = {
-      latitude: `${this.loc.latitude}`,
-      longitude: `${this.loc.longitude}`,
-      dongCode: `${this.loc.dongCode}`,
-    };
-    let resultAround = await getAroundEmojis(data);
+    // if (this.loc.latitude != null && this.loc.longitude != null) {
+    //   //7 주변 이모지 불러오기
+    //   let data = {
+    //     latitude: this.loc.latitude,
+    //     longitude: this.loc.longitude,
+    //     dongCode: this.loc.dongCode,
+    //   };
+    //   let resultAround = await getAroundEmojis(data);
 
-    //8 내 이모지 불러오기
-    let resultMyEmoji = await getEmojis();
+    //   //8 내 이모지 불러오기
+    //   let resultMyEmoji = await getEmojis();
 
-    //9 전체 이모지 합치기
-    this.setAroundEmojis(resultAround);
-    this.addMyEmojisToAroundEmojis(resultMyEmoji);
+    //   //9 전체 이모지 합치기
+    //   this.setAroundEmojis(resultAround);
+    //   this.addMyEmojisToAroundEmojis(resultMyEmoji);
+    // }
   },
   destroyed() {
     this.clearAroundEmojis();
