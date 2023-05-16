@@ -1,5 +1,5 @@
 import SignupForm from "@/components/molecules/SignupForm/SignupForm";
-import { signUp } from "@/utils/axiosApi";
+import { signUp } from "@/lib/user";
 import { useRouter } from "next/router";
 import { useState } from "react";
 
@@ -53,7 +53,7 @@ const SignupComponent = () => {
 
   return (
     <div>
-      <h1>회원가입 페이지</h1>
+      <h1>회원가입 컴포넌트</h1>
       <SignupForm
         nickname={nickname}
         uid={uid}

@@ -1,5 +1,5 @@
 import LogoutButton from "@/components/atoms/Button/LogoutButton";
-import { logout } from "@/utils/axiosApi";
+import { logout } from "@/lib/user";
 import { useRouter } from "next/router";
 
 const LogoutComponent = () => {
@@ -11,7 +11,7 @@ const LogoutComponent = () => {
     try {
       const result = await logout();
       if (result.data.success) {
-        alert("로그아웃 되었습니다.");
+        alert("다음에 또 봐요! 🤗");
       }
     } catch (error: any) {
       alert(error.response.data.message);

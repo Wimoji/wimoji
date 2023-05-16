@@ -1,15 +1,15 @@
 import SigninForm from "@/components/molecules/SigninForm/SigninForm";
 import { RootState } from "@/store";
 import { changeUserState } from "@/store/UserSlice";
-import { signIn } from "@/utils/axiosApi";
+import { signIn } from "@/lib/user";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 const SigninComponent = () => {
-  const dispatch = useDispatch();
-  const isLogin = useSelector((state: RootState) => state.user.isLogin);
+  // const dispatch = useDispatch();
+  // const isLogin = useSelector((state: RootState) => state.user.isLogin);
 
   const router = useRouter();
 
@@ -29,9 +29,8 @@ const SigninComponent = () => {
           "refresh-token",
           response.data.data.refreshToken
         );
-
-        dispatch(changeUserState(true));
-        // console.log("로그인 상태 확인할게요 >> ", isLogin);
+        //닉네임 저장
+        sessionStorage.setItem("nickname", response.data.data.nickname);
 
         //메인 화면으로 이동
         router.push("/");

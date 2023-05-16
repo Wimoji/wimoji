@@ -1,5 +1,5 @@
 import DeleteUserButton from "@/components/atoms/Button/DeleteUserButton";
-import { deleteUser } from "@/utils/axiosApi";
+import { deleteUser } from "@/lib/user";
 import { useRouter } from "next/router";
 
 const DeleteUserComponent = () => {
