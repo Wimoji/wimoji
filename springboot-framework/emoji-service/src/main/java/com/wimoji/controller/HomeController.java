@@ -53,7 +53,7 @@ public class HomeController {
         } catch (JsonProcessingException je) {
             throw new GeneralException(Code.UNAUTHORIZED);
         } catch (Exception e){
-            throw e;
+            throw new GeneralException(Code.INTERNAL_ERROR);
         }
     }
 }

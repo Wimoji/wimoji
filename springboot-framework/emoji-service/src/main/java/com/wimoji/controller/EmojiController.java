@@ -45,7 +45,7 @@ public class EmojiController {
         } catch (JsonProcessingException je) {
             throw new GeneralException(Code.UNAUTHORIZED);
         } catch (Exception e){
-            throw e;
+            throw new GeneralException(Code.INTERNAL_ERROR);
         }
     }
 
@@ -65,7 +65,7 @@ public class EmojiController {
         } catch (JsonProcessingException je) {
             throw new GeneralException(Code.UNAUTHORIZED);
         } catch (Exception e){
-            throw e;
+            throw new GeneralException(Code.INTERNAL_ERROR);
         }
     }
 
@@ -85,7 +85,7 @@ public class EmojiController {
         } catch (JsonProcessingException je) {
             throw new GeneralException(Code.UNAUTHORIZED);
         } catch (Exception e){
-            throw e;
+            throw new GeneralException(Code.INTERNAL_ERROR);
         }
     }
 
@@ -115,7 +115,7 @@ public class EmojiController {
         } catch (JsonProcessingException je) {
             throw new GeneralException(Code.UNAUTHORIZED);
         } catch (Exception e){
-            throw e;
+            throw new GeneralException(Code.INTERNAL_ERROR);
         }
     }
 }

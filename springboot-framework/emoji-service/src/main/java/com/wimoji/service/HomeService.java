@@ -73,6 +73,9 @@ public class HomeService {
                 homeRes.setDis(dis);
                 homeRes.setUid(user.getUid());
                 list.add(homeRes);
+
+                if (list.size() >= 30)
+                    break;
             }//emojiList
         }//userList
 
@@ -86,11 +89,7 @@ public class HomeService {
                     return -1;
             }
         });
-
-        if(list.size() < 30)
-            return list;
-        else
-            return list.subList(0, 30);
+        return list;
     }
 
     /**
