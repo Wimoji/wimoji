@@ -6,12 +6,10 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
 import com.wimoji.base.GeneralException;
 import com.wimoji.base.constant.Code;
-import com.wimoji.base.dto.DataResponseDto;
 import com.wimoji.repository.ChatRoomRepository;
 import com.wimoji.repository.LastChatRepository;
 import com.wimoji.repository.dto.entity.Chat;
@@ -129,7 +127,12 @@ public class ChatRoomService {
 	 * @return :
 	 **/
 	public void addUserToList(String rid, String uid) {
-		int idx = chatRoomRepository.getLastChat(rid);
+		ChatRoom chatRoom = chatRoomRepository.findById(rid);
+		if(chatRoom == null) {
+			throw new GeneralException(Code.NOT_FOUND);
+		}
+
+		int idx = chatRoom.getContent().size();
 		UserEnterRes userEnterRes = new UserEnterRes(uid, idx);
 		chatRoomRepository.addUserToList(rid, userEnterRes);
 	}
@@ -163,16 +166,15 @@ public class ChatRoomService {
 	 * @return :
 	 **/
 	public void makeLastChat(String uid, String rid) {
-		try {
-			int idx = chatRoomRepository.getLastChat(rid);
-			LastChat chatReq = new LastChat(new LastChatId(uid, rid), idx);
-
-			lastChatRepository.save(chatReq);
-		} catch (NullPointerException e) {
-			return;
-		} catch (Exception e) {
-			throw new GeneralException(Code.BAD_REQUEST);
+		ChatRoom chatRoom = chatRoomRepository.findById(rid);
+		if(chatRoom == null) {
+			throw new GeneralException(Code.NOT_FOUND);
 		}
+
+		int idx = chatRoom.getContent().size();
+		LastChat chatReq = new LastChat(new LastChatId(uid, rid), idx);
+
+		lastChatRepository.save(chatReq);
 	}
 
 	/**
@@ -201,20 +203,10 @@ public class ChatRoomService {
 	public Map<String, List> getNewChat(NewChatReq newChatReq, int enterIdx) {
 		try {
 			Map<String, List> result = new HashMap<>();
+
 			List<Integer> firstIdx = new ArrayList<>();
-
-			if (newChatReq.getStartIdx() < 15) {
-				newChatReq.setStartIdx(0);
-			} else {
-				newChatReq.setStartIdx(newChatReq.getStartIdx() - 15);
-			}
-
-			if (newChatReq.getStartIdx() < enterIdx) {
-				newChatReq.setStartIdx(enterIdx);
-				firstIdx.add(0);
-			} else {
-				firstIdx.add(newChatReq.getStartIdx());
-			}
+			newChatReq.setStartIdx(setIdx(newChatReq.getStartIdx(), 15, enterIdx));
+			firstIdx.add(newChatReq.getStartIdx());
 			result.put("firstIdx", firstIdx);
 
 			List<Chat> chatList = chatRoomRepository.getNewChat(newChatReq);
@@ -235,24 +227,13 @@ public class ChatRoomService {
 	public Map<String, List> getPastChat(NewChatReq newChatReq, int enterIdx) {
 		try {
 			Map<String, List> result = new HashMap<>();
+
 			List<Integer> firstIdx = new ArrayList<>();
-
-			if (newChatReq.getStartIdx() < 30) {
-				newChatReq.setStartIdx(0);
-			} else {
-				newChatReq.setStartIdx(newChatReq.getStartIdx() - 30);
-			}
-
-			if (newChatReq.getStartIdx() < enterIdx) {
-				newChatReq.setStartIdx(enterIdx);
-				firstIdx.add(0);
-			} else {
-				firstIdx.add(newChatReq.getStartIdx());
-			}
+			newChatReq.setStartIdx(setIdx(newChatReq.getStartIdx(), 30, enterIdx));
+			firstIdx.add(newChatReq.getStartIdx());
 			result.put("firstIdx", firstIdx);
 
 			List<Chat> chatList = chatRoomRepository.getPastChat(newChatReq);
-
 			List<ChatRes> chatResList = chatToChatRes(chatList, newChatReq.getUid());
 			result.put("chatList", chatResList);
 
@@ -279,5 +260,15 @@ public class ChatRoomService {
 		}
 
 		return chatResList;
+	}
+
+	private int setIdx(int nowIdx, int targetIdx, int enterIdx) {
+		int result = (nowIdx < targetIdx) ? 0 : (nowIdx - targetIdx);
+
+		if(result < enterIdx) {
+			result = enterIdx;
+		}
+
+		return result;
 	}
 }
