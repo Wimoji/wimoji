@@ -1,7 +1,7 @@
 import SigninForm from "@/components/molecules/SigninForm/SigninForm";
 import { RootState } from "@/store";
 import { changeUserState } from "@/store/UserSlice";
-import { signIn } from "@/lib/user";
+import { signIn } from "@/lib/modules/user";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useState } from "react";

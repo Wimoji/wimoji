@@ -1,5 +1,5 @@
 import SignupForm from "@/components/molecules/SignupForm/SignupForm";
-import { signUp } from "@/lib/user";
+import { signUp } from "@/lib/modules/user";
 import { useRouter } from "next/router";
 import { useState } from "react";
 

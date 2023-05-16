@@ -1,5 +1,5 @@
 import LogoutButton from "@/components/atoms/Button/LogoutButton";
-import { logout } from "@/lib/user";
+import { logout } from "@/lib/modules/user";
 import { useRouter } from "next/router";
 
 const LogoutComponent = () => {
