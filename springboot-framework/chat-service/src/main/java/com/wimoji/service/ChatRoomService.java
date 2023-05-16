@@ -166,7 +166,7 @@ public class ChatRoomService {
 	 * @return :
 	 **/
 	public void makeLastChat(String uid, String rid) {
-		ChatRoom chatRoom = chatRoomRepository.findById(uid);
+		ChatRoom chatRoom = chatRoomRepository.findById(rid);
 		if(chatRoom == null) {
 			throw new GeneralException(Code.NOT_FOUND);
 		}
@@ -205,7 +205,8 @@ public class ChatRoomService {
 			Map<String, List> result = new HashMap<>();
 
 			List<Integer> firstIdx = new ArrayList<>();
-			firstIdx.add(setIdx(newChatReq.getStartIdx(), 15, enterIdx));
+			newChatReq.setStartIdx(setIdx(newChatReq.getStartIdx(), 15, enterIdx));
+			firstIdx.add(newChatReq.getStartIdx());
 			result.put("firstIdx", firstIdx);
 
 			List<Chat> chatList = chatRoomRepository.getNewChat(newChatReq);
@@ -228,7 +229,8 @@ public class ChatRoomService {
 			Map<String, List> result = new HashMap<>();
 
 			List<Integer> firstIdx = new ArrayList<>();
-			firstIdx.add(setIdx(newChatReq.getStartIdx(), 30, enterIdx));
+			newChatReq.setStartIdx(setIdx(newChatReq.getStartIdx(), 30, enterIdx));
+			firstIdx.add(newChatReq.getStartIdx());
 			result.put("firstIdx", firstIdx);
 
 			List<Chat> chatList = chatRoomRepository.getPastChat(newChatReq);
