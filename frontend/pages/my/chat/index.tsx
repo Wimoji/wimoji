@@ -3,4 +3,3 @@ const Chat = () => {
 };
 
 export default Chat;
-<div>채팅 목록!</div>;
