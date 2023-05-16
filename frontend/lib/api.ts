@@ -8,6 +8,14 @@ const api = axios.create({
   },
 });
 
+//카카오 api 설정
+const kakaoApi = axios.create({
+  baseURL: process.env.NEXT_PUBLIC_KAKAO_URL,
+  headers: {
+    Authorization: "KakaoAK " + process.env.NEXT_PUBLIC_KAKAOMAP_API_KEY,
+  },
+});
+
 //Interceptors
 api.interceptors.request.use((config) => {
   //session storage에 access token이 존재한다면 담아서 보낸다
@@ -29,3 +37,4 @@ api.interceptors.response.use((config) => {
 });
 
 export default api;
+export { kakaoApi };
