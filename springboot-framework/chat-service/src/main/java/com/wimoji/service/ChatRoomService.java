@@ -6,17 +6,16 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
 import com.wimoji.base.GeneralException;
 import com.wimoji.base.constant.Code;
-import com.wimoji.base.dto.DataResponseDto;
 import com.wimoji.repository.ChatRoomRepository;
 import com.wimoji.repository.LastChatRepository;
 import com.wimoji.repository.dto.entity.Chat;
 import com.wimoji.repository.dto.entity.ChatRoom;
 import com.wimoji.repository.dto.entity.LastChat;
+import com.wimoji.repository.dto.entity.LastChatId;
 import com.wimoji.repository.dto.request.NewChatReq;
 import com.wimoji.repository.dto.response.ChatRes;
 import com.wimoji.repository.dto.response.ChatRoomRes;
@@ -163,7 +162,7 @@ public class ChatRoomService {
 	 **/
 	public void makeLastChat(String uid, String rid) {
 		int idx = chatRoomRepository.getLastChat(rid);
-		LastChat chatReq = new LastChat(uid, rid, idx);
+		LastChat chatReq = new LastChat(new LastChatId(uid, rid), idx);
 
 		lastChatRepository.save(chatReq);
 	}
