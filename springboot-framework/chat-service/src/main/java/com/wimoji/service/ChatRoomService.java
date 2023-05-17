@@ -202,10 +202,11 @@ public class ChatRoomService {
 	 **/
 	public Map<String, List> getNewChat(NewChatReq newChatReq, int enterIdx) {
 		try {
+			int preIdx = 15;
 			Map<String, List> result = new HashMap<>();
 
 			List<Integer> firstIdx = new ArrayList<>();
-			newChatReq.setStartIdx(setIdx(newChatReq.getStartIdx(), 15, enterIdx));
+			newChatReq.setStartIdx(setIdx(newChatReq.getStartIdx(), preIdx, enterIdx));
 			firstIdx.add(newChatReq.getStartIdx());
 			result.put("firstIdx", firstIdx);
 
@@ -226,10 +227,11 @@ public class ChatRoomService {
 	 **/
 	public Map<String, List> getPastChat(NewChatReq newChatReq, int enterIdx) {
 		try {
+			int preIdx = 30;
 			Map<String, List> result = new HashMap<>();
 
 			List<Integer> firstIdx = new ArrayList<>();
-			newChatReq.setStartIdx(setIdx(newChatReq.getStartIdx(), 30, enterIdx));
+			newChatReq.setStartIdx(setIdx(newChatReq.getStartIdx(), preIdx, enterIdx));
 			firstIdx.add(newChatReq.getStartIdx());
 			result.put("firstIdx", firstIdx);
 
