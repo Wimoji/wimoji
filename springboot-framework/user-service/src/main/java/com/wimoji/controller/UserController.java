@@ -12,7 +12,7 @@ import com.wimoji.repository.dto.request.UserReq;
 import com.wimoji.repository.dto.response.ChatRoomRes;
 import com.wimoji.repository.dto.response.NumberRes;
 import com.wimoji.service.ChatServiceClient;
-
+import com.wimoji.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -214,7 +214,6 @@ public class UserController {
             throw new GeneralException(Code.NO_USER);
         }
 
-        String token = bearerToken.substring(7);
-        return token;
+        return bearerToken.substring(7);
     }
 }
