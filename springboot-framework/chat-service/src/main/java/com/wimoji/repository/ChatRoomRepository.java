@@ -28,8 +28,7 @@ public class ChatRoomRepository {
 	 **/
 	public List<ChatRoomRes> findAll() {
 		Query query = new Query();
-		List<ChatRoomRes> chatRoom = mongoTemplate.find(query, ChatRoomRes.class);
-		return chatRoom;
+		return mongoTemplate.find(query, ChatRoomRes.class);
 	}
 
 	/**
@@ -40,9 +39,7 @@ public class ChatRoomRepository {
 	public ChatRoom findById(String rid) {
 		Query query = new Query();
 		query.addCriteria(Criteria.where("_id").is(new ObjectId(rid)));
-
-		ChatRoom chatRoom = mongoTemplate.findOne(query, ChatRoom.class);
-		return chatRoom;
+		return mongoTemplate.findOne(query, ChatRoom.class);
 	}
 
 	/**
@@ -103,7 +100,6 @@ public class ChatRoomRepository {
 		Query query = new Query();
 		query.addCriteria(Criteria.where("_id").is(new ObjectId(rid)));
 		Update update = new Update().addToSet("userList", userEnterRes);
-
 		mongoTemplate.updateFirst(query, update, ChatRoom.class);
 	}
 
@@ -156,8 +152,6 @@ public class ChatRoomRepository {
 		Query query = new Query();
 		query.addCriteria(Criteria.where("_id").is(new ObjectId(rid)));
 		query.fields().include("userList");
-		ChatRoom chatRoom = mongoTemplate.findOne(query, ChatRoom.class);
-
-		return chatRoom;
+		return mongoTemplate.findOne(query, ChatRoom.class);
 	}
 }
