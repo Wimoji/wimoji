@@ -14,13 +14,13 @@ const DeleteUserComponent = () => {
           alert("탈퇴가 완료되었습니다. /(ㄒoㄒ)/~~");
           //세션 스토리지에서 token 삭제
           sessionStorage.clear();
+          //페이지 이동
+          router.push("/");
         }
       }
     } catch (error: any) {
       alert(error.response.data.message);
     }
-    //페이지 이동
-    router.push("/");
   };
 
   return <DeleteUserButton onClick={handleDeleteUser} />;
