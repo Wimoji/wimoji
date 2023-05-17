@@ -214,7 +214,6 @@ public class UserController {
             throw new GeneralException(Code.NO_USER);
         }
 
-        String token = bearerToken.substring(7);
-        return token;
+        return bearerToken.substring(7);
     }
 }
