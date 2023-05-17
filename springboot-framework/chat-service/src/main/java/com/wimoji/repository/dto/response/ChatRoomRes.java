@@ -21,13 +21,6 @@ public class ChatRoomRes {
 	int limit;
 	boolean isNew;
 
-	public static boolean isLimit(ChatRoomRes chatRoom) {
-		if(chatRoom.getLimit() <= (chatRoom.getParticipant() + 1)) {
-			return false;
-		}
-		return true;
-	}
-
 	public ChatRoomRes(ChatRoom chatRoom, boolean isNew) {
 		this.id = chatRoom.getId();
 		this.rid = chatRoom.getId().substring(0, 8);
