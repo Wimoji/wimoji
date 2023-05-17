@@ -46,7 +46,7 @@ public class ChatRoomController {
 	 * @param : 채팅방의 id
 	 * @return : 채팅방의 정보를 담은 ChatRoomRes List 반환
 	 **/
-	@GetMapping("/test")
+	@GetMapping("/all")
 	public DataResponseDto<List<ChatRoomRes>> getAllRoom() {
 		try {
 			List<ChatRoomRes> chatRoomList = chatRoomService.getAllRoom();
