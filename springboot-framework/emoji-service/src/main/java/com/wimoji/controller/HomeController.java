@@ -34,7 +34,7 @@ public class HomeController {
      * @return
      */
     @PostMapping("/location")
-    public DataResponseDto<?> getOtherEmojiList(HttpServletRequest request, @RequestBody HomeReq location){
+    public DataResponseDto<List<HomeRes>> getOtherEmojiList(HttpServletRequest request, @RequestBody HomeReq location){
         try{
             String bearerToken = request.getHeader("Authorization");
             User user =  mapper.readValue(userServiceClient.getUser(bearerToken), User.class);

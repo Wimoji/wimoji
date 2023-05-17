@@ -23,7 +23,6 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 public class EmojiController {
-
     private final UserServiceClient userServiceClient;
     private final ChatServiceClient chatServiceClient;
     private final EmojiService emojiService;
@@ -35,7 +34,7 @@ public class EmojiController {
      * @return
      */
     @PostMapping("/")
-    public DataResponseDto<?> saveEmoji(HttpServletRequest request, @RequestBody EmojiSaveReq emoji) {
+    public DataResponseDto<Void> saveEmoji(HttpServletRequest request, @RequestBody EmojiSaveReq emoji) {
         try{
             String bearerToken = request.getHeader("Authorization");
             User user =  mapper.readValue(userServiceClient.getUser(bearerToken), User.class);
@@ -55,7 +54,7 @@ public class EmojiController {
      * @return
      */
     @PutMapping("/")
-    public DataResponseDto<?> modifyEmoji(HttpServletRequest request, @RequestBody EmojiModifyReq emoji){
+    public DataResponseDto<Void> modifyEmoji(HttpServletRequest request, @RequestBody EmojiModifyReq emoji){
         try{
             String bearerToken = request.getHeader("Authorization");
             User user =  mapper.readValue(userServiceClient.getUser(bearerToken), User.class);
@@ -75,7 +74,7 @@ public class EmojiController {
      * @return
      */
     @PutMapping("/del")
-    public DataResponseDto<?> deleteEmoji(HttpServletRequest request, @RequestBody EmojiDeleteReq emoji){
+    public DataResponseDto<Void> deleteEmoji(HttpServletRequest request, @RequestBody EmojiDeleteReq emoji){
         try{
             String bearerToken = request.getHeader("Authorization");
             User user =  mapper.readValue(userServiceClient.getUser(bearerToken), User.class);
@@ -94,7 +93,7 @@ public class EmojiController {
      * @return
      */
     @GetMapping("/")
-    public DataResponseDto<?> getEmojiList(HttpServletRequest request){
+    public DataResponseDto<List<EmojiGetRes>> getEmojiList(HttpServletRequest request){
         try{
             String bearerToken = request.getHeader("Authorization");
             User user =  mapper.readValue(userServiceClient.getUser(bearerToken), User.class);
