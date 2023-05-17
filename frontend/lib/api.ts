@@ -8,16 +8,14 @@ const api = axios.create({
   },
 });
 
-//카카오 api 설정
-const kakaoApi = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_KAKAO_URL,
-  headers: {
-    Authorization: "KakaoAK " + process.env.NEXT_PUBLIC_KAKAOMAP_API_KEY,
-  },
-});
-
 //Interceptors
 api.interceptors.request.use((config) => {
+  //카카오의 경우
+  if (config.url?.includes("coord2regioncode")) {
+    config.headers["Authorization"] =
+      "KakaoAK " + process.env.NEXT_PUBLIC_KAKAOMAP_API_KEY;
+    return config;
+  }
   //session storage에 access token이 존재한다면 담아서 보낸다
   const token = sessionStorage.getItem("access-token");
 
@@ -25,6 +23,7 @@ api.interceptors.request.use((config) => {
   if (token) {
     config.headers["Authorization"] = "Bearer " + token;
   }
+  console.log("req -> ", config.method, config.url, config.data);
   return config;
 });
 
@@ -37,4 +36,4 @@ api.interceptors.response.use((config) => {
 });
 
 export default api;
-export { kakaoApi };
+// export { kakaoApi };
