@@ -10,6 +10,7 @@ import com.wimoji.repository.dto.UserEntity;
 import com.wimoji.repository.dto.request.UserChatRoomReq;
 import com.wimoji.repository.dto.request.UserReq;
 import com.wimoji.repository.dto.response.ChatRoomRes;
+import com.wimoji.repository.dto.response.NumberRes;
 import com.wimoji.service.ChatServiceClient;
 import com.wimoji.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -32,7 +33,7 @@ public class UserController {
     private JwtTokenUtil jwtTokenUtil;
 
     @PostMapping("/signup")
-    public DataResponseDto<?> makeUser(@RequestBody UserReq userReq) {
+    public DataResponseDto<Void> makeUser(@RequestBody UserReq userReq) {
         try {
             service.makeUser(userReq);
 
@@ -43,7 +44,7 @@ public class UserController {
     }
 
     @PutMapping("/login")
-    public DataResponseDto<?> setLoginUser(@RequestBody UserReq user) {
+    public DataResponseDto<HashMap<String, String>> setLoginUser(@RequestBody UserReq user) {
         try {
             HashMap<String, String> result = service.loginUser(user.getUid(), user.getPassword());
 
@@ -54,7 +55,7 @@ public class UserController {
     }
 
     @PutMapping("/logout")
-    public DataResponseDto<?> setLogoutUser(HttpServletRequest request) {
+    public DataResponseDto<Void> setLogoutUser(HttpServletRequest request) {
         try {
             String token = getToken(request);
             String uid = jwtTokenUtil.getUserIdFromToken(token);
@@ -68,7 +69,7 @@ public class UserController {
     }
 
     @DeleteMapping("/")
-    public DataResponseDto<?> removeUser(HttpServletRequest request){
+    public DataResponseDto<Void> removeUser(HttpServletRequest request){
         try{
             String token = getToken(request);
             String uid = jwtTokenUtil.getUserIdFromToken(token);
@@ -114,7 +115,7 @@ public class UserController {
      * 다른 microservice와의 통신용
      */
     @GetMapping("/chat")
-    public DataResponseDto<?> getMyChatRoom(HttpServletRequest request) {
+    public DataResponseDto<List<ChatRoomRes>> getMyChatRoom(HttpServletRequest request) {
         try {
             String token = getToken(request);
             String uid = jwtTokenUtil.getUserIdFromToken(token);
@@ -140,15 +141,20 @@ public class UserController {
     }
 
     /**
-     * user가 만든 채팅방의 정보를 저장
+     * user가 참여한 채팅방의 정보를 저장
      * @param : bearerToken, 채팅방의 id
      * @return :
      */
     @PutMapping("/chat/{rid}")
-    public DataResponseDto<?> makeChat(HttpServletRequest request, @PathVariable String rid) {
+    public DataResponseDto<Void> makeChat(HttpServletRequest request, @PathVariable String rid) {
         try {
             String token = getToken(request);
             String uid = jwtTokenUtil.getUserIdFromToken(token);
+
+            NumberRes numberRes = mapper.readValue(chatServiceClient.getNumber(rid), NumberRes.class);
+            if(!numberRes.isEnter()) {
+                throw new GeneralException(Code.NOT_ENTER_CHAT);
+            }
 
             service.makeChat(uid, rid);
 
@@ -166,7 +172,7 @@ public class UserController {
      * @return :
      */
     @DeleteMapping("/chat/{rid}")
-    public DataResponseDto<?> removeChat(HttpServletRequest request, @PathVariable String rid) {
+    public DataResponseDto<Void> removeChat(HttpServletRequest request, @PathVariable String rid) {
         try {
             if(rid == null) {
                 throw new GeneralException(Code.BAD_REQUEST);
