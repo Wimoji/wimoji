@@ -1,5 +1,11 @@
+import ChatListComponent from "@/components/organisms/ChatListComponent/ChatListComponent";
+
 const Chat = () => {
-  return <div>채팅 목록!</div>;
+  return (
+    <div>
+      <ChatListComponent />
+    </div>
+  );
 };
 
 export default Chat;
