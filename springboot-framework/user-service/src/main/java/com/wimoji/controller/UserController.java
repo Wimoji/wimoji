@@ -33,7 +33,7 @@ public class UserController {
     private JwtTokenUtil jwtTokenUtil;
 
     @PostMapping("/signup")
-    public DataResponseDto<Void> makeUser(@RequestBody UserReq userReq) {
+    public DataResponseDto<?> makeUser(@RequestBody UserReq userReq) {
         try {
             service.makeUser(userReq);
 
@@ -44,7 +44,7 @@ public class UserController {
     }
 
     @PutMapping("/login")
-    public DataResponseDto<HashMap<String, String>> setLoginUser(@RequestBody UserReq user) {
+    public DataResponseDto<?> setLoginUser(@RequestBody UserReq user) {
         try {
             HashMap<String, String> result = service.loginUser(user.getUid(), user.getPassword());
 
@@ -55,7 +55,7 @@ public class UserController {
     }
 
     @PutMapping("/logout")
-    public DataResponseDto<Void> setLogoutUser(HttpServletRequest request) {
+    public DataResponseDto<?> setLogoutUser(HttpServletRequest request) {
         try {
             String token = getToken(request);
             String uid = jwtTokenUtil.getUserIdFromToken(token);
@@ -69,7 +69,7 @@ public class UserController {
     }
 
     @DeleteMapping("/")
-    public DataResponseDto<Void> removeUser(HttpServletRequest request){
+    public DataResponseDto<?> removeUser(HttpServletRequest request){
         try{
             String token = getToken(request);
             String uid = jwtTokenUtil.getUserIdFromToken(token);
@@ -115,7 +115,7 @@ public class UserController {
      * 다른 microservice와의 통신용
      */
     @GetMapping("/chat")
-    public DataResponseDto<List<ChatRoomRes>> getMyChatRoom(HttpServletRequest request) {
+    public DataResponseDto<?> getMyChatRoom(HttpServletRequest request) {
         try {
             String token = getToken(request);
             String uid = jwtTokenUtil.getUserIdFromToken(token);
@@ -146,7 +146,7 @@ public class UserController {
      * @return :
      */
     @PutMapping("/chat/{rid}")
-    public DataResponseDto<Void> makeChat(HttpServletRequest request, @PathVariable String rid) {
+    public DataResponseDto<?> makeChat(HttpServletRequest request, @PathVariable String rid) {
         try {
             String token = getToken(request);
             String uid = jwtTokenUtil.getUserIdFromToken(token);
@@ -172,7 +172,7 @@ public class UserController {
      * @return :
      */
     @DeleteMapping("/chat/{rid}")
-    public DataResponseDto<Void> removeChat(HttpServletRequest request, @PathVariable String rid) {
+    public DataResponseDto<?> removeChat(HttpServletRequest request, @PathVariable String rid) {
         try {
             if(rid == null) {
                 throw new GeneralException(Code.BAD_REQUEST);
