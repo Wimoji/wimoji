@@ -93,7 +93,7 @@ public class UserController {
 
             service.removeUser(uid);
             return DataResponseDto.empty();
-        }catch (Exception e){
+        } catch (Exception e){
             throw e;
         }
 
@@ -195,10 +195,8 @@ public class UserController {
 
             service.removeChat(uid, rid);
             return DataResponseDto.empty();
-        } catch (GeneralException e) {
-            throw new GeneralException(Code.NO_USER);
         } catch (Exception e) {
-            throw new GeneralException(Code.DATA_ACCESS_ERROR);
+            throw e;
         }
     }
 
