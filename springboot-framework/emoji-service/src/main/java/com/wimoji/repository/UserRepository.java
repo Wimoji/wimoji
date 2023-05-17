@@ -24,12 +24,9 @@ public class UserRepository {
      * @return
      */
     public List<User> findLoginedUser(String uid) {
-        //select * from user where login == true and uid = uid;
         Criteria criteria = Criteria.where("login").is(true);
-//                .andOperator(Criteria.where("uid").ne(uid));
         Query query = new Query(criteria);
-        List<User> userList = mongoTemplate.find(query, User.class);
-        return userList;
+        return mongoTemplate.find(query, User.class);
     }
 
     /**
@@ -52,11 +49,9 @@ public class UserRepository {
      */
 
     public User findUserByUid(String uid){
-        //select * from user where uid=uid;
         Criteria criteria = Criteria.where("uid").is(uid);
         Query query = new Query(criteria);
-        User document = mongoTemplate.findOne(query, User.class);
-        return document;
+        return mongoTemplate.findOne(query, User.class);
     }
 
     /**
@@ -66,13 +61,10 @@ public class UserRepository {
      * @param title
      */
     public void updateEmoji(String uid, String order, String title){
-        //select * from user where uid=uid;
         Criteria criteria = Criteria.where("uid").is(uid);
         Query query = new Query(criteria);
 
         Update update = new Update().set("emoji" + "." + order + ".title", title);
-//        FindAndModifyOptions options = new FindAndModifyOptions().returnNew(true).upsert(false);
-//        mongoTemplate.findAndModify(query, update, options, User.class);
         mongoTemplate.findAndModify(query, update, User.class);
     }
 
@@ -96,7 +88,6 @@ public class UserRepository {
         Criteria criteria = Criteria.where("uid").is(uid);
         Query query = new Query(criteria);
         User user = mongoTemplate.findOne(query, User.class);
-        List<Emoji> emojiList = user.getEmoji();
-        return emojiList;
+        return user.getEmoji();
     }
 }

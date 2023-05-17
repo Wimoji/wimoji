@@ -23,11 +23,11 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 public class EmojiController {
-
     private final UserServiceClient userServiceClient;
     private final ChatServiceClient chatServiceClient;
     private final EmojiService emojiService;
     private final ObjectMapper mapper;
+    private final String TOKEN = "Authorization";
 
     /**
      * 새로운 이모지 작성
@@ -37,7 +37,7 @@ public class EmojiController {
     @PostMapping("/")
     public DataResponseDto<?> saveEmoji(HttpServletRequest request, @RequestBody EmojiSaveReq emoji) {
         try{
-            String bearerToken = request.getHeader("Authorization");
+            String bearerToken = request.getHeader(TOKEN);
             User user =  mapper.readValue(userServiceClient.getUser(bearerToken), User.class);
 
             emojiService.saveEmoji(user.getUid(), emoji);
@@ -57,7 +57,7 @@ public class EmojiController {
     @PutMapping("/")
     public DataResponseDto<?> modifyEmoji(HttpServletRequest request, @RequestBody EmojiModifyReq emoji){
         try{
-            String bearerToken = request.getHeader("Authorization");
+            String bearerToken = request.getHeader(TOKEN);
             User user =  mapper.readValue(userServiceClient.getUser(bearerToken), User.class);
 
             emojiService.modifyEmoji(user.getUid(), emoji);
@@ -77,7 +77,7 @@ public class EmojiController {
     @PutMapping("/del")
     public DataResponseDto<?> deleteEmoji(HttpServletRequest request, @RequestBody EmojiDeleteReq emoji){
         try{
-            String bearerToken = request.getHeader("Authorization");
+            String bearerToken = request.getHeader(TOKEN);
             User user =  mapper.readValue(userServiceClient.getUser(bearerToken), User.class);
 
             emojiService.deleteEmoji(user.getUid(), emoji);
@@ -96,7 +96,7 @@ public class EmojiController {
     @GetMapping("/")
     public DataResponseDto<?> getEmojiList(HttpServletRequest request){
         try{
-            String bearerToken = request.getHeader("Authorization");
+            String bearerToken = request.getHeader(TOKEN);
             User user =  mapper.readValue(userServiceClient.getUser(bearerToken), User.class);
 
             List<EmojiGetRes> emojiList = emojiService.getEmojiList(user.getUid());

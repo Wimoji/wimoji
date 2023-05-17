@@ -9,8 +9,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -48,23 +46,21 @@ public class HomeService {
         for(User user: userList){
             List<Emoji> emojiList = user.getEmoji();
             //이모지 리스트가 없으면 다음 유저로
-            if(emojiList == null)
+            if(emojiList == null) {
                 continue;
-
+            }
 
             //3. 동 코드가 같은 이모지 리스트 가져오기
             for(Emoji emoji: emojiList){
-//                if(!emoji.getDongCode().equals(homeReq.getDongCode()))
-//                    continue;
-
                 //4. 위도 경도로 거리 계산
                 double dis = getDistance(Double.parseDouble(homeReq.getLatitude()), Double.parseDouble(homeReq.getLongitude()),
                         Double.parseDouble(emoji.getLatitude()), Double.parseDouble(emoji.getLongitude()));
 
                 log.info("Distance >> " + dis);
                 //반경 600m 넘으면 추가 안 함
-                if(dis > 600)
+                if(dis > 600) {
                     continue;
+                }
 
                 //5. 저장
                 ModelMapper mapper = new ModelMapper();
@@ -74,22 +70,22 @@ public class HomeService {
                 homeRes.setUid(user.getUid());
                 list.add(homeRes);
 
-                if (list.size() >= 30)
+                if (list.size() >= 30) {
                     break;
+                }
             }//emojiList
         }//userList
 
         //6. 거리순 정렬하여 30개 뽑기
-        if (!list.isEmpty())
+        if (!list.isEmpty()) {
             Collections.sort(list, new Comparator<HomeRes>() {
                 @Override
                 public int compare(HomeRes o1, HomeRes o2) {
-                    if(o1.getDis() >= o2.getDis())
-                        return 1;
-                    else
-                        return -1;
+                    if(o1.getDis() >= o2.getDis()) return 1;
+                    else return -1;
                 }
             });
+        }
         return list;
     }
 
@@ -108,7 +104,6 @@ public class HomeService {
 
         double a = Math.sin(dLat/2)* Math.sin(dLat/2)+ Math.cos(Math.toRadians(lat1))* Math.cos(Math.toRadians(lat2))* Math.sin(dLon/2)* Math.sin(dLon/2);
         double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
-        double d = EARTH_RADIUS * c * 1000;    // Distance in m
-        return d;
+        return EARTH_RADIUS * c * 1000;    // Distance in m
     }
 }

@@ -50,12 +50,12 @@ public class EmojiService {
         if(intOrder >= 0 && intOrder<document.getEmoji().size()) {
             if(document.getEmoji().get(intOrder).getEid().equals(emojiReq.getEid())){
                 userRepository.updateEmoji(uid, emojiReq.getOrder(), emojiReq.getTitle());
-            }
-            else
+            } else {
                 throw new GeneralException(Code.NO_EMOJI);
-        }
-        else
+            }
+        } else {
             throw new GeneralException(Code.NO_EMOJI);
+        }
     }
 
     /**
@@ -71,12 +71,12 @@ public class EmojiService {
         if(intOrder >= 0 && intOrder<document.getEmoji().size()) {
             if(document.getEmoji().get(intOrder).getEid().equals(emojiReq.getEid())){
                 userRepository.removeEmoji(uid, intOrder);
-            }
-            else
+            } else {
                 throw new GeneralException(Code.NO_EMOJI);
-        }
-        else
+            }
+        } else {
             throw new GeneralException(Code.NO_EMOJI);
+        }
     }
 
     /**
@@ -101,6 +101,4 @@ public class EmojiService {
         }
         return emojiGetList;
     }
-
-
 }
