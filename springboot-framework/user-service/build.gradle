@@ -2,6 +2,7 @@ plugins {
     id 'java'
     id 'org.springframework.boot' version '3.0.6'
     id 'io.spring.dependency-management' version '1.1.0'
+    id 'jacoco'
 }
 
 group = 'com.wimoji'
@@ -47,4 +48,17 @@ dependencyManagement {
 }
 tasks.named('test') {
     useJUnitPlatform()
+}
+
+jacoco {
+    toolVersion = "0.8.7"
+    reportsDir = file("$buildDir/customJacocoReportDir")
+}
+
+jacocoTestReport {
+    dependsOn test
+    reports {
+        xml.enabled true
+        html.enabled true
+    }
 }
