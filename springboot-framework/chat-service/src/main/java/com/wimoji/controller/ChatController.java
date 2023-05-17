@@ -31,12 +31,13 @@ public class ChatController {
 	private final ObjectMapper mapper;
 	private final SimpMessagingTemplate template; // message broker 사용 template
 	private final ChatRoomService chatRoomService;
+	private final String CHAT_PATH = "/sub/chat/";
 
 	/**
 	 * 사용자간 채팅
 	 * @param : 채팅 정보를 담은 ChatReq
 	 * @return 채팅을 보낸 채팅방에 대해서만 새로운 채팅 반환
-	**/
+	 **/
 	@MessageMapping("/chat/message")
 	public void chat(@Payload ChatReq chatReq, @Header("Authorization") String bearerToken,
 		@Header("simpSessionId") String sessionId) {
@@ -47,7 +48,7 @@ public class ChatController {
 			chatRoomService.saveContent(chat);
 
 			ChatRes chatRes = new ChatRes(chatReq.getRid(), user.getNickname(), chatReq.getContent(), sessionId, LocalDateTime.now());
-			template.convertAndSend("/sub/chat/" + chatReq.getRid(), chatRes);
+			template.convertAndSend(CHAT_PATH + chatReq.getRid(), chatRes);
 		} catch (JsonProcessingException je) {
 			throw new GeneralException(Code.UNAUTHORIZED);
 		} catch (Exception e) {
@@ -75,7 +76,7 @@ public class ChatController {
 			chatRoomService.saveContent(chat);
 
 			ChatRes chatRes = new ChatRes(rid, user.getNickname(), user.getNickname() + "님이 입장하였습니다.", "3", LocalDateTime.now());
-			template.convertAndSend("/sub/chat/" + chatRes.getRid(), chatRes);
+			template.convertAndSend(CHAT_PATH + chatRes.getRid(), chatRes);
 		} catch (JsonProcessingException je) {
 			throw new GeneralException(Code.UNAUTHORIZED);
 		} catch (Exception e) {
@@ -87,7 +88,7 @@ public class ChatController {
 	 * 사용자 퇴장
 	 * @param : accessToken, 채팅방의 id
 	 * @return :
-	**/
+	 **/
 	@MessageMapping("/chat/exit")
 	public void exit(@Header("Authorization") String bearerToken, @Payload String rid) {
 		try {
@@ -101,7 +102,7 @@ public class ChatController {
 			chatRoomService.saveContent(chat);
 
 			ChatRes chatRes = new ChatRes(rid, user.getNickname(), user.getNickname() + "님이 퇴장하였습니다.", "3", LocalDateTime.now());
-			template.convertAndSend("/sub/chat/" + chatRes.getRid(), chatRes);
+			template.convertAndSend(CHAT_PATH + chatRes.getRid(), chatRes);
 		} catch (JsonProcessingException je) {
 			throw new GeneralException(Code.UNAUTHORIZED);
 		} catch (Exception e) {
