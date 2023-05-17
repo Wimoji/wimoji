@@ -1,18 +1,12 @@
 package com.wimoji.repository;
 
-import org.bson.conversions.Bson;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.mongodb.core.FindAndModifyOptions;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Repository;
 
-import com.mongodb.client.model.Filters;
-import com.mongodb.client.result.DeleteResult;
-import com.wimoji.base.GeneralException;
-import com.wimoji.base.constant.Code;
 import com.wimoji.repository.dto.entity.LastChat;
 import com.wimoji.repository.dto.entity.LastChatId;
 

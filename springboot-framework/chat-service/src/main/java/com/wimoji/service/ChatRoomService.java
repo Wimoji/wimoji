@@ -56,9 +56,8 @@ public class ChatRoomService {
 		if (chatRoom.getContent().size()-1 != idx && idx != 0) {
 			isNew = true;
 		}
-		ChatRoomRes chatRoomRes = new ChatRoomRes(chatRoom, isNew);
 
-		return chatRoomRes;
+		return new ChatRoomRes(chatRoom, isNew);
 	}
 
 	/**
@@ -86,8 +85,7 @@ public class ChatRoomService {
 		}
 
 		boolean isEnter = (chatRoom.getParticipant() == chatRoom.getLimit()) ? false : true;
-		NumberRes numberRes = new NumberRes(chatRoom.getParticipant(), chatRoom.getLimit(), isEnter);
-		return numberRes;
+		return new NumberRes(chatRoom.getParticipant(), chatRoom.getLimit(), isEnter);
 	}
 
 	/**
