@@ -34,13 +34,13 @@ public class HomeController {
      * @return
      */
     @PostMapping("/location")
-    public DataResponseDto<?> getOtherEmojiList(HttpServletRequest request, @RequestBody HomeReq location){
+    public DataResponseDto<List<HomeRes>> getOtherEmojiList(HttpServletRequest request, @RequestBody HomeReq location){
         try{
             String bearerToken = request.getHeader("Authorization");
             User user =  mapper.readValue(userServiceClient.getUser(bearerToken), User.class);
 
             List<HomeRes> homeResList =
-                    homeService.getOtherEmojiList(user.getUid(), location);
+                homeService.getOtherEmojiList(user.getUid(), location);
 
             for(HomeRes homeRes : homeResList) {
                 NumberRes numberRes = mapper.readValue(chatServiceClient.getNumber(homeRes.getRid()), NumberRes.class);
@@ -53,7 +53,8 @@ public class HomeController {
         } catch (JsonProcessingException je) {
             throw new GeneralException(Code.UNAUTHORIZED);
         } catch (Exception e){
-            throw e;
+            e.printStackTrace();
+            throw new GeneralException(Code.INTERNAL_ERROR);
         }
     }
 }
