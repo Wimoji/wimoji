@@ -1,5 +1,11 @@
+import ChatRoomComponent from "@/components/organisms/ChatRoomComponent/ChatRoomComponent";
+
 const Chat = () => {
-  return <div>챗 방! 입니다</div>;
+  return (
+    <>
+      <ChatRoomComponent />
+    </>
+  );
 };
 
 export default Chat;

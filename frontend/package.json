@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@reduxjs/toolkit": "^1.9.5",
+    "@stomp/stompjs": "^7.0.0",
     "@types/node": "18.16.1",
     "@types/react": "18.2.0",
     "@types/react-dom": "18.2.1",
@@ -24,11 +25,13 @@
     "react-dom": "18.2.0",
     "react-redux": "^8.0.5",
     "redux-persist": "^6.0.0",
+    "sockjs-client": "^1.6.1",
     "tailwindcss": "3.3.2",
     "typescript": "5.0.4"
   },
   "devDependencies": {
     "@types/redux-persist": "^4.3.1",
+    "@types/sockjs-client": "^1.5.1",
     "redux-logger": "^3.0.6"
   }
 }
