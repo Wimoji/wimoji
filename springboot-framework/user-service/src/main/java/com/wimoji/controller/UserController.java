@@ -32,28 +32,41 @@ public class UserController {
     @Autowired
     private JwtTokenUtil jwtTokenUtil;
 
+    /**
+     * 신규 유저 생성
+     * @param : uid, nickname, password
+     * @return :
+     */
     @PostMapping("/signup")
     public DataResponseDto<?> makeUser(@RequestBody UserReq userReq) {
         try {
             service.makeUser(userReq);
-
             return DataResponseDto.empty();
         } catch (Exception e) {
             throw e;
         }
     }
 
+    /**
+     * 로그인 상태 변경
+     * @param : uid, password
+     * @return : bearertoken
+     */
     @PutMapping("/login")
     public DataResponseDto<?> setLoginUser(@RequestBody UserReq user) {
         try {
             HashMap<String, String> result = service.loginUser(user.getUid(), user.getPassword());
-
             return DataResponseDto.of(result);
         } catch (Exception e) {
             throw e;
         }
     }
 
+    /**
+     * 로그인 상태 변경
+     * @param : bearerToken
+     * @return :
+     */
     @PutMapping("/logout")
     public DataResponseDto<?> setLogoutUser(HttpServletRequest request) {
         try {
@@ -61,13 +74,17 @@ public class UserController {
             String uid = jwtTokenUtil.getUserIdFromToken(token);
 
             service.logoutUser(uid);
-
             return DataResponseDto.empty();
         } catch (Exception e) {
             throw e;
         }
     }
 
+    /**
+     * 회원 정보 삭제
+     * @param : bearerToken
+     * @return :
+     */
     @DeleteMapping("/")
     public DataResponseDto<?> removeUser(HttpServletRequest request){
         try{
@@ -75,7 +92,6 @@ public class UserController {
             String uid = jwtTokenUtil.getUserIdFromToken(token);
 
             service.removeUser(uid);
-
             return DataResponseDto.empty();
         }catch (Exception e){
             throw e;
@@ -84,10 +100,9 @@ public class UserController {
     }
 
     /**
-     *
-     * @param bearerToken
-     * @return userid, usernickname이 들어있는 userEntity
      * 다른 microservice와의 통신용
+     * @param : bearerToken
+     * @return : userid, usernickname이 들어있는 userEntity
      */
     @GetMapping("/userinfo")
     public UserEntity getUser(@RequestParam String bearerToken) {
@@ -101,7 +116,6 @@ public class UserController {
             String nickname = jwtTokenUtil.getUserNicknameFromToken(token);
 
             UserEntity user = UserEntity.builder().uid(uid).nickname(nickname).build();
-
             return user;
         } catch (Exception e) {
             throw e;
@@ -112,7 +126,6 @@ public class UserController {
      * 참여한 채팅방의 id List를 보내면 채팅방 List를 받는 함수
      * @param : bearerToken
      * @return : 채팅방 List
-     * 다른 microservice와의 통신용
      */
     @GetMapping("/chat")
     public DataResponseDto<?> getMyChatRoom(HttpServletRequest request) {
@@ -157,7 +170,6 @@ public class UserController {
             }
 
             service.makeChat(uid, rid);
-
             return DataResponseDto.empty();
         } catch (GeneralException e) {
             throw new GeneralException(Code.NO_USER);
@@ -182,7 +194,6 @@ public class UserController {
             String uid = jwtTokenUtil.getUserIdFromToken(token);
 
             service.removeChat(uid, rid);
-
             return DataResponseDto.empty();
         } catch (GeneralException e) {
             throw new GeneralException(Code.NO_USER);
@@ -204,7 +215,6 @@ public class UserController {
         }
 
         String token = bearerToken.substring(7);
-
         return token;
     }
 }

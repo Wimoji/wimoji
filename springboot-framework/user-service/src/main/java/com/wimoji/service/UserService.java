@@ -22,6 +22,11 @@ public class UserService {
     private static final boolean LOGIN = true;
     private static final boolean LOGOUT = false;
 
+    /**
+     * 신규 유저 생성
+     * @param : uid, nickname, password
+     * @return :
+     */
     public void makeUser(UserReq userReq) {
         UserEntity findUserEntity = repository.findById(userReq.getUid());
 
@@ -44,7 +49,6 @@ public class UserService {
      * @return
      */
     public HashMap<String, String> loginUser(String id, String password) {
-
         //로그인 상태 변경 로그인할 때 true
         UserEntity userEntity = repository.findAndModify(id, password, LOGIN);
 
@@ -69,16 +73,8 @@ public class UserService {
      * @param id
      */
     public void logoutUser(String id){
-        Query query = new Query();
-        Criteria criteria = new Criteria();
-
-        query.addCriteria(criteria.andOperator(
-                Criteria.where("uid").is(id)
-        ));
-
         //로그아웃 상태로 변경
         UserEntity userEntity = repository.findAndModify(id, null, LOGOUT);
-
         if(userEntity == null){
             throw new GeneralException(Code.NO_USER);
         }
@@ -89,7 +85,7 @@ public class UserService {
      * @param id
      */
     public void removeUser(String id){
-        UserEntity userEntity = repository.findAndRemove(id);
+        repository.findAndRemove(id);
     }
 
     /**
@@ -99,7 +95,6 @@ public class UserService {
      */
     public List<String> getChatListByUser(String id) {
         UserEntity user = repository.findById(id);
-
         if(user == null) {
             throw new GeneralException(Code.NO_USER);
         }
