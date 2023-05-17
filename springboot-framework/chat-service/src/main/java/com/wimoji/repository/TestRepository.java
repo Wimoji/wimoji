@@ -6,6 +6,6 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 
 import com.wimoji.repository.dto.entity.Test;
 
-public interface TestRepository exFetends MongoRepository<Test, String> {
+public interface TestRepository extends MongoRepository<Test, String> {
 	List<Test> findAll();
 }
