@@ -29,7 +29,7 @@ export const getEmojis = () => {
   return api.get("/emoji-service/");
 };
 // PUT 유저의 이모지 삭제하기
-export const deleteEmoji = (data: any) => {
+export const deleteEmoji = (data: EmojiDeleteReq) => {
   return api.put("/emoji-service/del", data);
 };
 // GET 주변 이모지 불러오기

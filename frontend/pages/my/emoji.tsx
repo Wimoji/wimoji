@@ -1,5 +1,11 @@
+import MyEmojiComponent from "@/components/organisms/MyEmojiComponent/MyEmojicomponent";
+
 const Emoji = () => {
-  return <div>이모지 페이지!</div>;
+  return (
+    <>
+      <MyEmojiComponent />
+    </>
+  );
 };
 
 export default Emoji;

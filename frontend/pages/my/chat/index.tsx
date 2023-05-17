@@ -2,9 +2,9 @@ import ChatListComponent from "@/components/organisms/ChatListComponent/ChatList
 
 const Chat = () => {
   return (
-    <div>
+    <>
       <ChatListComponent />
-    </div>
+    </>
   );
 };
 
