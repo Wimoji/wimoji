@@ -12,7 +12,7 @@ import com.wimoji.repository.dto.request.UserReq;
 import com.wimoji.repository.dto.response.ChatRoomRes;
 import com.wimoji.repository.dto.response.NumberRes;
 import com.wimoji.service.ChatServiceClient;
-import com.wimoji.service.UserService;
+
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,50 +32,66 @@ public class UserController {
     @Autowired
     private JwtTokenUtil jwtTokenUtil;
 
+    /**
+     * 신규 유저 생성
+     * @param : uid, nickname, password
+     * @return :
+     */
     @PostMapping("/signup")
-    public DataResponseDto<Void> makeUser(@RequestBody UserReq userReq) {
+    public DataResponseDto<?> makeUser(@RequestBody UserReq userReq) {
         try {
             service.makeUser(userReq);
-
             return DataResponseDto.empty();
         } catch (Exception e) {
             throw e;
         }
     }
 
+    /**
+     * 로그인 상태 변경
+     * @param : uid, password
+     * @return : bearertoken
+     */
     @PutMapping("/login")
-    public DataResponseDto<HashMap<String, String>> setLoginUser(@RequestBody UserReq user) {
+    public DataResponseDto<?> setLoginUser(@RequestBody UserReq user) {
         try {
             HashMap<String, String> result = service.loginUser(user.getUid(), user.getPassword());
-
             return DataResponseDto.of(result);
         } catch (Exception e) {
             throw e;
         }
     }
 
+    /**
+     * 로그인 상태 변경
+     * @param : bearerToken
+     * @return :
+     */
     @PutMapping("/logout")
-    public DataResponseDto<Void> setLogoutUser(HttpServletRequest request) {
+    public DataResponseDto<?> setLogoutUser(HttpServletRequest request) {
         try {
             String token = getToken(request);
             String uid = jwtTokenUtil.getUserIdFromToken(token);
 
             service.logoutUser(uid);
-
             return DataResponseDto.empty();
         } catch (Exception e) {
             throw e;
         }
     }
 
+    /**
+     * 회원 정보 삭제
+     * @param : bearerToken
+     * @return :
+     */
     @DeleteMapping("/")
-    public DataResponseDto<Void> removeUser(HttpServletRequest request){
+    public DataResponseDto<?> removeUser(HttpServletRequest request){
         try{
             String token = getToken(request);
             String uid = jwtTokenUtil.getUserIdFromToken(token);
 
             service.removeUser(uid);
-
             return DataResponseDto.empty();
         }catch (Exception e){
             throw e;
@@ -84,10 +100,9 @@ public class UserController {
     }
 
     /**
-     *
-     * @param bearerToken
-     * @return userid, usernickname이 들어있는 userEntity
      * 다른 microservice와의 통신용
+     * @param : bearerToken
+     * @return : userid, usernickname이 들어있는 userEntity
      */
     @GetMapping("/userinfo")
     public UserEntity getUser(@RequestParam String bearerToken) {
@@ -101,7 +116,6 @@ public class UserController {
             String nickname = jwtTokenUtil.getUserNicknameFromToken(token);
 
             UserEntity user = UserEntity.builder().uid(uid).nickname(nickname).build();
-
             return user;
         } catch (Exception e) {
             throw e;
@@ -112,10 +126,9 @@ public class UserController {
      * 참여한 채팅방의 id List를 보내면 채팅방 List를 받는 함수
      * @param : bearerToken
      * @return : 채팅방 List
-     * 다른 microservice와의 통신용
      */
     @GetMapping("/chat")
-    public DataResponseDto<List<ChatRoomRes>> getMyChatRoom(HttpServletRequest request) {
+    public DataResponseDto<?> getMyChatRoom(HttpServletRequest request) {
         try {
             String token = getToken(request);
             String uid = jwtTokenUtil.getUserIdFromToken(token);
@@ -146,7 +159,7 @@ public class UserController {
      * @return :
      */
     @PutMapping("/chat/{rid}")
-    public DataResponseDto<Void> makeChat(HttpServletRequest request, @PathVariable String rid) {
+    public DataResponseDto<?> makeChat(HttpServletRequest request, @PathVariable String rid) {
         try {
             String token = getToken(request);
             String uid = jwtTokenUtil.getUserIdFromToken(token);
@@ -157,7 +170,6 @@ public class UserController {
             }
 
             service.makeChat(uid, rid);
-
             return DataResponseDto.empty();
         } catch (GeneralException e) {
             throw new GeneralException(Code.NO_USER);
@@ -172,7 +184,7 @@ public class UserController {
      * @return :
      */
     @DeleteMapping("/chat/{rid}")
-    public DataResponseDto<Void> removeChat(HttpServletRequest request, @PathVariable String rid) {
+    public DataResponseDto<?> removeChat(HttpServletRequest request, @PathVariable String rid) {
         try {
             if(rid == null) {
                 throw new GeneralException(Code.BAD_REQUEST);
@@ -182,7 +194,6 @@ public class UserController {
             String uid = jwtTokenUtil.getUserIdFromToken(token);
 
             service.removeChat(uid, rid);
-
             return DataResponseDto.empty();
         } catch (GeneralException e) {
             throw new GeneralException(Code.NO_USER);
@@ -204,7 +215,6 @@ public class UserController {
         }
 
         String token = bearerToken.substring(7);
-
         return token;
     }
 }

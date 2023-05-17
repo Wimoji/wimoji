@@ -23,11 +23,8 @@ public class UserRepository {
 
     /**
      * 로그인, 로그아웃
-     *
-     * @param id
-     * @param password
-     * @param isLogin
-     * @return
+     * @param : id, password, isLogin
+     * @return :
      */
     public UserEntity findAndModify(String id, String password, boolean isLogin) {
         Query query = new Query();
@@ -35,37 +32,29 @@ public class UserRepository {
 
         if (password != null) { //로그인 : 아이디, 패스워드
             query.addCriteria(criteria.andOperator(
-                    Criteria.where("uid").is(id),
-                    Criteria.where("password").is(password)
+                Criteria.where("uid").is(id),
+                Criteria.where("password").is(password)
             ));
         } else { //로그아웃 : 아이디
             query.addCriteria(criteria.andOperator(
-                    Criteria.where("uid").is(id)
+                Criteria.where("uid").is(id)
             ));
         }
-        //로그인 상태 변경
-        UserEntity userEntity = mongoTemplate.findAndModify(
-                query,
-                Update.update("login", isLogin),
-                UserEntity.class
-        );
-        return userEntity;
+
+        return mongoTemplate.findAndModify(query, Update.update("login", isLogin), UserEntity.class);
     }
 
     public UserEntity findAndRemove(String id) {
         Query query = new Query();
         Criteria criteria = new Criteria();
         query.addCriteria(criteria.andOperator(Criteria.where("uid").is(id)));
-
-        UserEntity userEntity = mongoTemplate.findAndRemove(query, UserEntity.class);
-        return userEntity;
+        return mongoTemplate.findAndRemove(query, UserEntity.class);
     }
 
     public void makeChat(String uid, String rid) {
         Query query = new Query();
         query.addCriteria(Criteria.where("uid").is(uid));
         Update update = new Update().addToSet("chatList", rid);
-
         mongoTemplate.updateFirst(query, update, UserEntity.class);
     }
 
