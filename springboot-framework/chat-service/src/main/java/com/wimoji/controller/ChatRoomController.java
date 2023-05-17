@@ -46,7 +46,7 @@ public class ChatRoomController {
 	 * @return : 채팅방의 정보를 담은 ChatRoomRes List 반환
 	 **/
 	@GetMapping("/test")
-	public DataResponseDto<?> getAllRoom() {
+	public DataResponseDto<List<ChatRoomRes>> getAllRoom() {
 		try {
 			List<ChatRoomRes> chatRoomList = chatRoomService.getAllRoom();
 			return DataResponseDto.of(chatRoomList);
@@ -82,7 +82,7 @@ public class ChatRoomController {
 	 * @return : 성공 또는 실패 메세지
 	 **/
 	@PostMapping("/")
-	public DataResponseDto<?> makeRoom(@RequestHeader("Authorization") String accessToken,
+	public DataResponseDto<Map<String, String>> makeRoom(@RequestHeader("Authorization") String accessToken,
 		@RequestBody ChatRoomReq chatRoomReq) {
 		try {
 			UserRes user = mapper.readValue(userServiceClient.getUser(accessToken), UserRes.class);
@@ -123,7 +123,7 @@ public class ChatRoomController {
 	 * @return : 성공 또는 실패 메세지
 	 **/
 	@PostMapping("/last/{rid}")
-	public DataResponseDto<?> makeLastChat(@RequestHeader("Authorization") String accessToken,
+	public DataResponseDto<Void> makeLastChat(@RequestHeader("Authorization") String accessToken,
 		@PathVariable String rid) {
 		try {
 			UserRes user = mapper.readValue(userServiceClient.getUser(accessToken), UserRes.class);
@@ -143,7 +143,7 @@ public class ChatRoomController {
 	 * @return : 마지막 메시지의 인덱스
 	 **/
 	@GetMapping("/last/{rid}")
-	public DataResponseDto<?> getLastChat(@RequestHeader("Authorization") String accessToken,
+	public DataResponseDto<Integer> getLastChat(@RequestHeader("Authorization") String accessToken,
 		@PathVariable String rid) {
 		try {
 			UserRes user = mapper.readValue(userServiceClient.getUser(accessToken), UserRes.class);
@@ -163,7 +163,7 @@ public class ChatRoomController {
 	 * @return :
 	 **/
 	@DeleteMapping("/last/{rid}")
-	public DataResponseDto<?> removeLastChat(@RequestHeader("Authorization") String accessToken,
+	public DataResponseDto<Void> removeLastChat(@RequestHeader("Authorization") String accessToken,
 		@PathVariable String rid) {
 		try {
 			UserRes user = mapper.readValue(userServiceClient.getUser(accessToken), UserRes.class);
@@ -183,7 +183,7 @@ public class ChatRoomController {
 	 * @return : 메시지의 List, firstIdx
 	 **/
 	@GetMapping("/unread/{rid}/{idx}")
-	public DataResponseDto<?> getNewChat(@RequestHeader("Authorization") String accessToken,
+	public DataResponseDto<Map<String, List>> getNewChat(@RequestHeader("Authorization") String accessToken,
 		@PathVariable String rid, @PathVariable int idx) {
 		try {
 			UserRes user = mapper.readValue(userServiceClient.getUser(accessToken), UserRes.class);
@@ -212,7 +212,7 @@ public class ChatRoomController {
 	 * @return : 메시지의 List, firstIdx
 	 **/
 	@GetMapping("/read/{rid}/{idx}")
-	public DataResponseDto<?> getPastChat(@RequestHeader("Authorization") String accessToken,
+	public DataResponseDto<Map<String, List>> getPastChat(@RequestHeader("Authorization") String accessToken,
 		@PathVariable String rid, @PathVariable int idx) {
 		try {
 			UserRes user = mapper.readValue(userServiceClient.getUser(accessToken), UserRes.class);
