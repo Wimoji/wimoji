@@ -5,12 +5,12 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.wimoji.base.GeneralException;
 import com.wimoji.base.constant.Code;
 import com.wimoji.base.dto.DataResponseDto;
-import com.wimoji.repository.Entity.User;
 import com.wimoji.repository.dto.request.EmojiDeleteReq;
 import com.wimoji.repository.dto.request.EmojiModifyReq;
 import com.wimoji.repository.dto.request.EmojiSaveReq;
 import com.wimoji.repository.dto.response.EmojiGetRes;
 import com.wimoji.repository.dto.response.NumberRes;
+import com.wimoji.repository.dto.response.UserRes;
 import com.wimoji.service.ChatServiceClient;
 import com.wimoji.service.EmojiService;
 import com.wimoji.service.UserServiceClient;
@@ -38,7 +38,7 @@ public class EmojiController {
     public DataResponseDto<?> saveEmoji(HttpServletRequest request, @RequestBody EmojiSaveReq emoji) {
         try{
             String bearerToken = request.getHeader(TOKEN);
-            User user =  mapper.readValue(userServiceClient.getUser(bearerToken), User.class);
+            UserRes user =  mapper.readValue(userServiceClient.getUser(bearerToken), UserRes.class);
 
             emojiService.saveEmoji(user.getUid(), emoji);
             return DataResponseDto.empty(Code.SUCCESS_NODATA,Code.SUCCESS_NODATA.getMessage());
@@ -58,7 +58,7 @@ public class EmojiController {
     public DataResponseDto<?> modifyEmoji(HttpServletRequest request, @RequestBody EmojiModifyReq emoji){
         try{
             String bearerToken = request.getHeader(TOKEN);
-            User user =  mapper.readValue(userServiceClient.getUser(bearerToken), User.class);
+            UserRes user =  mapper.readValue(userServiceClient.getUser(bearerToken), UserRes.class);
 
             emojiService.modifyEmoji(user.getUid(), emoji);
             return DataResponseDto.empty(Code.SUCCESS, Code.SUCCESS.getMessage());
@@ -78,7 +78,7 @@ public class EmojiController {
     public DataResponseDto<?> deleteEmoji(HttpServletRequest request, @RequestBody EmojiDeleteReq emoji){
         try{
             String bearerToken = request.getHeader(TOKEN);
-            User user =  mapper.readValue(userServiceClient.getUser(bearerToken), User.class);
+            UserRes user =  mapper.readValue(userServiceClient.getUser(bearerToken), UserRes.class);
 
             emojiService.deleteEmoji(user.getUid(), emoji);
             return DataResponseDto.empty(Code.SUCCESS_NODATA, Code.SUCCESS.getMessage());
@@ -97,7 +97,7 @@ public class EmojiController {
     public DataResponseDto<?> getEmojiList(HttpServletRequest request){
         try{
             String bearerToken = request.getHeader(TOKEN);
-            User user =  mapper.readValue(userServiceClient.getUser(bearerToken), User.class);
+            UserRes user =  mapper.readValue(userServiceClient.getUser(bearerToken), UserRes.class);
 
             List<EmojiGetRes> emojiList = emojiService.getEmojiList(user.getUid());
             if(emojiList.size() == 0) {

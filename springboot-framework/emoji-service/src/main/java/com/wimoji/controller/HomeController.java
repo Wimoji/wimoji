@@ -5,10 +5,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.wimoji.base.GeneralException;
 import com.wimoji.base.constant.Code;
 import com.wimoji.base.dto.DataResponseDto;
-import com.wimoji.repository.Entity.User;
 import com.wimoji.repository.dto.request.HomeReq;
 import com.wimoji.repository.dto.response.HomeRes;
 import com.wimoji.repository.dto.response.NumberRes;
+import com.wimoji.repository.dto.response.UserRes;
 import com.wimoji.service.ChatServiceClient;
 import com.wimoji.service.HomeService;
 import com.wimoji.service.UserServiceClient;
@@ -37,7 +37,7 @@ public class HomeController {
     public DataResponseDto<?> getOtherEmojiList(HttpServletRequest request, @RequestBody HomeReq location){
         try{
             String bearerToken = request.getHeader("Authorization");
-            User user =  mapper.readValue(userServiceClient.getUser(bearerToken), User.class);
+            UserRes user =  mapper.readValue(userServiceClient.getUser(bearerToken), UserRes.class);
 
             List<HomeRes> homeResList =
                     homeService.getOtherEmojiList(user.getUid(), location);
