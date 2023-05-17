@@ -27,6 +27,7 @@ public class EmojiController {
     private final ChatServiceClient chatServiceClient;
     private final EmojiService emojiService;
     private final ObjectMapper mapper;
+    private final String TOKEN = "Authorization";
 
     /**
      * 새로운 이모지 작성
@@ -34,9 +35,9 @@ public class EmojiController {
      * @return
      */
     @PostMapping("/")
-    public DataResponseDto<Void> saveEmoji(HttpServletRequest request, @RequestBody EmojiSaveReq emoji) {
+    public DataResponseDto<?> saveEmoji(HttpServletRequest request, @RequestBody EmojiSaveReq emoji) {
         try{
-            String bearerToken = request.getHeader("Authorization");
+            String bearerToken = request.getHeader(TOKEN);
             User user =  mapper.readValue(userServiceClient.getUser(bearerToken), User.class);
 
             emojiService.saveEmoji(user.getUid(), emoji);
@@ -54,9 +55,9 @@ public class EmojiController {
      * @return
      */
     @PutMapping("/")
-    public DataResponseDto<Void> modifyEmoji(HttpServletRequest request, @RequestBody EmojiModifyReq emoji){
+    public DataResponseDto<?> modifyEmoji(HttpServletRequest request, @RequestBody EmojiModifyReq emoji){
         try{
-            String bearerToken = request.getHeader("Authorization");
+            String bearerToken = request.getHeader(TOKEN);
             User user =  mapper.readValue(userServiceClient.getUser(bearerToken), User.class);
 
             emojiService.modifyEmoji(user.getUid(), emoji);
@@ -74,9 +75,9 @@ public class EmojiController {
      * @return
      */
     @PutMapping("/del")
-    public DataResponseDto<Void> deleteEmoji(HttpServletRequest request, @RequestBody EmojiDeleteReq emoji){
+    public DataResponseDto<?> deleteEmoji(HttpServletRequest request, @RequestBody EmojiDeleteReq emoji){
         try{
-            String bearerToken = request.getHeader("Authorization");
+            String bearerToken = request.getHeader(TOKEN);
             User user =  mapper.readValue(userServiceClient.getUser(bearerToken), User.class);
 
             emojiService.deleteEmoji(user.getUid(), emoji);
@@ -93,9 +94,9 @@ public class EmojiController {
      * @return
      */
     @GetMapping("/")
-    public DataResponseDto<List<EmojiGetRes>> getEmojiList(HttpServletRequest request){
+    public DataResponseDto<?> getEmojiList(HttpServletRequest request){
         try{
-            String bearerToken = request.getHeader("Authorization");
+            String bearerToken = request.getHeader(TOKEN);
             User user =  mapper.readValue(userServiceClient.getUser(bearerToken), User.class);
 
             List<EmojiGetRes> emojiList = emojiService.getEmojiList(user.getUid());
