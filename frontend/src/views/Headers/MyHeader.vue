@@ -45,12 +45,12 @@ export default {
       }
     },
     async deleteUser() {
-      if (confirm("회원 탈퇴 하시겠습니까?")) {
+      if (confirm("탈퇴하시나요? ＼（〇_ｏ）／")) {
         await deleteUser(
           ({ data }) => {
             console.log(data);
             if (data.success) {
-              alert("회원 탈퇴가 완료되었습니다.");
+              alert("탈퇴가 완료되었습니다. /(ㄒoㄒ)/~~");
               //세션에서 유저 정보 제거
               sessionStorage.clear();
               //로그인 상태 변경

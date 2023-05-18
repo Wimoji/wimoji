@@ -216,9 +216,9 @@ export default {
 
 <style>
 .emoji-category {
-  position: fixed;
+  position: fixed !important;
+  width: 100% !important;
   top: 50%;
   transform: translateY(-50%);
-  width: 100%;
 }
 </style>
