@@ -119,7 +119,6 @@ export default {
         let result = await login(data);
         // console.log("로그인화면에서 받은값 >> ", result);
         if (result != null) {
-          alert("로그인 성공");
           //세션 스토리지에 토큰 저장
           sessionStorage.setItem("access-token", result.accessToken);
           sessionStorage.setItem("refresh-token", result.refreshToken);
