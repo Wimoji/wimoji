@@ -4,7 +4,8 @@ import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 
 import SockJS from "sockjs-client";
-import * as StompJS from "@stomp/stompjs";
+import StompJS, { Stomp } from "@stomp/stompjs";
+import { useRouter } from "next/router";
 
 interface ChatRoomRes {
   id: string;
@@ -17,42 +18,113 @@ interface ChatRoomRes {
 }
 
 const ChatRoomComponent = () => {
-  var nowChatRoom = useSelector((state: RootState) => state.user.nowChatRoom);
+  const router = useRouter();
 
   const [chatRoom, setChatRoom] = useState<ChatRoomRes | null>(null);
+  const nowChatRoom = useSelector((state: RootState) => state.user.nowChatRoom);
+
   const [lastActiveTime, setLastActiveTime] = useState<number | null>(null);
   const [lastReadIdx, setLastReadIdx] = useState<number | null>(null);
-  const [socket, setSocket] = useState(null);
+  // const [socket, setSocket] = useState(null);
+  let socket: any;
+  const [mySessionId, setMySessionId] = useState(null);
+  const [messages, setMessages] = useState<Object[]>([]);
 
   useEffect(() => {
-    //현재 채팅방 정보 설정
-    if (nowChatRoom.rid.length == 0 && nowChatRoom.limit == 0) {
-      setChatRoom(JSON.parse(sessionStorage.getItem("nowChatRoom")!));
-    } else {
-      setChatRoom(nowChatRoom);
+    const storedChatRoom = sessionStorage.getItem("nowChatRoom");
+    if (storedChatRoom) {
     }
+  });
 
-    //마지막 활동 시간 측정
-    setLastActiveTime(Date.now());
-    setInterval(() => {
-      checkUserActivity();
-    }, 300000);
+  // useEffect(() => {
+  //   //현재 채팅방 정보 설정
+  //   if (nowChatRoom.rid.length == 0 && nowChatRoom.limit == 0) {
+  //     setChatRoom(JSON.parse(sessionStorage.getItem("nowChatRoom")!));
+  //   } else {
+  //     setChatRoom(nowChatRoom);
+  //   }
+  //   console.log("지금 챗방 정보", chatRoom);
 
-    //마지막 메시지 조회
-    getLastReadIndex();
-    if (lastReadIdx == null) {
-      alert("마지막 메시지 조회 실패");
-    } else {
-      connectSocket();
-    }
-  }, []);
+  // setThisChatRoom();
+
+  // console.log("현재 채팅방 정보 설정", chatRoom);
+  // if (chatRoom == null) return;
+
+  //마지막 활동 시간 측정
+  // setLastActiveTime(Date.now());
+  // setInterval(() => {
+  //   checkUserActivity();
+  // }, 300000);
+
+  // //마지막 메시지 조회
+  // getLastReadIndex();
+  // if (lastReadIdx == null) {
+  //   alert("마지막 메시지 조회 실패");
+  // } else {
+  //   connectSocket();
+  // }
+  // }, []);
 
   const connectSocket = () => {
     const sockJs = new SockJS(
       `${process.env.NEXT_PUBLIC_BASE_URL}/chat-service/ws/chat`
     );
-    // setSocket(StompJS.over(sockJs));
+    socket = Stomp.over(sockJs);
+    // socket = StompJS.over(sockJs);
+
+    let token = "Bearer " + sessionStorage.getItem("access-token");
+
+    if (chatRoom == null) return;
+    const headers = {
+      Authorization: token,
+      rid: chatRoom.id,
+    };
+
+    socket.connect(
+      headers,
+      (frame: any) => {
+        console.log("소켓 연결 성공", frame);
+
+        // const url = sockJs._transport.url;
+        // const regex = /\/(\w+)\/websocket$/;
+        // const sessionId = url.match(regex)[1];
+        // setMySessionId(sessionId);
+
+        socket.send(
+          "/pub/chat/enter",
+          { Authorization: token },
+          JSON.stringify(chatRoom.id)
+        );
+
+        socket.subscribe(`/sub/chat/${chatRoom.id}`, (msg: any) => {
+          //시간 수정
+          let nowMsg = JSON.parse(msg.body);
+          nowMsg.mtime = nowMsg.mtime.split("T")[1].substring(0, 5);
+          // this.messages.push(nowMsg);
+          setMessages((messages) => [...messages, nowMsg]);
+        }),
+          (error: any) => {
+            console.log("메시지 수신 실패 ", error);
+          };
+      },
+      (error: any) => {
+        console.log("소켓 연결 실패 ", error);
+        // rid 오류, uid 오류, 인원 최대
+        if (error.command === "ERROR") {
+          alert("채팅방에 접속할 수 없습니다.");
+          router.push("/my/chat");
+        }
+      }
+    );
   };
+
+  async function setThisChatRoom() {
+    if (chatRoom != null) return;
+    const storageChatRoom = await JSON.parse(
+      sessionStorage.getItem("nowChatRoom")!
+    );
+    setChatRoom(storageChatRoom);
+  }
 
   async function getLastReadIndex() {
     if (chatRoom == null) return;
@@ -84,8 +156,13 @@ const ChatRoomComponent = () => {
 
   return (
     <>
-      <h1>채팅들</h1>
-      <h1>보내기창</h1>
+      <div>채팅 보일곳</div>
+      <div>
+        <form>
+          <input type="text" placeholder="내용을 입력해주세요..." />
+          <button>보내기</button>
+        </form>
+      </div>
     </>
   );
 };
