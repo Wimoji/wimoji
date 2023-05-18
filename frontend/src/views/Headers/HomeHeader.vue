@@ -50,12 +50,12 @@ export default {
       this.$router.push("/my/chat");
     },
     async goLogout() {
-      console.log("로그아웃 합니다");
+      // console.log("로그아웃 합니다");
       await logout(
         ({ data }) => {
           // console.log(data);
           if (data.success) {
-            alert("로그아웃 되었습니다.");
+            alert("다음에 또 봐요! 🤗");
             //로그인 상태 변경
             this.setLogout();
             //세션에서 유저 정보 제거

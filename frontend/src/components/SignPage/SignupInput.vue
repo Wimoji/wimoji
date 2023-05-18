@@ -131,7 +131,7 @@ export default {
             // console.log("ㅎ회원가입>>", data);
             if (data.success) {
               alert(
-                `회원가입이 완료되었습니다. 반갑습니다 ${this.nickname}님!`
+                `회원가입이 완료되었습니다. 반가워요 ${this.nickname}님! 😁`
               );
               setTimeout(() => {
                 this.$router.push("/login");
