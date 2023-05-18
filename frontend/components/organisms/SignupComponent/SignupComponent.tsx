@@ -30,7 +30,7 @@ const SignupComponent = () => {
     try {
       const result = await signUp({ nickname, uid, password });
       if (result.data.success) {
-        alert("회원가입이 완료되었습니다.");
+        alert(`회원가입이 완료되었습니다. 반가워요 ${nickname}님 😁`);
         //로그인 화면으로 이동
         router.push("/signin");
       }
