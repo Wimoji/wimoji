@@ -34,7 +34,7 @@ public enum Code {
     private final String message;
 
     public String getMessage(Throwable e) {
-        return this.getMessage(this.getMessage() + " - " + e.getMessage());
+        return this.getMessage(e.getMessage());
         // 결과 예시 - "Validation error - Reason why it isn't valid"
     }
 
