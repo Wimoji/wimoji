@@ -1,30 +1,38 @@
 <template>
-  <div>
-    <div>로그인 페이지입니다</div>
-    <div>
-      <v-btn @click="goLogin">로그인하기</v-btn>
-    </div>
-    <div>다른 방법으로 로그인 하기</div>
-    <div>
-      계정이 없으신가요?
-      <span style="color: var(--main-col-3); cursor: pointer" @click="goSignup"
-        >회원가입 하기</span
-      >
-    </div>
-  </div>
+  <v-sheet class="sign-area col-transparent">
+    <the-footer></the-footer>
+    <div class="login-blue-circle"><blue-circle></blue-circle></div>
+    <div class="login-input"><login-input></login-input></div>
+  </v-sheet>
 </template>
 
 <script>
+import LoginInput from "@/components/SignPage/LoginInput.vue";
+import BlueCircle from "@/common/component/BlueCircle.vue";
+import TheFooter from "@/views/TheFooter.vue";
+
 export default {
-  methods: {
-    goSignup() {
-      this.$router.push("/signup");
-    },
-    goLogin() {
-      this.$router.push("/home");
-    },
-  },
+  components: { LoginInput, BlueCircle, TheFooter },
 };
 </script>
 
-<style></style>
+<style>
+.sign-area {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+.sign-area .login-blue-circle {
+  position: absolute;
+  top: 15%;
+  left: 40%;
+}
+.sign-area .login-blue-circle .blue-ellipse-container .blue-ellipse2 {
+  position: absolute;
+  top: 10%;
+}
+.login-input {
+  position: relative;
+  height: 100%;
+}
+</style>
