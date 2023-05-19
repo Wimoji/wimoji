@@ -1,19 +1,9 @@
 <template>
-  <v-container>
-    <my-emoji-list />
-  </v-container>
+  <div>나의 이모지 목록</div>
 </template>
 
 <script>
-import { mapState } from "vuex";
-import MyEmojiList from "@/components/MyEmojiPage/MyEmojiList.vue";
-
-export default {
-  components: { MyEmojiList },
-  computed: {
-    ...mapState("emojiStore", ["emojiCategory"]),
-  },
-};
+export default {};
 </script>
 
 <style></style>

@@ -1,32 +1,20 @@
 <template>
-  <v-sheet class="sign-area col-transparent">
-    <the-footer></the-footer>
-    <div class="signup-yellow-circle"><yellow-circle></yellow-circle></div>
-    <div class="signup-input"><signup-input></signup-input></div>
-  </v-sheet>
+  <div>
+    <div>회원가입 페이지입니다.</div>
+    <div>
+      <v-btn @click="goSignUp">회원가입하기</v-btn>
+    </div>
+  </div>
 </template>
 
 <script>
-import SignupInput from "@/components/SignPage/SignupInput.vue";
-import YellowCircle from "@/common/component/YellowCircle.vue";
-import TheFooter from "@/views/TheFooter.vue";
-
 export default {
-  components: { SignupInput, YellowCircle, TheFooter },
+  methods: {
+    goSignUp() {
+      this.$router.push("/login");
+    },
+  },
 };
 </script>
 
-<style>
-.sign-area .signup-yellow-circle {
-  position: absolute;
-  top: 15%;
-  left: 40%;
-}
-.sign-area .signup-yellow-circle .ellipse-container .ellipse2 {
-  position: absolute;
-  top: 10%;
-}
-.signup-input {
-  position: relative;
-}
-</style>
+<style></style>

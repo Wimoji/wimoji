@@ -1,10 +1,4 @@
 /* 폰트 크기 */
-.rem-font {
-  font-size: 0.9rem;
-}
-.xxxs-font {
-  font-size: 8px;
-}
 .xxs-font {
   font-size: 10px;
 }
@@ -75,7 +69,4 @@
 }
 .main-font-bd {
   font-family: var(--main-font-2);
-}
-.col-transparent {
-  background-color: transparent !important;
 }

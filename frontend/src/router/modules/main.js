@@ -1,11 +1,11 @@
-import MainView from "@/views/MainView.vue";
+import MainPage from "@/components/MainPage/MainPage.vue";
 
 const main = [
   {
     path: "/",
     name: "main",
     components: {
-      default: MainView,
+      default: MainPage,
     },
   },
 ];
