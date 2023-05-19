@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class TestController {
     private final TestService service;
 
-    @GetMapping({"/test"})
+    @GetMapping("/test")
     public ResponseEntity<?> Test() {
         List<Test> list = this.service.getAll();
 
